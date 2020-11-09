@@ -19,7 +19,12 @@ class AuthenticationBloc
         super(const AuthenticationState.unknown()) {
     _userSubscription = _authenticationRepository.user.listen(
       (user) async {
-        add(AuthenticationUserChanged(user));
+        if (user.email.endsWith("esiee.fr")) {
+          add(AuthenticationUserChanged(user));
+        } else {
+          if(user.email.contains("@")) _authenticationRepository.logOut();
+          else add(AuthenticationUserChanged(user));
+        }
       },
     );
   }
@@ -51,5 +56,4 @@ class AuthenticationBloc
         ? AuthenticationState.authenticated(event.user)
         : const AuthenticationState.unauthenticated();
   }
-
 }

@@ -1,5 +1,6 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LobbyPage extends StatelessWidget {
   static Route route() {
@@ -18,7 +19,11 @@ class LobbyPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         children: [
-          Text("Y'a R fraté")
+          Text("Y'a R fraté"),
+          FlatButton(
+              onPressed: () =>
+                  context.read<AuthenticationRepository>().logOut(),
+              child: Text("Logout"))
         ],
       ),
     );
