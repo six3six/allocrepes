@@ -1,4 +1,3 @@
-
 import 'package:allocrepes/login/cubit/login_cubit.dart';
 import 'package:allocrepes/login/cubit/login_state.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class LoginForm extends StatelessWidget {
         const SizedBox(height: 10),
         BlocBuilder<LoginCubit, LoginState>(
           buildWhen: (previous, current) =>
-          previous.showSignInWithApple != current.showSignInWithApple,
+              previous.showSignInWithApple != current.showSignInWithApple,
           builder: (context, LoginState state) {
             return state.showSignInWithApple ? AppleLoginButton() : SizedBox();
           },
