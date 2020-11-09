@@ -1,16 +1,32 @@
+import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'authentication/bloc/authentication_bloc.dart';
 import 'lobby/view/lobby_page.dart';
+import 'login/view/login_page.dart';
 
 class App extends StatelessWidget {
   const App({
     Key key,
-  }) : super(key: key);
+    @required this.authenticationRepository,
+  })  : assert(authenticationRepository != null),
+        super(key: key);
+  final AuthenticationRepository authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
-    return AppView();
+    return RepositoryProvider.value(
+      value: authenticationRepository,
+      child: BlocProvider(
+        create: (_) => AuthenticationBloc(
+          authenticationRepository: authenticationRepository,
+        ),
+        child: AppView(),
+      ),
+    );
   }
 }
 
@@ -30,9 +46,29 @@ class _AppViewState extends State<AppView> {
       theme: theme,
       navigatorKey: _navigatorKey,
       builder: (context, child) {
-        return child;
+        return BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            switch (state.status) {
+              case AuthenticationStatus.authenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  LobbyPage.route(),
+                  (route) => false,
+                );
+                break;
+              case AuthenticationStatus.unauthenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  LoginPage.route(),
+                  (route) => false,
+                );
+                break;
+              default:
+                break;
+            }
+          },
+          child: child,
+        );
       },
-      onGenerateRoute: (_) => LobbyPage.route(),
+      onGenerateRoute: (_) => SplashPage.route(),
     );
   }
 }

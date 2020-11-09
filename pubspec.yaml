@@ -14,13 +14,18 @@ dependencies:
   flutter:
     sdk: flutter
 
-  firebase_core: ^0.5.0+1
-  firebase_analytics: ^6.0.2
-  firebase_crashlytics: ^0.2.1+1
-  cloud_firestore: ^0.14.1+3
+  authentication_repository:
+    path: packages/authentication_repository
 
-  bloc: ^6.0.3
-  flutter_bloc: ^6.0.6
+  firebase_core: ^0.5.2
+  firebase_analytics: ^6.2.0
+  firebase_crashlytics: ^0.2.3
+  cloud_firestore: ^0.14.3
+
+  font_awesome_flutter: ^8.10.0
+
+  bloc: ^6.1.0
+  flutter_bloc: ^6.1.0
   
   equatable: ^1.2.5
   formz: ^0.3.2
