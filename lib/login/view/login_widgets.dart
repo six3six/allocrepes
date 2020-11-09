@@ -19,7 +19,7 @@ class GoogleLoginButton extends StatelessWidget {
           style: TextStyle(color: theme.accentColor),
         ),
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
         icon: Icon(FontAwesomeIcons.google, color: theme.accentColor),
         color: Colors.white,
         onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
@@ -42,7 +42,7 @@ class AppleLoginButton extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
         icon: Icon(FontAwesomeIcons.apple, color: Colors.white),
         color: Colors.black,
         onPressed: () => context.bloc<LoginCubit>().logInWithApple(),
@@ -65,7 +65,7 @@ class DebugLoginButton extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
         icon: Icon(FontAwesomeIcons.apple, color: Colors.white),
         color: Colors.green,
         onPressed: () => context.bloc<LoginCubit>().logInWithApple(),
