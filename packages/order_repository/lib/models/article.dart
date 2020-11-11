@@ -2,8 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:order_repository/entities/article_entity.dart';
 
-import '../entities/order_entity.dart';
-import '../entities/order_entity.dart';
+import 'item.dart';
 
 class Article extends Equatable {
   const Article({
@@ -15,22 +14,22 @@ class Article extends Equatable {
         assert(item != null);
 
   final String id;
-  final String item;
+  final Item item;
   final int amount;
 
-  static const empty = Article(id: "", item: "", amount: 0);
+  static const empty = Article(id: "", item: Item.empty, amount: 0);
 
   @override
   List<Object> get props => [id, item, amount];
 
   ArticleEntity toEntity() {
-    return ArticleEntity(id, item, amount);
+    return ArticleEntity(id, item.id, amount);
   }
 
-  static Article fromEntity(ArticleEntity entity) {
+  static Article fromEntity(ArticleEntity entity, Item item) {
     return Article(
       id: entity.id,
-      item: entity.item,
+      item: item,
       amount: entity.amount
     );
   }
