@@ -17,6 +17,9 @@ dependencies:
   authentication_repository:
     path: packages/authentication_repository
 
+  order_repository:
+    path: packages/order_repository
+
   firebase_core: ^0.5.2
   firebase_analytics: ^6.2.0
   firebase_crashlytics: ^0.2.3

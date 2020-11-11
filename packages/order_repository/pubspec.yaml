@@ -1,0 +1,19 @@
+name: order_repository
+description: Dart package which manages the editions domain.
+version: 1.0.0
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  equatable: ^1.2.5
+  firebase_core: ^0.5.2
+  meta: ^1.2.3
+  cloud_firestore: ^0.14.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^4.0.0

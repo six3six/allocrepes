@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:order_repository/entities/order_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
@@ -21,6 +22,7 @@ class AuthenticationBloc
       (user) async {
         if (user.email.endsWith("esiee.fr")) {
           add(AuthenticationUserChanged(user));
+
         } else {
           if(user.email.contains("@")) _authenticationRepository.logOut();
           else add(AuthenticationUserChanged(user));

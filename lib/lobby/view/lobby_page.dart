@@ -1,4 +1,6 @@
+import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:order_repository/entities/order_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +21,8 @@ class LobbyPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         children: [
-          Text("Y'a R fraté"),
+          Text(context.watch<AuthenticationBloc>().state.user.id),
+
           FlatButton(
               onPressed: () =>
                   context.read<AuthenticationRepository>().logOut(),
