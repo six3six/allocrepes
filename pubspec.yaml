@@ -28,7 +28,7 @@ dependencies:
   font_awesome_flutter: ^8.10.0
 
   bloc: ^6.1.0
-  flutter_bloc: ^6.1.0
+  flutter_bloc: ^6.1.1
   
   equatable: ^1.2.5
   formz: ^0.3.2
