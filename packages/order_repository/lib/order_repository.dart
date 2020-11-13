@@ -11,6 +11,16 @@ abstract class OrderRepository {
 
   Stream<List<Product>> products();
 
+  Future<void> addCategory(Category category);
+
+  Future<void> addProduct(Category category, Product product);
+
+  Future<void> changeAvailability(
+    Category category,
+    Product product,
+    bool available,
+  );
+
   Stream<List<Product>> productsFromCategory(Category category);
 
   Stream<List<Category>> categories();
@@ -19,9 +29,9 @@ abstract class OrderRepository {
 
   Stream<Order> order(String id);
 
-  void createOrder(Order order);
+  Future<void> createOrder(Order order);
 
-  void editOrder(Order order);
+  Future<void> editOrder(Order order);
 
-  void cancelOrder(Order order);
+  Future<void> cancelOrder(Order order);
 }

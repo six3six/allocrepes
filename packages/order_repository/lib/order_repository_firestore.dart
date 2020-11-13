@@ -44,7 +44,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     orderRoot.doc(order.id).set(order.toEntity().toDocument());
 
     final CollectionReference articlesRef =
-    orderRoot.doc(order.id).collection("articles");
+        orderRoot.doc(order.id).collection("articles");
     QuerySnapshot articleList = await articlesRef.get();
 
     articleList.docs.map((doc) => articlesRef.doc(doc.id).delete());
@@ -54,8 +54,10 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  void cancelOrder(Order order) {
-    orderRoot.doc(order.id).update({"status": OrderStatus.CANCELED.index});
+  Future<void> cancelOrder(Order order) async {
+    await orderRoot
+        .doc(order.id)
+        .update({"status": OrderStatus.CANCELED.index});
   }
 
   @override
@@ -69,9 +71,9 @@ class OrderRepositoryFirestore extends OrderRepository {
   Stream<List<Product>> products() {
     return productGroupRoot.snapshots().map<List<Product>>(
             (QuerySnapshot snapshot) =>
-            snapshot.docs.map<Product>(
-                    (QueryDocumentSnapshot doc) =>
-                    Product.fromEntity(ProductEntity.fromSnapshot(doc)))
+            snapshot.docs
+                .map<Product>((QueryDocumentSnapshot doc) =>
+                Product.fromEntity(ProductEntity.fromSnapshot(doc)))
                 .toList());
   }
 
@@ -162,5 +164,28 @@ class OrderRepositoryFirestore extends OrderRepository {
       if (product.id == id) return product;
     }
     return null;
+  }
+
+  @override
+  Future<void> addCategory(Category category) async {
+    await productCategoryRoot.add(category.toEntity().toDocument());
+  }
+
+  @override
+  Future<void> addProduct(Category category, Product product) async {
+    await productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .add(product.toEntity().toDocument());
+  }
+
+  @override
+  Future<void> changeAvailability(Category category, Product product,
+      bool available) async {
+    await productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .doc(product.id)
+        .update({"available": available});
   }
 }

@@ -31,4 +31,23 @@ class ProductsCubit extends Cubit<ProductsState> {
       });
     });
   }
+
+  void addCategory(String name) {
+    _orderRepository.addCategory(Category(id: "", name: name));
+  }
+
+  void changeAvailability(Category category, Product product, bool available) {
+    _orderRepository.changeAvailability(category, product, available);
+  }
+
+  void addProduct(Category category, String name) {
+    _orderRepository.addProduct(
+      category,
+      Product(
+        id: "",
+        name: name,
+        available: true,
+      ),
+    );
+  }
 }
