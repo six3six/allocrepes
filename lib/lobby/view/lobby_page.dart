@@ -1,5 +1,6 @@
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
-import 'package:allocrepes/order/view/order_page.dart';
+import 'package:allocrepes/order_list/view/order_list_page.dart';
+import 'package:allocrepes/products/view/product_page.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,8 +28,11 @@ class LobbyPage extends StatelessWidget {
                   context.read<AuthenticationRepository>().logOut(),
               child: Text("Logout")),
           FlatButton(
-              onPressed: () => Navigator.push(context, OrderPage.route()),
+              onPressed: () => Navigator.push(context, OrderListPage.route()),
               child: Text("Commander")),
+          FlatButton(
+              onPressed: () => Navigator.push(context, ProductPage.route()),
+              child: Text("Produits")),
           NewsCard(
             title:
                 "Concours : Arriverez vous à trouver la tête de Miguel dans ces montagnes ?",

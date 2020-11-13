@@ -20,7 +20,8 @@ class ArticleEntity extends Equatable {
       ];
 
   @override
-  String toString() => "CrepeEntity { id: $id, item: $item, amount: $amount }";
+  String toString() =>
+      "ArticleEntity { id: $id, item: $item, amount: $amount }";
 
   static ArticleEntity fromJson(Map<String, Object> json) => ArticleEntity(
         json["id"] as String,

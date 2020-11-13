@@ -25,7 +25,7 @@ class OrderEntity extends Equatable {
 
   @override
   String toString() =>
-      "CrepeEntity { id: $id, status: $status, created_at: $createdAt, delivered_at; $deliveredAt }";
+      "OrderEntity { id: $id, status: $status, created_at: $createdAt, delivered_at; $deliveredAt }";
 
   static OrderEntity fromJson(Map<String, Object> json) => OrderEntity(
         json["id"] as String,

@@ -1,25 +1,32 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:order_repository/entities/article_entity.dart';
+import 'package:order_repository/entities/category_entity.dart';
 import 'package:order_repository/entities/order_entity.dart';
+import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/order_repository.dart';
 
-import 'entities/item_entity.dart';
+import 'entities/product_entity.dart';
 import 'models/article.dart';
-import 'models/item.dart';
 import 'models/order_status.dart';
+import 'models/product.dart';
 
 class OrderRepositoryFirestore extends OrderRepository {
   final CollectionReference orderRoot =
       FirebaseFirestore.instance.collection("orders");
 
-  final CollectionReference itemRoot =
-      FirebaseFirestore.instance.collection("items");
+  final CollectionReference productCategoryRoot =
+      FirebaseFirestore.instance.collection("product_categories");
 
-  List<Item> itemsList = [];
+  final Query productGroupRoot =
+      FirebaseFirestore.instance.collectionGroup("products");
+
+  List<Product> productList = [];
 
   OrderRepositoryFirestore() {
-    items().listen((List<Item> items) => itemsList = items);
+    products().listen((List<Product> products) => productList = products);
   }
 
   @override
@@ -29,7 +36,6 @@ class OrderRepositoryFirestore extends OrderRepository {
     for (Article article in order.articles) {
       articlesRef.add(article.toEntity().toDocument());
     }
-
     return this.order(orderRef.id).first;
   }
 
@@ -38,7 +44,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     orderRoot.doc(order.id).set(order.toEntity().toDocument());
 
     final CollectionReference articlesRef =
-        orderRoot.doc(order.id).collection("articles");
+    orderRoot.doc(order.id).collection("articles");
     QuerySnapshot articleList = await articlesRef.get();
 
     articleList.docs.map((doc) => articlesRef.doc(doc.id).delete());
@@ -60,10 +66,49 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Stream<List<Item>> items() {
-    return itemRoot.snapshots().map<List<Item>>((QuerySnapshot snapshot) =>
-        snapshot.docs.map<Item>((QueryDocumentSnapshot doc) =>
-            Item.fromEntity(ItemEntity.fromSnapshot(doc))));
+  Stream<List<Product>> products() {
+    return productGroupRoot.snapshots().map<List<Product>>(
+            (QuerySnapshot snapshot) =>
+            snapshot.docs.map<Product>(
+                    (QueryDocumentSnapshot doc) =>
+                    Product.fromEntity(ProductEntity.fromSnapshot(doc)))
+                .toList());
+  }
+
+  @override
+  Stream<List<Product>> productsFromCategory(Category category) {
+    return productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .snapshots()
+        .map<List<Product>>((QuerySnapshot snapshot) =>
+        snapshot.docs
+            .map<Product>((QueryDocumentSnapshot doc) =>
+            Product.fromEntity(ProductEntity.fromSnapshot(doc)))
+            .toList());
+  }
+
+  @override
+  Stream<List<Category>> categories() {
+    return productCategoryRoot.snapshots().map<List<Category>>(
+            (QuerySnapshot snapshot) =>
+            snapshot.docs
+                .map((e) => Category.fromEntity(CategoryEntity.fromSnapshot(e)))
+                .toList());
+  }
+
+  @override
+  Stream<Map<Category, Stream<List<Product>>>> productByCategory() async* {
+    await for (List<Category> categories in categories()) {
+      Map<Category, Stream<List<Product>>> result =
+      Map<Category, Stream<List<Product>>>();
+
+      for (Category category in categories) {
+        result[category] = productsFromCategory(category);
+      }
+
+      yield result;
+    }
   }
 
   @override
@@ -101,10 +146,10 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   Future<Order> _orderFromEntity(OrderEntity entity) async {
     final CollectionReference articlesRef =
-        orderRoot.doc(entity.id).collection("articles");
+    orderRoot.doc(entity.id).collection("articles");
     final QuerySnapshot querySnapshot = await articlesRef.get();
     List<Article> articles =
-        querySnapshot.docs.map((QueryDocumentSnapshot doc) {
+    querySnapshot.docs.map((QueryDocumentSnapshot doc) {
       final ArticleEntity entity = ArticleEntity.fromSnapshot(doc);
       return Article.fromEntity(entity, _itemById(entity.item));
     }).toList();
@@ -112,9 +157,9 @@ class OrderRepositoryFirestore extends OrderRepository {
     return Order.fromEntity(entity, articles);
   }
 
-  Item _itemById(String id) {
-    for (Item item in itemsList) {
-      if (item.id == id) return item;
+  Product _itemById(String id) {
+    for (Product product in productList) {
+      if (product.id == id) return product;
     }
     return null;
   }

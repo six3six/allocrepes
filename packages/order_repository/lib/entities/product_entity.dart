@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class ItemEntity extends Equatable {
-  ItemEntity(
+class ProductEntity extends Equatable {
+  ProductEntity(
     this.id,
     this.name,
     this.category,
@@ -24,25 +24,26 @@ class ItemEntity extends Equatable {
 
   @override
   String toString() =>
-      "CrepeEntity { id: $id, category: $name, category: $category, available: $available }";
+      "ProductEntity { id: $id, category: $name, category: $category, available: $available }";
 
-  static ItemEntity fromJson(Map<String, Object> json) => ItemEntity(
+  static ProductEntity fromJson(Map<String, Object> json) =>
+      ProductEntity(
         json["id"] as String,
         json["name"] as String,
         json["category"] as String,
         json["available"] as bool,
       );
 
-  static ItemEntity fromSnapshot(DocumentSnapshot snapshot) => ItemEntity(
+  static ProductEntity fromSnapshot(DocumentSnapshot snapshot) =>
+      ProductEntity(
         snapshot.id,
         snapshot.get("name") as String,
-        snapshot.get("category") as String,
+        snapshot.reference.parent.parent.id,
         snapshot.get("available") as bool,
       );
 
   Map<String, Object> toDocument() => {
         "name": name,
-        "category": category,
         "available": available,
       };
 }
