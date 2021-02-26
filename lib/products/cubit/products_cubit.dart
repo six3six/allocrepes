@@ -37,7 +37,7 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   void changeAvailability(Category category, Product product, bool available) {
-    _orderRepository.changeAvailability(category, product, available);
+    _orderRepository.updateProductAvailability(category, product, available);
   }
 
   void addProduct(Category category, String name) {

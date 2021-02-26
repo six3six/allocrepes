@@ -50,6 +50,7 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
+                print("authenticated");
                 _navigator.pushAndRemoveUntil<void>(
                   LobbyPage.route(),
                   (route) => false,

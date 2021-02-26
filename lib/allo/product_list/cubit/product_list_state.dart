@@ -1,0 +1,19 @@
+import 'package:equatable/equatable.dart';
+import 'package:order_repository/models/category.dart';
+import 'package:order_repository/models/product.dart';
+
+class ProductListState extends Equatable {
+  final Map<Category, List<Product>> categories;
+
+  const ProductListState({this.categories = const {}})
+      : assert(categories != null);
+
+  @override
+  List<Object> get props => [categories.values, categories.entries.toList()];
+
+  ProductListState copyWith({categories}) {
+    return ProductListState(
+      categories: categories ?? this.categories,
+    );
+  }
+}

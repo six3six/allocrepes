@@ -13,7 +13,7 @@ class LoginState extends Equatable {
   final FormzStatus status;
 
   @override
-  List<Object> get props => [isSignIn, showSignInWithApple];
+  List<Object> get props => [isSignIn, showSignInWithApple, status];
 
   LoginState copyWith({
     bool isSignIn,

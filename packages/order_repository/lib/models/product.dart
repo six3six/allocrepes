@@ -5,13 +5,12 @@ import 'package:order_repository/entities/product_entity.dart';
 
 class Product extends Equatable {
   const Product({
-    @required this.id,
+    this.id,
     @required this.name,
     @required this.available,
     this.image = const NetworkImage(
         "https://www.hervecuisine.com/wp-content/uploads/2010/11/recette-crepes.jpg"),
-  })  : assert(id != null),
-        assert(name != null),
+  })  : assert(name != null),
         assert(available != null);
 
   final String id;

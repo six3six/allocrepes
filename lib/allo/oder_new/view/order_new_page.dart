@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../oder_new/view/order_new.dart';
+import 'order_new_view.dart';
 
 class OrderNewPage extends StatelessWidget {
   static Route route() {
@@ -10,8 +10,6 @@ class OrderNewPage extends StatelessWidget {
   const OrderNewPage({Key key}) : super(key: key);
 
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return OrderNew();
+    return const OrderNewView();
   }
 }

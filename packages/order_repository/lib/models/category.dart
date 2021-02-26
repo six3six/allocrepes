@@ -4,10 +4,9 @@ import 'package:order_repository/entities/category_entity.dart';
 
 class Category extends Equatable {
   const Category({
-    @required this.id,
+    this.id,
     @required this.name,
-  })  : assert(id != null),
-        assert(name != null);
+  }) : assert(name != null);
 
   final String id;
   final String name;
@@ -16,6 +15,13 @@ class Category extends Equatable {
 
   @override
   List<Object> get props => [id, name];
+
+  Category copyWith({String name}) {
+    return Category(
+      id: id,
+      name: name ?? this.name,
+    );
+  }
 
   CategoryEntity toEntity() {
     return CategoryEntity(id, name);

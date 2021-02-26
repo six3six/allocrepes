@@ -13,9 +13,15 @@ abstract class OrderRepository {
 
   Future<void> addCategory(Category category);
 
+  Future<void> updateCategory(Category category);
+
+  Future<void> deleteCategory(Category category);
+
   Future<void> addProduct(Category category, Product product);
 
-  Future<void> changeAvailability(
+  Future<void> removeProduct(Category category, Product product);
+
+  Future<void> updateProductAvailability(
     Category category,
     Product product,
     bool available,

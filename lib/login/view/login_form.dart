@@ -26,6 +26,7 @@ class LoginForm extends StatelessWidget {
         const SizedBox(height: 60.0),
         GoogleLoginButton(),
         const SizedBox(height: 60.0),
+        DebugLoginButton(),
         const SizedBox(height: 10),
         BlocBuilder<LoginCubit, LoginState>(
           buildWhen: (previous, current) =>

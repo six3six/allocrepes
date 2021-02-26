@@ -20,17 +20,16 @@ dependencies:
   order_repository:
     path: packages/order_repository
 
-  firebase_core: ^0.5.2
-  firebase_analytics: ^6.2.0
-  firebase_crashlytics: ^0.2.3
-  cloud_firestore: ^0.14.3
+  firebase_core: ^0.7.0
+  firebase_analytics: ^7.0.1
+  firebase_crashlytics: ^0.4.0+1
 
-  font_awesome_flutter: ^8.10.0
+  font_awesome_flutter: ^8.11.0
 
-  bloc: ^6.1.0
-  flutter_bloc: ^6.1.1
-  
-  equatable: ^1.2.5
+  bloc: ^6.1.1
+  flutter_bloc: ^6.1.2
+
+  equatable: ^1.2.6
   formz: ^0.3.2
 
   cupertino_icons: ^1.0.0
@@ -41,3 +40,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Oswald
+      fonts:
+        - asset: fonts/Oswald-VariableFont_wght.ttf

@@ -12,9 +12,13 @@ class Order extends Equatable {
     @required this.status,
     @required this.createdAt,
     @required this.articles,
+    @required this.place,
+    @required this.room,
     this.deliveredAt,
   })  : assert(id != null),
         assert(status != null),
+        assert(place != null),
+        assert(room != null),
         assert(articles != null);
 
   final String id;
@@ -22,6 +26,8 @@ class Order extends Equatable {
   final DateTime createdAt;
   final DateTime deliveredAt;
   final List<Article> articles;
+  final String place;
+  final String room;
 
   static const empty = Order(
     id: "",
@@ -29,13 +35,16 @@ class Order extends Equatable {
     createdAt: null,
     deliveredAt: null,
     articles: [],
+    place: "",
+    room: "",
   );
 
   @override
-  List<Object> get props => [id, status, createdAt, deliveredAt, articles];
+  List<Object> get props =>
+      [id, status, createdAt, deliveredAt, articles, place, room];
 
   OrderEntity toEntity() {
-    return OrderEntity(id, status, createdAt, deliveredAt);
+    return OrderEntity(id, status, createdAt, deliveredAt, place, room);
   }
 
   static Order fromEntity(OrderEntity entity, List<Article> articles) {
@@ -45,6 +54,8 @@ class Order extends Equatable {
       createdAt: entity.createdAt,
       deliveredAt: entity.deliveredAt,
       articles: articles,
+      place: entity.place,
+      room: entity.room,
     );
   }
 }

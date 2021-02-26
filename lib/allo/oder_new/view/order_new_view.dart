@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:order_repository/models/place.dart';
 
-class OrderNew extends StatelessWidget {
-  const OrderNew({Key key}) : super(key: key);
+class OrderNewView extends StatelessWidget {
+  const OrderNewView({Key key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -16,14 +18,41 @@ class OrderNew extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Batiment : ",
+                  style: theme.textTheme.caption,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: DropdownButton<Place>(
+                    value: Place(name: "Ampère A"),
+                    onChanged: (Place value) {},
+                    items: [
+                      Place(name: "Ampère A"),
+                      Place(name: "Ampère B"),
+                      Place(name: "Ampère C"),
+                      Place(name: "Arago")
+                    ].map<DropdownMenuItem<Place>>((Place place) {
+                      return DropdownMenuItem<Place>(
+                        value: place,
+                        child: Text(place.name),
+                      );
+                    }).toList(),
+                  ),
+                ),
                 TextField(
                   autocorrect: false,
                   keyboardType: TextInputType.numberWithOptions(
                       signed: false, decimal: false),
                   maxLength: 4,
                   decoration: InputDecoration(
-                    labelText: 'Salle',
+                    labelText: 'Appart n°',
                     helperText: '',
                   ),
                 ),

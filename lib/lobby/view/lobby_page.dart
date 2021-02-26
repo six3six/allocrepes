@@ -1,7 +1,8 @@
+import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
+import 'package:allocrepes/allo/product_list/view/product_list_page.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
-import 'package:allocrepes/order_list/view/order_list_page.dart';
-import 'package:allocrepes/products/view/product_page.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,39 +18,114 @@ class LobbyPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Accueil"),
+        title: const Text("XANTOS"),
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        children: [
-          Text(context.watch<AuthenticationBloc>().state.user.id),
-          FlatButton(
-              onPressed: () =>
-                  context.read<AuthenticationRepository>().logOut(),
-              child: Text("Logout")),
-          FlatButton(
-              onPressed: () => Navigator.push(context, OrderListPage.route()),
-              child: Text("Commander")),
-          FlatButton(
-              onPressed: () => Navigator.push(context, ProductPage.route()),
-              child: Text("Produits")),
-          NewsCard(
-            title:
-                "Concours : Arriverez vous à trouver la tête de Miguel dans ces montagnes ?",
-            image:
-                "https://wp-fr.oberlo.com/wp-content/uploads/sites/4/2019/09/banque-images.jpg",
+      body: CustomScrollView(
+        primary: false,
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.all(20),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        "XANTOS",
+                        style: textTheme.headline2
+                            .merge(TextStyle(fontFamily: "Oswald")),
+                      ),
+                    ),
+                    SizedBox.fromSize(
+                      size: Size(0, 30),
+                    ),
+                    Text(
+                      "Bonjour " +
+                          context.watch<AuthenticationBloc>().state.user.name,
+                    ),
+                  ]),
+            ),
           ),
-          NewsCard(
-            title: "Décrouvrez Notre Programme",
-            image:
-                "https://d1fmx1rbmqrxrr.cloudfront.net/cnet/i/edit/2019/04/eso1644bsmall.jpg",
+          SliverPadding(
+            padding: const EdgeInsets.all(20),
+            sliver: SliverGrid.count(
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              crossAxisCount: 2,
+              children: <Widget>[
+                const MenuCard(
+                  title: "News",
+                ),
+                const MenuCard(
+                  title: "Concours",
+                ),
+                const MenuCard(
+                  title: "En savoir +",
+                ),
+                MenuCard(
+                  title: "Allo !",
+                  onTap: () {
+                    Navigator.push(context, OrderListPage.route());
+                  },
+                ),
+                MenuCard(
+                  title: "Allo admin : modifier les produits",
+                  onTap: () {
+                    Navigator.push(context, ProductListPage.route());
+                  },
+                ),
+              ],
+            ),
           ),
-          NewsCard(
-            title: "5 Raisons De Ne Pas Voter Pour Les Autres",
-            image:
-                "https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg",
+          SliverPadding(
+            padding: const EdgeInsets.all(20),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  NewsCard(
+                    title:
+                        "Concours : Arriverez vous à trouver la tête de Miguel dans ces montagnes ?",
+                    image:
+                        "https://wp-fr.oberlo.com/wp-content/uploads/sites/4/2019/09/banque-images.jpg",
+                  ),
+                  NewsCard(
+                    title: "Décrouvrez Notre Programme",
+                    image:
+                        "https://d1fmx1rbmqrxrr.cloudfront.net/cnet/i/edit/2019/04/eso1644bsmall.jpg",
+                  ),
+                  NewsCard(
+                    title: "5 Raisons De Ne Pas Voter Pour Les Autres",
+                    image:
+                        "https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg",
+                  ),
+                  FlatButton(
+                      onPressed: () =>
+                          context.read<AuthenticationRepository>().logOut(),
+                      child: Text("Logout")),
+                ],
+              ),
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MenuCard extends StatelessWidget {
+  final String title;
+  final GestureTapCallback onTap;
+
+  const MenuCard({Key key, this.title = "", this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        onTap: onTap,
+        child: Center(
+          child: Text(title),
+        ),
       ),
     );
   }

@@ -24,7 +24,7 @@ class ProductPage extends StatelessWidget {
         child: BlocProvider(
           create: (BuildContext context) =>
               ProductsCubit(context.read<OrderRepositoryFirestore>()),
-          child: ItemList(),
+          child: const ItemList(),
         ),
       ),
     );

@@ -70,11 +70,10 @@ class OrderRepositoryFirestore extends OrderRepository {
   @override
   Stream<List<Product>> products() {
     return productGroupRoot.snapshots().map<List<Product>>(
-            (QuerySnapshot snapshot) =>
-            snapshot.docs
-                .map<Product>((QueryDocumentSnapshot doc) =>
+        (QuerySnapshot snapshot) => snapshot.docs
+            .map<Product>((QueryDocumentSnapshot doc) =>
                 Product.fromEntity(ProductEntity.fromSnapshot(doc)))
-                .toList());
+            .toList());
   }
 
   @override
@@ -83,27 +82,25 @@ class OrderRepositoryFirestore extends OrderRepository {
         .doc(category.id)
         .collection("products")
         .snapshots()
-        .map<List<Product>>((QuerySnapshot snapshot) =>
-        snapshot.docs
+        .map<List<Product>>((QuerySnapshot snapshot) => snapshot.docs
             .map<Product>((QueryDocumentSnapshot doc) =>
-            Product.fromEntity(ProductEntity.fromSnapshot(doc)))
+                Product.fromEntity(ProductEntity.fromSnapshot(doc)))
             .toList());
   }
 
   @override
   Stream<List<Category>> categories() {
     return productCategoryRoot.snapshots().map<List<Category>>(
-            (QuerySnapshot snapshot) =>
-            snapshot.docs
-                .map((e) => Category.fromEntity(CategoryEntity.fromSnapshot(e)))
-                .toList());
+        (QuerySnapshot snapshot) => snapshot.docs
+            .map((e) => Category.fromEntity(CategoryEntity.fromSnapshot(e)))
+            .toList());
   }
 
   @override
   Stream<Map<Category, Stream<List<Product>>>> productByCategory() async* {
     await for (List<Category> categories in categories()) {
       Map<Category, Stream<List<Product>>> result =
-      Map<Category, Stream<List<Product>>>();
+          Map<Category, Stream<List<Product>>>();
 
       for (Category category in categories) {
         result[category] = productsFromCategory(category);
@@ -148,10 +145,10 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   Future<Order> _orderFromEntity(OrderEntity entity) async {
     final CollectionReference articlesRef =
-    orderRoot.doc(entity.id).collection("articles");
+        orderRoot.doc(entity.id).collection("articles");
     final QuerySnapshot querySnapshot = await articlesRef.get();
     List<Article> articles =
-    querySnapshot.docs.map((QueryDocumentSnapshot doc) {
+        querySnapshot.docs.map((QueryDocumentSnapshot doc) {
       final ArticleEntity entity = ArticleEntity.fromSnapshot(doc);
       return Article.fromEntity(entity, _itemById(entity.item));
     }).toList();
@@ -167,22 +164,42 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Future<void> addCategory(Category category) async {
-    await productCategoryRoot.add(category.toEntity().toDocument());
+  Future<void> addCategory(Category category) {
+    return productCategoryRoot.add(category.toEntity().toDocument());
   }
 
   @override
-  Future<void> addProduct(Category category, Product product) async {
-    await productCategoryRoot
+  Future<void> updateCategory(Category category) {
+    return productCategoryRoot
+        .doc(category.id)
+        .update(category.toEntity().toDocument());
+  }
+
+  @override
+  Future<void> deleteCategory(Category category) async {
+    await productCategoryRoot.doc(category.id).delete();
+  }
+
+  @override
+  Future<void> addProduct(Category category, Product product) {
+    return productCategoryRoot
         .doc(category.id)
         .collection("products")
         .add(product.toEntity().toDocument());
   }
 
+  Future<void> removeProduct(Category category, Product product) {
+    return productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .doc(product.id)
+        .delete();
+  }
+
   @override
-  Future<void> changeAvailability(Category category, Product product,
-      bool available) async {
-    await productCategoryRoot
+  Future<void> updateProductAvailability(
+      Category category, Product product, bool available) {
+    return productCategoryRoot
         .doc(category.id)
         .collection("products")
         .doc(product.id)

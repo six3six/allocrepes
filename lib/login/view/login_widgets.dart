@@ -45,7 +45,7 @@ class AppleLoginButton extends StatelessWidget {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
         icon: Icon(FontAwesomeIcons.apple, color: Colors.white),
         color: Colors.black,
-        onPressed: () => context.bloc<LoginCubit>().logInWithApple(),
+        onPressed: () => context.read<LoginCubit>().logInWithApple(),
       ),
     );
   }
@@ -62,13 +62,15 @@ class DebugLoginButton extends StatelessWidget {
         key: const Key('loginForm_appleLogin_raisedButton'),
         label: Text(
           'Pour le debugage : voici une connexion fictive',
+          overflow: TextOverflow.fade,
           style: TextStyle(color: Colors.white),
+          softWrap: false,
         ),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        icon: Icon(FontAwesomeIcons.apple, color: Colors.white),
+        icon: Icon(FontAwesomeIcons.robot, color: Colors.white),
         color: Colors.green,
-        onPressed: () => context.bloc<LoginCubit>().logInWithApple(),
+        onPressed: () => context.read<LoginCubit>().loginDebug(),
       ),
     );
   }
