@@ -123,8 +123,11 @@ class MenuCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: onTap,
-        child: Center(
-          child: Text(title),
+        child: Padding(
+          padding: EdgeInsets.all(15),
+          child: Center(
+            child: Text(title),
+          ),
         ),
       ),
     );

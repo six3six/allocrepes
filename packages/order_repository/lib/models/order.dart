@@ -8,20 +8,22 @@ export "order_status.dart";
 
 class Order extends Equatable {
   const Order({
-    @required this.id,
+    this.id,
+    @required this.userId,
     @required this.status,
     @required this.createdAt,
     @required this.articles,
     @required this.place,
     @required this.room,
     this.deliveredAt,
-  })  : assert(id != null),
-        assert(status != null),
+  })  : assert(status != null),
         assert(place != null),
         assert(room != null),
+        assert(userId != null),
         assert(articles != null);
 
   final String id;
+  final String userId;
   final OrderStatus status;
   final DateTime createdAt;
   final DateTime deliveredAt;
@@ -31,6 +33,7 @@ class Order extends Equatable {
 
   static const empty = Order(
     id: "",
+    userId: "",
     status: OrderStatus.UNKNOWN,
     createdAt: null,
     deliveredAt: null,
@@ -41,16 +44,17 @@ class Order extends Equatable {
 
   @override
   List<Object> get props =>
-      [id, status, createdAt, deliveredAt, articles, place, room];
+      [id, status, createdAt, deliveredAt, articles, place, room, userId];
 
   OrderEntity toEntity() {
-    return OrderEntity(id, status, createdAt, deliveredAt, place, room);
+    return OrderEntity(id, status, userId, createdAt, deliveredAt, place, room);
   }
 
   static Order fromEntity(OrderEntity entity, List<Article> articles) {
     return Order(
       id: entity.id,
       status: entity.status,
+      userId: entity.userId,
       createdAt: entity.createdAt,
       deliveredAt: entity.deliveredAt,
       articles: articles,

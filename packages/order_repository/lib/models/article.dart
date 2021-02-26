@@ -6,11 +6,10 @@ import 'product.dart';
 
 class Article extends Equatable {
   const Article({
-    @required this.id,
+    this.id,
     @required this.product,
     @required this.amount,
-  })  : assert(id != null),
-        assert(amount != null),
+  })  : assert(amount != null),
         assert(product != null);
 
   final String id;

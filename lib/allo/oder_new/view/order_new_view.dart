@@ -1,7 +1,13 @@
+import 'package:allocrepes/allo/oder_new/cubit/order_new_cubit.dart';
+import 'package:allocrepes/allo/oder_new/cubit/order_new_state.dart';
+import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/place.dart';
+import 'package:order_repository/models/product.dart';
 
 class OrderNewView extends StatelessWidget {
   const OrderNewView({Key key}) : super(key: key);
@@ -21,7 +27,15 @@ class OrderNewView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 10,
+                  height: 20,
+                ),
+                BlocBuilder<OrderNewCubit, OrderNewState>(
+                  buildWhen: (prev, next) => prev.placeError != next.placeError,
+                  builder: (context, state) => Text(
+                    state.placeError ?? "",
+                    style: theme.textTheme.bodyText2
+                        .merge(TextStyle(color: Colors.red)),
+                  ),
                 ),
                 Text(
                   "Batiment : ",
@@ -30,23 +44,38 @@ class OrderNewView extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   height: 60,
-                  child: DropdownButton<Place>(
-                    value: Place(name: "Ampère A"),
-                    onChanged: (Place value) {},
-                    items: [
-                      Place(name: "Ampère A"),
-                      Place(name: "Ampère B"),
-                      Place(name: "Ampère C"),
-                      Place(name: "Arago")
-                    ].map<DropdownMenuItem<Place>>((Place place) {
-                      return DropdownMenuItem<Place>(
-                        value: place,
-                        child: Text(place.name),
-                      );
-                    }).toList(),
+                  child: BlocBuilder<OrderNewCubit, OrderNewState>(
+                    buildWhen: (prev, next) => prev.place != next.place,
+                    builder: (context, state) => DropdownButton<Place>(
+                      value: state.place,
+                      onChanged: (Place place) =>
+                          BlocProvider.of<OrderNewCubit>(context)
+                              .updatePlace(place),
+                      items: [
+                        Place(name: "Ampère A"),
+                        Place(name: "Ampère B"),
+                        Place(name: "Ampère C"),
+                        Place(name: "Arago")
+                      ].map<DropdownMenuItem<Place>>((Place place) {
+                        return DropdownMenuItem<Place>(
+                          value: place,
+                          child: Text(place.name),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                BlocBuilder<OrderNewCubit, OrderNewState>(
+                  buildWhen: (prev, next) => prev.roomError != next.roomError,
+                  builder: (context, state) => Text(
+                    state.roomError ?? "",
+                    style: theme.textTheme.bodyText2
+                        .merge(TextStyle(color: Colors.red)),
                   ),
                 ),
                 TextField(
+                  onChanged: (val) =>
+                      BlocProvider.of<OrderNewCubit>(context).updateRoom(val),
                   autocorrect: false,
                   keyboardType: TextInputType.numberWithOptions(
                       signed: false, decimal: false),
@@ -59,12 +88,21 @@ class OrderNewView extends StatelessWidget {
               ],
             ),
           ),
-          Column(
-            children: [
-              _OrderNewCategory(),
-              _OrderNewCategory(),
-              _OrderNewCategory(),
-            ],
+          BlocBuilder<OrderNewCubit, OrderNewState>(
+            buildWhen: (prev, next) =>
+                prev.categories.keys != next.categories.keys ||
+                prev.categories.values.toList() !=
+                    next.categories.values.toList(),
+            builder: (context, state) {
+              List<_OrderNewCategory> categories = [];
+              state.categories.forEach((Category cat, List<Product> products) =>
+                  categories.add(
+                      _OrderNewCategory(category: cat, products: products)));
+
+              return Column(
+                children: categories,
+              );
+            },
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -72,7 +110,11 @@ class OrderNewView extends StatelessWidget {
               height: 50,
               child: RaisedButton(
                 color: theme.primaryColor,
-                onPressed: () {},
+                onPressed: () {
+                  if (BlocProvider.of<OrderNewCubit>(context).checkout()) {
+                    Navigator.pushReplacement(context, OrderListPage.route());
+                  }
+                },
                 child: Text("Commander"),
               ),
             ),
@@ -84,7 +126,14 @@ class OrderNewView extends StatelessWidget {
 }
 
 class _OrderNewCategory extends StatelessWidget {
-  final title = "Crepes";
+  final Category category;
+  final List<Product> products;
+
+  const _OrderNewCategory(
+      {Key key, @required this.category, @required this.products})
+      : assert(category != null),
+        assert(products != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,15 +148,14 @@ class _OrderNewCategory extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                category.name,
                 style: textTheme.headline5,
               ),
               Column(
-                children: [
-                  _OrderNewItem(),
-                  _OrderNewItem(),
-                  _OrderNewItem(),
-                ],
+                children: products
+                    .map<_OrderNewItem>((product) =>
+                        _OrderNewItem(category: category, product: product))
+                    .toList(),
               )
             ],
           ),
@@ -119,9 +167,14 @@ class _OrderNewCategory extends StatelessWidget {
 }
 
 class _OrderNewItem extends StatelessWidget {
-  final image =
-      "https://www.hervecuisine.com/wp-content/uploads/2010/11/recette-crepes.jpg";
-  final title = "Crepes aux sucres";
+  final Category category;
+  final Product product;
+
+  const _OrderNewItem(
+      {Key key, @required this.category, @required this.product})
+      : assert(product != null),
+        assert(category != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -137,8 +190,8 @@ class _OrderNewItem extends StatelessWidget {
           SizedBox(
             width: 100,
             height: 100,
-            child: Image.network(
-              image,
+            child: Image(
+              image: product.image,
               fit: BoxFit.fill,
             ),
           ),
@@ -147,18 +200,16 @@ class _OrderNewItem extends StatelessWidget {
           ),
           Expanded(
             flex: 7,
-            child: Text(title, style: textTheme.headline5),
+            child: Text(product.name, style: textTheme.headline5),
           ),
           DropdownButton<int>(
-            value: 0,
+            value: BlocProvider.of<OrderNewCubit>(context)
+                .getQuantity(category, product),
             icon: Icon(Icons.arrow_drop_down_circle_outlined),
             iconSize: 24,
             elevation: 16,
-            underline: Container(
-              height: 2,
-              color: Colors.deepPurpleAccent,
-            ),
-            onChanged: (int newValue) {},
+            onChanged: (int val) => BlocProvider.of<OrderNewCubit>(context)
+                .updateQuantity(category, product, val),
             items: <int>[0, 1, 2, 3, 4].map<DropdownMenuItem<int>>((int value) {
               return DropdownMenuItem<int>(
                 value: value,

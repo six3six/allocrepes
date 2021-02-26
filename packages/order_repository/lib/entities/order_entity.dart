@@ -6,6 +6,7 @@ class OrderEntity extends Equatable {
   OrderEntity(
     this.id,
     this.status,
+    this.userId,
     this.createdAt,
     this.deliveredAt,
     this.place,
@@ -13,6 +14,7 @@ class OrderEntity extends Equatable {
   );
 
   final String id;
+  final String userId;
   final OrderStatus status;
   final DateTime createdAt;
   final DateTime deliveredAt;
@@ -36,6 +38,7 @@ class OrderEntity extends Equatable {
   static OrderEntity fromJson(Map<String, Object> json) => OrderEntity(
         json["id"] as String,
         OrderStatus.values[(json["status"] as int)],
+        json["user_id"] as String,
         DateTime.parse(json["created_at"]),
         DateTime.parse(json["delivered_at"]),
         json["place"] as String,
@@ -45,6 +48,7 @@ class OrderEntity extends Equatable {
   static OrderEntity fromSnapshot(DocumentSnapshot snapshot) => OrderEntity(
         snapshot.id,
         OrderStatus.values[(snapshot.get("status") as int)],
+        snapshot.get("user_id") as String,
         (snapshot.get("created_at") as Timestamp).toDate(),
         (snapshot.get("delivered_at") as Timestamp).toDate(),
         snapshot.get("place") as String,
@@ -53,6 +57,7 @@ class OrderEntity extends Equatable {
 
   Map<String, Object> toDocument() => {
         "status": status.index,
+        "user_id": userId,
         "created_at": createdAt,
         "delivered_at": deliveredAt,
         "place": place,
