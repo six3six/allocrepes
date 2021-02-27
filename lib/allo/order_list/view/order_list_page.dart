@@ -19,20 +19,15 @@ class OrderListPage extends StatelessWidget {
 
     return RepositoryProvider(
       create: (context) => OrderRepositoryFirestore(),
-      child: BlocProvider<AuthenticationBloc>(
-        create: (context) => AuthenticationBloc(
-            authenticationRepository:
-                RepositoryProvider.of<AuthenticationRepository>(context)),
-        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (BuildContext context, AuthenticationState state) {
-          return BlocProvider<OrderListCubit>(
-            create: (context) => OrderListCubit(
-                RepositoryProvider.of<OrderRepositoryFirestore>(context),
-                state.user),
-            child: const OrderListView(),
-          );
-        }),
-      ),
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (BuildContext context, AuthenticationState state) {
+        return BlocProvider<OrderListCubit>(
+          create: (context) => OrderListCubit(
+              RepositoryProvider.of<OrderRepositoryFirestore>(context),
+              state.user),
+          child: const OrderListView(),
+        );
+      }),
     );
   }
 }

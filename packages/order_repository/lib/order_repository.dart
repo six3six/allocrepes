@@ -7,7 +7,10 @@ import 'models/product.dart';
 
 abstract class OrderRepository {
   Stream<List<Order>> orders(
-      {bool delivered, DateTime start, DateTime stop, String userId});
+      {List<OrderStatus> orderStatus,
+      DateTime start,
+      DateTime stop,
+      String userId});
 
   Stream<List<Product>> products();
 

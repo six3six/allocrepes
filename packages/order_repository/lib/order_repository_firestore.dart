@@ -30,13 +30,12 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Future<Order> createOrder(Order order) async {
+  Future<void> createOrder(Order order) async {
     final orderRef = await orderRoot.add(order.toEntity().toDocument());
     final articlesRef = orderRef.collection("articles");
     for (Article article in order.articles) {
       articlesRef.add(article.toEntity().toDocument());
     }
-    return this.order(orderRef.id).first;
   }
 
   @override
@@ -62,7 +61,7 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   @override
   Stream<Order> order(String id) async* {
-    await for (DocumentSnapshot doc in orderRoot.doc("id").snapshots()) {
+    await for (DocumentSnapshot doc in orderRoot.doc(id).snapshots()) {
       yield await _orderFromEntity(OrderEntity.fromSnapshot(doc));
     }
   }
@@ -112,16 +111,16 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   @override
   Stream<List<Order>> orders({
-    bool delivered,
+    List<OrderStatus> orderStatus,
     DateTime start,
     DateTime stop,
     String userId,
   }) async* {
-    Query query = orderRoot.orderBy("created_at");
-    if (delivered == false)
-      query = query.where("status", isNotEqualTo: OrderStatus.DELIVERED);
-    else if (delivered == true)
-      query = query.where("status", isEqualTo: OrderStatus.DELIVERED);
+    Query query = orderRoot.limit(10000);
+    if (orderStatus != null) {
+      query = query.where("status",
+          whereIn: orderStatus.map((e) => e.index).toList());
+    }
 
     if (userId != null) query = query.where("owner", isEqualTo: userId);
 
@@ -129,6 +128,10 @@ class OrderRepositoryFirestore extends OrderRepository {
       query = query.where("create_at", isGreaterThanOrEqualTo: start);
     if (stop != null)
       query = query.where("create_at", isLessThanOrEqualTo: start);
+
+    query.orderBy("create_at");
+
+    print(query.parameters);
 
     await for (QuerySnapshot snapshot in query.snapshots()) {
       List<Order> orders = List<Order>(snapshot.docs.length);

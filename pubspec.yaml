@@ -32,6 +32,7 @@ dependencies:
   equatable: ^1.2.6
   formz: ^0.3.2
 
+  loading_overlay: ^0.2.1
   cupertino_icons: ^1.0.0
 
 dev_dependencies:

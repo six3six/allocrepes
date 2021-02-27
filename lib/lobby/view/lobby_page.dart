@@ -102,6 +102,11 @@ class LobbyPage extends StatelessWidget {
                       onPressed: () =>
                           context.read<AuthenticationRepository>().logOut(),
                       child: Text("Logout")),
+                  Text("Aucun test n'a été dev pour ce projet"),
+                  Text(
+                    "Tester c'est douter",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
                 ],
               ),
             ),

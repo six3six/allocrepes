@@ -40,9 +40,7 @@ class OrderListView extends StatelessWidget {
             ),
           ),
           BlocBuilder<OrderListCubit, OrderListState>(
-            buildWhen: (OrderListState prevState, OrderListState nextState) {
-              return prevState.currentOrders != prevState.currentOrders;
-            },
+            buildWhen: (prev, next) => prev.currentOrders != next.currentOrders,
             builder: (BuildContext context, OrderListState state) {
               if (state.currentOrders.isEmpty) {
                 return Padding(
@@ -82,9 +80,8 @@ class OrderListView extends StatelessWidget {
             ),
           ),
           BlocBuilder<OrderListCubit, OrderListState>(
-            buildWhen: (OrderListState prevState, OrderListState nextState) {
-              return prevState.previousOrders != prevState.previousOrders;
-            },
+            buildWhen: (prev, next) =>
+                prev.previousOrders != next.previousOrders,
             builder: (BuildContext context, OrderListState state) {
               return Column(
                 children: state.previousOrders

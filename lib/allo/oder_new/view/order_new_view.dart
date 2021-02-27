@@ -111,9 +111,12 @@ class OrderNewView extends StatelessWidget {
               child: RaisedButton(
                 color: theme.primaryColor,
                 onPressed: () {
-                  if (BlocProvider.of<OrderNewCubit>(context).checkout()) {
-                    Navigator.pushReplacement(context, OrderListPage.route());
-                  }
+                  BlocProvider.of<OrderNewCubit>(context)
+                      .checkout(context)
+                      .then((ok) {
+                    if (ok)
+                      Navigator.pushReplacement(context, OrderListPage.route());
+                  });
                 },
                 child: Text("Commander"),
               ),

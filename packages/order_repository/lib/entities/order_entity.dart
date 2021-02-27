@@ -6,7 +6,7 @@ class OrderEntity extends Equatable {
   OrderEntity(
     this.id,
     this.status,
-    this.userId,
+    this.owner,
     this.createdAt,
     this.deliveredAt,
     this.place,
@@ -14,7 +14,7 @@ class OrderEntity extends Equatable {
   );
 
   final String id;
-  final String userId;
+  final String owner;
   final OrderStatus status;
   final DateTime createdAt;
   final DateTime deliveredAt;
@@ -29,16 +29,17 @@ class OrderEntity extends Equatable {
         this.deliveredAt,
         this.place,
         this.room,
+        this.owner,
       ];
 
   @override
   String toString() =>
-      "OrderEntity { id: $id, status: $status, created_at: $createdAt, delivered_at: $deliveredAt, place: $place, room: $room }";
+      "OrderEntity { id: $id, status: $status, created_at: $createdAt, delivered_at: $deliveredAt, place: $place, room: $room, owner: $owner }";
 
   static OrderEntity fromJson(Map<String, Object> json) => OrderEntity(
         json["id"] as String,
         OrderStatus.values[(json["status"] as int)],
-        json["user_id"] as String,
+        json["owner"] as String,
         DateTime.parse(json["created_at"]),
         DateTime.parse(json["delivered_at"]),
         json["place"] as String,
@@ -48,16 +49,16 @@ class OrderEntity extends Equatable {
   static OrderEntity fromSnapshot(DocumentSnapshot snapshot) => OrderEntity(
         snapshot.id,
         OrderStatus.values[(snapshot.get("status") as int)],
-        snapshot.get("user_id") as String,
+        snapshot.get("owner") as String,
         (snapshot.get("created_at") as Timestamp).toDate(),
-        (snapshot.get("delivered_at") as Timestamp).toDate(),
+        (snapshot.get("delivered_at") as Timestamp ?? Timestamp(0, 0)).toDate(),
         snapshot.get("place") as String,
         snapshot.get("room") as String,
       );
 
   Map<String, Object> toDocument() => {
         "status": status.index,
-        "user_id": userId,
+        "owner": owner,
         "created_at": createdAt,
         "delivered_at": deliveredAt,
         "place": place,
