@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
+import 'package:order_repository/models/product.dart';
 
 class OrderListView extends StatelessWidget {
   const OrderListView({Key key}) : super(key: key);
@@ -124,7 +125,16 @@ class _OrderSummary extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: order.articles.map((Article a) {
-                  return Text("${a.amount.toString()}x ${a.product.name}");
+                  return FutureBuilder<Product>(
+                      future: BlocProvider.of<OrderListCubit>(context)
+                          .getProduct(a),
+                      builder: (context, snap) {
+                        if (snap.hasData)
+                          return Text(
+                              "${a.amount.toString()}x ${snap.data.name}");
+                        else
+                          return Text("${a.amount.toString()}x ${a.productId}");
+                      });
                 }).toList(),
               ),
             )

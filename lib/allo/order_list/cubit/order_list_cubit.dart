@@ -1,6 +1,9 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:order_repository/models/article.dart';
+import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/order.dart';
+import 'package:order_repository/models/product.dart';
 import 'package:order_repository/order_repository.dart';
 
 import 'order_list_state.dart';
@@ -25,5 +28,9 @@ class OrderListCubit extends Cubit<OrderListState> {
       OrderStatus.PENDING,
       OrderStatus.DELIVERING,
     ]).forEach((orders) => emit(state.copyWith(currentOrders: orders)));
+  }
+
+  Future<Product> getProduct(Article article) {
+    return _orderRepository.getProduct(article.categoryId, article.productId);
   }
 }

@@ -1,6 +1,10 @@
 import 'dart:async';
-
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/src/widgets/image.dart';
 import 'package:order_repository/entities/article_entity.dart';
 import 'package:order_repository/entities/category_entity.dart';
 import 'package:order_repository/entities/order_entity.dart';
@@ -14,20 +18,17 @@ import 'models/order_status.dart';
 import 'models/product.dart';
 
 class OrderRepositoryFirestore extends OrderRepository {
-  final CollectionReference orderRoot =
+  static final CollectionReference orderRoot =
       FirebaseFirestore.instance.collection("orders");
 
-  final CollectionReference productCategoryRoot =
+  static final CollectionReference productCategoryRoot =
       FirebaseFirestore.instance.collection("product_categories");
 
-  final Query productGroupRoot =
+  static final Query productGroupRoot =
       FirebaseFirestore.instance.collectionGroup("products");
 
-  List<Product> productList = [];
-
-  OrderRepositoryFirestore() {
-    products().listen((List<Product> products) => productList = products);
-  }
+  static final _productImageBase =
+      FirebaseStorage.instance.ref().child("products").child("images");
 
   @override
   Future<void> createOrder(Order order) async {
@@ -67,24 +68,32 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Stream<List<Product>> products() {
-    return productGroupRoot.snapshots().map<List<Product>>(
-        (QuerySnapshot snapshot) => snapshot.docs
-            .map<Product>((QueryDocumentSnapshot doc) =>
-                Product.fromEntity(ProductEntity.fromSnapshot(doc)))
-            .toList());
+  Stream<List<Product>> products() async* {
+    await for (final snapshot in productGroupRoot.snapshots()) {
+      yield await productsFromSnapshot(snapshot);
+    }
   }
 
   @override
-  Stream<List<Product>> productsFromCategory(Category category) {
-    return productCategoryRoot
+  Stream<List<Product>> productsFromCategory(Category category) async* {
+    await for (final snapshot in productCategoryRoot
         .doc(category.id)
         .collection("products")
-        .snapshots()
-        .map<List<Product>>((QuerySnapshot snapshot) => snapshot.docs
-            .map<Product>((QueryDocumentSnapshot doc) =>
-                Product.fromEntity(ProductEntity.fromSnapshot(doc)))
-            .toList());
+        .snapshots()) {
+      yield await productsFromSnapshot(snapshot);
+    }
+  }
+
+  Future<List<Product>> productsFromSnapshot(QuerySnapshot snapshot) async {
+    List<Product> products = [];
+    for (final doc in snapshot.docs) {
+      Product product = Product.fromEntityWithImage(
+          ProductEntity.fromSnapshot(doc), await getProductImage(doc.id));
+
+      products.add(product);
+    }
+
+    return products;
   }
 
   @override
@@ -153,22 +162,27 @@ class OrderRepositoryFirestore extends OrderRepository {
     List<Article> articles =
         querySnapshot.docs.map((QueryDocumentSnapshot doc) {
       final ArticleEntity entity = ArticleEntity.fromSnapshot(doc);
-      return Article.fromEntity(entity, _itemById(entity.item));
+      return Article.fromEntity(entity);
     }).toList();
 
     return Order.fromEntity(entity, articles);
   }
 
-  Product _itemById(String id) {
-    for (Product product in productList) {
-      if (product.id == id) return product;
-    }
-    return null;
-  }
-
   @override
   Future<void> addCategory(Category category) {
     return productCategoryRoot.add(category.toEntity().toDocument());
+  }
+
+  @override
+  Future<Product> getProduct(String categoryId, String productId) async {
+    final snapshot = await productCategoryRoot
+        .doc(categoryId)
+        .collection("products")
+        .doc(productId)
+        .get();
+    final image = await getProductImage(productId);
+    return Product.fromEntityWithImage(
+        ProductEntity.fromSnapshot(snapshot), image);
   }
 
   @override
@@ -207,5 +221,25 @@ class OrderRepositoryFirestore extends OrderRepository {
         .collection("products")
         .doc(product.id)
         .update({"available": available});
+  }
+
+  @override
+  Future<ImageProvider> getProductImage(String productId) async {
+    try {
+      final url = await _getImageURL(productId + ".jpg");
+      return NetworkImage(url);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> setProductImage(Product product, Uint8List data) async {
+    await _productImageBase.child(product.id + ".jpg").putData(Uint8List(20));
+  }
+
+  static Future<String> _getImageURL(String image) async {
+    final path = _productImageBase.child(image);
+    return await path.getDownloadURL();
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:typed_data';
 
+import 'package:flutter/widgets.dart';
 import 'package:order_repository/models/category.dart';
 
 import 'models/order.dart';
@@ -15,6 +17,8 @@ abstract class OrderRepository {
   Stream<List<Product>> products();
 
   Future<void> addCategory(Category category);
+
+  Future<Product> getProduct(String categoryId, String productId);
 
   Future<void> updateCategory(Category category);
 
@@ -43,4 +47,8 @@ abstract class OrderRepository {
   Future<void> editOrder(Order order);
 
   Future<void> cancelOrder(Order order);
+
+  Future<ImageProvider> getProductImage(String productId);
+
+  Future<void> setProductImage(Product product, Uint8List data);
 }

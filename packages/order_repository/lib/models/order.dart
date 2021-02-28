@@ -46,6 +46,28 @@ class Order extends Equatable {
   List<Object> get props =>
       [id, status, createdAt, deliveredAt, articles, place, room, owner];
 
+  Order copyWith({
+    final String id,
+    String owner,
+    OrderStatus status,
+    DateTime createdAt,
+    DateTime deliveredAt,
+    List<Article> articles,
+    String place,
+    String room,
+  }) {
+    return Order(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      owner: owner ?? this.owner,
+      createdAt: createdAt ?? this.createdAt,
+      deliveredAt: deliveredAt ?? this.deliveredAt,
+      articles: articles ?? this.articles,
+      place: place ?? this.place,
+      room: room ?? this.room,
+    );
+  }
+
   OrderEntity toEntity() {
     return OrderEntity(id, status, owner, createdAt, deliveredAt, place, room);
   }

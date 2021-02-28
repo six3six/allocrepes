@@ -23,6 +23,20 @@ class Product extends Equatable {
   @override
   List<Object> get props => [id, name, available, image];
 
+  Product copyWith({
+    String id,
+    String name,
+    bool available,
+    ImageProvider image,
+  }) {
+    return Product(
+      name: name ?? this.name,
+      available: available ?? this.available,
+      id: id ?? this.id,
+      image: image ?? this.image,
+    );
+  }
+
   ProductEntity toEntity() {
     return ProductEntity(id, name, available);
   }
@@ -32,6 +46,18 @@ class Product extends Equatable {
       id: entity.id,
       name: entity.name,
       available: entity.available,
+    );
+  }
+
+  static Product fromEntityWithImage(
+      ProductEntity entity, ImageProvider image) {
+    return Product(
+      id: entity.id,
+      name: entity.name,
+      available: entity.available,
+      image: image ??
+          const NetworkImage(
+              "https://www.hervecuisine.com/wp-content/uploads/2010/11/recette-crepes.jpg"),
     );
   }
 }
