@@ -138,12 +138,13 @@ class OrderRepositoryFirestore extends OrderRepository {
     if (stop != null)
       query = query.where("create_at", isLessThanOrEqualTo: start);
 
-    query.orderBy("create_at");
+    query.orderBy("create_at", descending: false);
 
     print(query.parameters);
 
     await for (QuerySnapshot snapshot in query.snapshots()) {
-      List<Order> orders = List<Order>(snapshot.docs.length);
+      List<Order> orders =
+          List<Order>.filled(snapshot.docs.length, Order.empty);
 
       int i = 0;
       for (QueryDocumentSnapshot doc in snapshot.docs) {
@@ -174,15 +175,22 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Future<Product> getProduct(String categoryId, String productId) async {
+  Future<Product> getProduct(
+    String categoryId,
+    String productId, {
+    bool loadImage = true,
+  }) async {
     final snapshot = await productCategoryRoot
         .doc(categoryId)
         .collection("products")
         .doc(productId)
         .get();
-    final image = await getProductImage(productId);
-    return Product.fromEntityWithImage(
-        ProductEntity.fromSnapshot(snapshot), image);
+    if (loadImage) {
+      final image = await getProductImage(productId);
+      return Product.fromEntityWithImage(
+          ProductEntity.fromSnapshot(snapshot), image);
+    } else
+      return Product.fromEntity(ProductEntity.fromSnapshot(snapshot));
   }
 
   @override

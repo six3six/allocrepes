@@ -1,6 +1,8 @@
+import 'package:allocrepes/admin_main/view/admin_main_page.dart';
 import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
-import 'package:allocrepes/allo/product_list/view/product_list_page.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
+import 'package:allocrepes/widget/menu_card.dart';
+import 'package:allocrepes/widget/news_card.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class LobbyPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("XANTOS"),
+        title: const Text("XANTHOS"),
       ),
       body: CustomScrollView(
         primary: false,
@@ -31,7 +33,7 @@ class LobbyPage extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        "XANTOS",
+                        "XANTHOS",
                         style: textTheme.headline2
                             .merge(TextStyle(fontFamily: "Oswald")),
                       ),
@@ -69,9 +71,9 @@ class LobbyPage extends StatelessWidget {
                   },
                 ),
                 MenuCard(
-                  title: "Allo admin : modifier les produits",
+                  title: "Admin",
                   onTap: () {
-                    Navigator.push(context, ProductListPage.route());
+                    Navigator.push(context, AdminMainPage.route());
                   },
                 ),
               ],
@@ -112,73 +114,6 @@ class LobbyPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class MenuCard extends StatelessWidget {
-  final String title;
-  final GestureTapCallback onTap;
-
-  const MenuCard({Key key, this.title = "", this.onTap}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.all(15),
-          child: Center(
-            child: Text(title),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class NewsCard extends StatelessWidget {
-  final image;
-  final title;
-
-  const NewsCard({Key key, this.image, this.title}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final headStyle = Theme.of(context).textTheme.bodyText1.merge(TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ));
-    return Card(
-      semanticContainer: true,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: InkWell(
-        onTap: () {},
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 200,
-              child: Image.network(
-                image,
-                fit: BoxFit.fill,
-                height: double.infinity,
-                width: double.infinity,
-              ),
-            ),
-            ListTile(
-              title: Container(
-                padding: EdgeInsets.only(right: 20, bottom: 20, top: 10),
-                child: Text(
-                  title,
-                  style: headStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

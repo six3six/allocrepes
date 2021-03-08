@@ -18,7 +18,11 @@ abstract class OrderRepository {
 
   Future<void> addCategory(Category category);
 
-  Future<Product> getProduct(String categoryId, String productId);
+  Future<Product> getProduct(
+    String categoryId,
+    String productId, {
+    bool loadImage = true,
+  });
 
   Future<void> updateCategory(Category category);
 

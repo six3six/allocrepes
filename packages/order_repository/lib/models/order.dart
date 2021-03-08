@@ -10,7 +10,7 @@ class Order extends Equatable {
   const Order({
     this.id,
     @required this.owner,
-    @required this.status,
+    this.status = OrderStatus.VALIDATING,
     @required this.createdAt,
     @required this.articles,
     @required this.place,
@@ -83,5 +83,28 @@ class Order extends Equatable {
       place: entity.place,
       room: entity.room,
     );
+  }
+
+  static String statusToString(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.CANCELED:
+        return "Annulé";
+        break;
+      case OrderStatus.VALIDATING:
+        return "En cours de validation";
+        break;
+      case OrderStatus.PENDING:
+        return "En cours de préparation";
+        break;
+      case OrderStatus.DELIVERING:
+        return "En cours de livraison";
+        break;
+      case OrderStatus.DELIVERED:
+        return "Livrée";
+        break;
+      default:
+        return "Etat inconnu";
+        break;
+    }
   }
 }

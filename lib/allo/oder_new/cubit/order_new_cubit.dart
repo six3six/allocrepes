@@ -92,7 +92,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     try {
       emit(state.copyWith(loading: true));
       await orderRepository.createOrder(Order(
-        status: OrderStatus.PENDING,
+        status: OrderStatus.VALIDATING,
         owner: user.id,
         createdAt: DateTime.now(),
         articles: articles,

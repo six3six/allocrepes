@@ -85,6 +85,7 @@ class OrderListView extends StatelessWidget {
                 prev.previousOrders != next.previousOrders,
             builder: (BuildContext context, OrderListState state) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: state.previousOrders
                     .map<_OrderSummary>((e) => _OrderSummary(order: e))
                     .toList(),
@@ -124,24 +125,37 @@ class _OrderSummary extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: order.articles.map((Article a) {
-                  return FutureBuilder<Product>(
-                      future: BlocProvider.of<OrderListCubit>(context)
-                          .getProduct(a),
-                      builder: (context, snap) {
-                        if (snap.hasData)
-                          return Text(
-                              "${a.amount.toString()}x ${snap.data.name}");
-                        else
-                          return Text("${a.amount.toString()}x ${a.productId}");
-                      });
-                }).toList(),
+                children: order.articles
+                    .map((Article a) => _ArticleToProductLabel(article: a))
+                    .toList(),
               ),
             )
           ],
         ),
       ),
     );
+  }
+}
+
+class _ArticleToProductLabel extends StatelessWidget {
+  final Article article;
+
+  const _ArticleToProductLabel({
+    Key key,
+    @required this.article,
+  })  : assert(article != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Product>(
+        future: BlocProvider.of<OrderListCubit>(context).getProduct(article),
+        builder: (context, snap) {
+          if (snap.hasData)
+            return Text("${article.amount.toString()}x ${snap.data.name}");
+          else
+            return Text("${article.amount.toString()}x ${article.productId}");
+        });
   }
 }
 
@@ -157,31 +171,37 @@ class _OrderSummaryStatus extends StatelessWidget {
     switch (status) {
       case OrderStatus.CANCELED:
         return Text(
-          "Annulé",
+          Order.statusToString(status),
           style: textTheme.merge(TextStyle(color: Colors.red)),
+        );
+        break;
+      case OrderStatus.VALIDATING:
+        return Text(
+          Order.statusToString(status),
+          style: textTheme.merge(TextStyle(color: Colors.amber)),
         );
         break;
       case OrderStatus.PENDING:
         return Text(
-          "En cours de préparation",
+          Order.statusToString(status),
           style: textTheme.merge(TextStyle(color: Colors.amber)),
         );
         break;
       case OrderStatus.DELIVERING:
         return Text(
-          "En cours de livraison",
+          Order.statusToString(status),
           style: textTheme.merge(TextStyle(color: Colors.amber)),
         );
         break;
       case OrderStatus.DELIVERED:
         return Text(
-          "Livrée",
+          Order.statusToString(status),
           style: textTheme.merge(TextStyle(color: Colors.green)),
         );
         break;
       default:
         return Text(
-          "Etat inconnu",
+          Order.statusToString(status),
           style: textTheme.merge(TextStyle(color: Colors.grey)),
         );
         break;
