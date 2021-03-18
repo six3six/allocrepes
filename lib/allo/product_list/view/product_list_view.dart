@@ -51,11 +51,11 @@ class _ProductEntry extends StatelessWidget {
   final Product product;
   final Category category;
 
-  const _ProductEntry(
-      {Key key, @required this.product, @required this.category})
-      : assert(product != null),
-        assert(category != null),
-        super(key: key);
+  const _ProductEntry({
+    Key? key,
+    required this.product,
+    required this.category,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +96,12 @@ class _ProductEntry extends StatelessWidget {
               child: Text(product.name, style: textTheme.headline6),
             ),
             Checkbox(
-                value: product.available,
-                onChanged: (bool availability) =>
-                    BlocProvider.of<ProductListCubit>(context)
-                        .updateProductAvailability(
-                            category, product, availability)),
+              value: product.available,
+              onChanged: (bool? availability) =>
+                  BlocProvider.of<ProductListCubit>(context)
+                      .updateProductAvailability(
+                          category, product, availability ?? false),
+            ),
           ],
         ),
       ),
@@ -113,10 +114,8 @@ class _ProductCategory extends StatelessWidget {
   final Category category;
 
   const _ProductCategory(
-      {Key key, @required this.category, @required this.products})
-      : assert(category != null),
-        assert(products != null),
-        super(key: key);
+      {Key? key, required this.category, required this.products})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +160,7 @@ class _ProductCategory extends StatelessWidget {
               ),
               SizedBox(
                 width: double.infinity,
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () => BlocProvider.of<ProductListCubit>(context)
                       .addProductDialog(context, category),
                   child: Text("Ajouter un produit"),

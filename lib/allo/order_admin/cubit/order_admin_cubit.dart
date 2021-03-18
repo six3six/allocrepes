@@ -25,7 +25,7 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
   final OrderRepository _orderRepository;
   final AuthenticationRepository _authenticationRepository;
 
-  Stream<List<Order>> orderStream;
+  Stream<List<Order>>? orderStream;
 
   void getOrders() {
     orderStream = null;
@@ -42,11 +42,11 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
 
     orderStream = _orderRepository.orders(orderStatus: status, places: places);
 
-    orderStream.forEach((orders) {
+    orderStream?.forEach((orders) {
       Map<OrderStatus, List<Order>> ordersMap = {};
       orders.forEach((order) {
         if (!ordersMap.containsKey(order.status)) ordersMap[order.status] = [];
-        ordersMap[order.status].add(order);
+        ordersMap[order.status]?.add(order);
       });
 
       emit(state.copyWith(orders: ordersMap));
@@ -69,7 +69,7 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
     Map<String, bool> expandedOrders = {};
     expandedOrders.addAll(state.expandedOrders);
 
-    expandedOrders[order.id] = expand;
+    expandedOrders[order.id!] = expand;
 
     emit(state.copyWith(expandedOrders: expandedOrders));
   }

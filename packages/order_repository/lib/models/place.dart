@@ -6,7 +6,10 @@ class Place extends Equatable {
   final String name;
   final bool available;
 
-  const Place({@required this.name, this.available = false});
+  const Place({
+    required this.name,
+    this.available = false,
+  });
 
   static const empty = Place(name: "");
 

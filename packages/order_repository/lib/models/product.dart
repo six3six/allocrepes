@@ -6,14 +6,13 @@ import 'package:order_repository/entities/product_entity.dart';
 class Product extends Equatable {
   const Product({
     this.id,
-    @required this.name,
-    @required this.available,
+    required this.name,
+    required this.available,
     this.image = const NetworkImage(
         "https://www.hervecuisine.com/wp-content/uploads/2010/11/recette-crepes.jpg"),
-  })  : assert(name != null),
-        assert(available != null);
+  });
 
-  final String id;
+  final String? id;
   final String name;
   final bool available;
   final ImageProvider image;
@@ -21,13 +20,13 @@ class Product extends Equatable {
   static const empty = Product(id: "", name: "", available: false);
 
   @override
-  List<Object> get props => [id, name, available, image];
+  List<Object?> get props => [id, name, available, image];
 
   Product copyWith({
-    String id,
-    String name,
-    bool available,
-    ImageProvider image,
+    String? id,
+    String? name,
+    bool? available,
+    ImageProvider? image,
   }) {
     return Product(
       name: name ?? this.name,
@@ -50,7 +49,7 @@ class Product extends Equatable {
   }
 
   static Product fromEntityWithImage(
-      ProductEntity entity, ImageProvider image) {
+      ProductEntity entity, ImageProvider? image) {
     return Product(
       id: entity.id,
       name: entity.name,

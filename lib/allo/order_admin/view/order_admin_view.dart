@@ -15,7 +15,7 @@ import 'package:order_repository/models/product.dart';
 import 'package:order_repository/order_repository_firestore.dart';
 
 class OrderAdminView extends StatelessWidget {
-  OrderAdminView({Key key}) : super(key: key);
+  OrderAdminView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +72,14 @@ class OrderAdminView extends StatelessWidget {
                     return ExpansionPanelList(
                       expansionCallback: (panelIndex, isExpanded) =>
                           BlocProvider.of<OrderAdminCubit>(context).expandOrder(
-                        state.orders[status][panelIndex],
+                        state.orders[status]?[panelIndex] ?? Order.empty,
                         !isExpanded,
                       ),
                       children: state.orders[status]
-                          .map((order) => orderToPanel(
-                              order, state.expandedOrders[order.id] ?? false))
-                          .toList(),
+                              ?.map((order) => orderToPanel(order,
+                                  state.expandedOrders[order.id] ?? false))
+                              .toList() ??
+                          [],
                     );
                   },
                 ),
@@ -100,11 +101,11 @@ class OrderAdminView extends StatelessWidget {
       headerBuilder: (BuildContext context, bool isExpanded) {
         if (isExpanded)
           return ListTile(
-            title: Text("Commande : " + order.id),
+            title: Text("Commande : " + (order.id ?? "")),
           );
         else
           return ListTile(
-            title: Text("Commande : " + order.id),
+            title: Text("Commande : " + (order.id ?? "")),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: order.articles
@@ -126,8 +127,11 @@ class _FilterView extends StatelessWidget {
   final Map<OrderStatus, bool> selectedStatus;
   final Map<Place, bool> selectedPlaces;
 
-  const _FilterView({Key key, this.selectedStatus, this.selectedPlaces})
-      : super(key: key);
+  const _FilterView({
+    Key? key,
+    required this.selectedStatus,
+    required this.selectedPlaces,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -159,9 +163,10 @@ class _FilterView extends StatelessWidget {
                         .map((place) => CheckboxListTile(
                               title: Text(place.name),
                               value: state.selectedPlaces[place] ?? false,
-                              onChanged: (bool activate) =>
+                              onChanged: (bool? activate) =>
                                   BlocProvider.of<OrderAdminCubit>(context)
-                                      .updateFilterRoom(place, activate),
+                                      .updateFilterRoom(
+                                          place, activate ?? false),
                             ))
                         .toList(),
               );
@@ -180,9 +185,9 @@ class _FilterView extends StatelessWidget {
                           overflow: TextOverflow.clip,
                         ),
                         value: selectedStatus[status] ?? false,
-                        onChanged: (bool activate) =>
+                        onChanged: (bool? activate) =>
                             BlocProvider.of<OrderAdminCubit>(context)
-                                .updateFilterStatus(status, activate),
+                                .updateFilterStatus(status, activate ?? false),
                       ))
                   .toList()),
         ],
@@ -210,9 +215,7 @@ class _FilterView extends StatelessWidget {
 class _OrderCompleteView extends StatelessWidget {
   final Order order;
 
-  const _OrderCompleteView({Key key, @required this.order})
-      : assert(order != null),
-        super(key: key);
+  const _OrderCompleteView({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -267,9 +270,7 @@ class _OrderCompleteView extends StatelessWidget {
 class _StateSelector extends StatelessWidget {
   final Order order;
 
-  const _StateSelector({Key key, @required this.order})
-      : assert(order != null),
-        super(key: key);
+  const _StateSelector({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -299,9 +300,9 @@ class _ArticleToProductLabel extends StatelessWidget {
   final Article article;
 
   const _ArticleToProductLabel({
-    Key key,
-    @required this.article,
-  })  : assert(article != null),
+    Key? key,
+    required this.article,
+  })   : assert(article != null),
         super(key: key);
 
   @override
@@ -310,7 +311,7 @@ class _ArticleToProductLabel extends StatelessWidget {
         future: BlocProvider.of<OrderAdminCubit>(context).getProduct(article),
         builder: (context, snap) {
           if (snap.hasData)
-            return Text("${article.amount.toString()}x ${snap.data.name}");
+            return Text("${article.amount.toString()}x ${snap.data!.name}");
           else
             return Text("${article.amount.toString()}x ${article.productId}");
         });
@@ -321,22 +322,21 @@ class _UserLabel extends Text {
   final String userId;
 
   const _UserLabel({
-    Key key,
-    @required this.userId,
-    TextStyle style,
-    StrutStyle strutStyle,
-    TextAlign textAlign,
-    TextDirection textDirection,
-    Locale locale,
-    bool softWrap,
-    TextOverflow overflow,
-    double textScaleFactor,
-    int maxLines,
-    String semanticsLabel,
-    TextWidthBasis textWidthBasis,
-    ui.TextHeightBehavior textHeightBehavior,
-  })  : assert(userId != null),
-        super(
+    Key? key,
+    required this.userId,
+    TextStyle? style,
+    StrutStyle? strutStyle,
+    TextAlign? textAlign,
+    TextDirection? textDirection,
+    Locale? locale,
+    bool? softWrap,
+    TextOverflow? overflow,
+    double? textScaleFactor,
+    int? maxLines,
+    String? semanticsLabel,
+    TextWidthBasis? textWidthBasis,
+    ui.TextHeightBehavior? textHeightBehavior,
+  }) : super(
           userId,
           key: key,
           style: style,
@@ -359,7 +359,7 @@ class _UserLabel extends Text {
         future: BlocProvider.of<OrderAdminCubit>(context).getUser(userId),
         builder: (context, snap) {
           if (snap.hasData)
-            return Text("${snap.data.name}");
+            return Text("${snap.data!.name}");
           else
             return Text("$userId");
         });
@@ -368,9 +368,9 @@ class _UserLabel extends Text {
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
   });
 
   final double minHeight;
@@ -385,7 +385,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return new SizedBox.expand(child: child);
   }
 

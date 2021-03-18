@@ -13,7 +13,7 @@ class LobbyPage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => LobbyPage());
   }
 
-  const LobbyPage({Key key}) : super(key: key);
+  const LobbyPage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -34,7 +34,7 @@ class LobbyPage extends StatelessWidget {
                     Center(
                       child: Text(
                         "XANTHOS",
-                        style: textTheme.headline2
+                        style: textTheme.headline2!
                             .merge(TextStyle(fontFamily: "Oswald")),
                       ),
                     ),

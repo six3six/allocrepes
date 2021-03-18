@@ -5,7 +5,10 @@ class PlaceEntity extends Equatable {
   final String name;
   final bool available;
 
-  PlaceEntity({this.name, this.available});
+  PlaceEntity({
+    required this.name,
+    required this.available,
+  });
 
   @override
   List<Object> get props => [name, available];

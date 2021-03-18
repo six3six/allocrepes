@@ -14,7 +14,7 @@ class OrderListPage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => OrderListPage());
   }
 
-  const OrderListPage({Key key}) : super(key: key);
+  const OrderListPage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

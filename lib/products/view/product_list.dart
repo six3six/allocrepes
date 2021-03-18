@@ -7,7 +7,7 @@ import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/product.dart';
 
 class ItemList extends StatelessWidget {
-  const ItemList({Key key}) : super(key: key);
+  const ItemList({Key? key}) : super(key: key);
 
   _addCategoryDialog(BuildContext context) {
     final theme = Theme.of(context);
@@ -25,19 +25,20 @@ class ItemList extends StatelessWidget {
           ),
         ),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text(
               'Annuler',
-              style: theme.textTheme.button.merge(TextStyle(color: Colors.red)),
+              style:
+                  theme.textTheme.button!.merge(TextStyle(color: Colors.red)),
             ),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               'Ajouter',
-              style: theme.textTheme.button.merge(
+              style: theme.textTheme.button!.merge(
                 TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blueAccent,
@@ -62,16 +63,14 @@ class ItemList extends StatelessWidget {
         BlocBuilder<ProductsCubit, ProductsState>(
             builder: (context, ProductsState state) {
           if (state.products == null) return SizedBox();
-          List<Widget> catWid = List<Widget>(state.products.keys.length + 1);
+          List<Widget> catWid = [];
 
-          int i = 0;
           for (Category category in state.products.keys) {
-            catWid[i] = _ItemListCategory(
+            catWid.add(_ItemListCategory(
               title: category.name,
-              products: state.products[category],
+              products: state.products[category]!,
               category: category,
-            );
-            i++;
+            ));
           }
 
           catWid[catWid.length - 1] = SizedBox(
@@ -89,7 +88,7 @@ class ItemList extends StatelessWidget {
                       Text(
                         "Ajouter une categorie",
                         textAlign: TextAlign.left,
-                        style: theme.textTheme.headline5.merge(
+                        style: theme.textTheme.headline5!.merge(
                           TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -114,21 +113,15 @@ class _ItemListCategory extends StatelessWidget {
   final List<Product> products;
 
   const _ItemListCategory({
-    Key key,
-    @required this.title,
-    @required this.products,
-    @required this.category,
-  })
-      : assert(title != null),
-        assert(products != null),
-        assert(category != null),
-        super(key: key);
+    Key? key,
+    required this.title,
+    required this.products,
+    required this.category,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -140,26 +133,24 @@ class _ItemListCategory extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: textTheme.headline5
+                style: textTheme.headline5!
                     .merge(TextStyle(fontWeight: FontWeight.bold)),
               ),
               Column(
                 children: products
-                    .map((Product product) =>
-                    _ItemListTile(
-                      image: product.image,
-                      product: product,
-                      category: category,
-                    ))
+                    .map((Product product) => _ItemListTile(
+                          image: product.image,
+                          product: product,
+                          category: category,
+                        ))
                     .toList(),
               ),
               Center(
-                child: FlatButton(
-                  onPressed: () =>
-                      _addProductDialog(
-                        context,
-                        category,
-                      ),
+                child: TextButton(
+                  onPressed: () => _addProductDialog(
+                    context,
+                    category,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -188,47 +179,46 @@ class _ItemListCategory extends StatelessWidget {
     TextEditingController controller = TextEditingController();
     showDialog(
       context: context,
-      builder: (_) =>
-          AlertDialog(
-            title: Text("Ajouter un produit"),
-            content: TextField(
-              controller: controller,
-              autocorrect: true,
-              decoration: InputDecoration(
-                labelText: 'Produit',
-                helperText: 'Crêpes aux sucres',
+      builder: (_) => AlertDialog(
+        title: Text("Ajouter un produit"),
+        content: TextField(
+          controller: controller,
+          autocorrect: true,
+          decoration: InputDecoration(
+            labelText: 'Produit',
+            helperText: 'Crêpes aux sucres',
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text(
+              'Annuler',
+              style:
+                  theme.textTheme.button!.merge(TextStyle(color: Colors.red)),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text(
+              'Ajouter',
+              style: theme.textTheme.button!.merge(
+                TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
               ),
             ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  'Annuler',
-                  style: theme.textTheme.button.merge(
-                      TextStyle(color: Colors.red)),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: Text(
-                  'Ajouter',
-                  style: theme.textTheme.button.merge(
-                    TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent,
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  context
-                      .read<ProductsCubit>()
-                      .addProduct(category, controller.text);
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          ),
+            onPressed: () {
+              context
+                  .read<ProductsCubit>()
+                  .addProduct(category, controller.text);
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
     );
   }
 }
@@ -238,20 +228,16 @@ class _ItemListTile extends StatelessWidget {
   final Product product;
   final Category category;
 
-  const _ItemListTile({Key key,
-    @required this.image,
-    @required this.product,
-    @required this.category})
-      : assert(image != null),
-        assert(product != null),
-        assert(category != null),
-        super(key: key);
+  const _ItemListTile(
+      {Key? key,
+      required this.image,
+      required this.product,
+      required this.category})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -279,15 +265,14 @@ class _ItemListTile extends StatelessWidget {
             child: Text(product.name,
                 style: product.available
                     ? textTheme.headline5
-                    : textTheme.headline5.merge(TextStyle(
-                    decoration: TextDecoration.lineThrough,
-                    color: Colors.grey))),
+                    : textTheme.headline5!.merge(TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                        color: Colors.grey))),
           ),
           Checkbox(
-            onChanged: (bool value) =>
-                context
-                    .read<ProductsCubit>()
-                    .changeAvailability(category, product, value),
+            onChanged: (bool? value) => context
+                .read<ProductsCubit>()
+                .changeAvailability(category, product, value ?? false),
             value: product.available,
           )
         ],

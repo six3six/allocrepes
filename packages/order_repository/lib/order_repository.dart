@@ -12,11 +12,11 @@ abstract class OrderRepository {
   List<Place> places();
 
   Stream<List<Order>> orders({
-    List<OrderStatus> orderStatus,
-    List<Place> places,
-    DateTime start,
-    DateTime stop,
-    String userId,
+    List<OrderStatus>? orderStatus,
+    List<Place>? places,
+    DateTime? start,
+    DateTime? stop,
+    String? userId,
   });
 
   Stream<List<Product>> products();
@@ -57,7 +57,7 @@ abstract class OrderRepository {
 
   Future<void> cancelOrder(Order order);
 
-  Future<ImageProvider> getProductImage(String productId);
+  Future<ImageProvider?> getProductImage(String productId);
 
   Future<void> setProductImage(Product product, Uint8List data);
 }

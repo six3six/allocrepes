@@ -7,21 +7,19 @@ class OrderListState extends Equatable {
 
   final bool isLoading;
 
-  const OrderListState(
-      {this.previousOrders = const [],
-      this.currentOrders = const [],
-      this.isLoading = true})
-      : assert(previousOrders != null),
-        assert(isLoading != null),
-        assert(currentOrders != null);
+  const OrderListState({
+    this.previousOrders = const [],
+    this.currentOrders = const [],
+    this.isLoading = true,
+  });
 
   @override
   List<Object> get props => [previousOrders, currentOrders, isLoading];
 
   OrderListState copyWith({
-    List<Order> previousOrders,
-    List<Order> currentOrders,
-    bool isLoading,
+    List<Order>? previousOrders,
+    List<Order>? currentOrders,
+    bool? isLoading,
   }) {
     return OrderListState(
       previousOrders: previousOrders ?? this.previousOrders,

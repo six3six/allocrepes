@@ -9,7 +9,7 @@ import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/product.dart';
 
 class OrderListView extends StatelessWidget {
-  const OrderListView({Key key}) : super(key: key);
+  const OrderListView({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -101,7 +101,7 @@ class OrderListView extends StatelessWidget {
 class _OrderSummary extends StatelessWidget {
   final Order order;
 
-  const _OrderSummary({Key key, @required this.order}) : super(key: key);
+  const _OrderSummary({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +118,7 @@ class _OrderSummary extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Text(
-                "Commandé le ${order.createdAt?.toLocal().toString().split(".")[0]}"),
+                "Commandé le ${order.createdAt.toLocal().toString().split(".")[0]}"),
             Text("Livraison à ${order.place}, salle/appartement ${order.room}"),
             _OrderSummaryStatus(order.status),
             Container(
@@ -141,9 +141,9 @@ class _ArticleToProductLabel extends StatelessWidget {
   final Article article;
 
   const _ArticleToProductLabel({
-    Key key,
-    @required this.article,
-  })  : assert(article != null),
+    Key? key,
+    required this.article,
+  })   : assert(article != null),
         super(key: key);
 
   @override
@@ -152,7 +152,7 @@ class _ArticleToProductLabel extends StatelessWidget {
         future: BlocProvider.of<OrderListCubit>(context).getProduct(article),
         builder: (context, snap) {
           if (snap.hasData)
-            return Text("${article.amount.toString()}x ${snap.data.name}");
+            return Text("${article.amount.toString()}x ${snap.data!.name}");
           else
             return Text("${article.amount.toString()}x ${article.productId}");
         });
@@ -162,7 +162,7 @@ class _ArticleToProductLabel extends StatelessWidget {
 class _OrderSummaryStatus extends StatelessWidget {
   final OrderStatus status;
 
-  const _OrderSummaryStatus(this.status, {Key key}) : super(key: key);
+  const _OrderSummaryStatus(this.status, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -172,37 +172,37 @@ class _OrderSummaryStatus extends StatelessWidget {
       case OrderStatus.CANCELED:
         return Text(
           Order.statusToString(status),
-          style: textTheme.merge(TextStyle(color: Colors.red)),
+          style: textTheme!.merge(TextStyle(color: Colors.red)),
         );
         break;
       case OrderStatus.VALIDATING:
         return Text(
           Order.statusToString(status),
-          style: textTheme.merge(TextStyle(color: Colors.amber)),
+          style: textTheme!.merge(TextStyle(color: Colors.grey)),
         );
         break;
       case OrderStatus.PENDING:
         return Text(
           Order.statusToString(status),
-          style: textTheme.merge(TextStyle(color: Colors.amber)),
+          style: textTheme!.merge(TextStyle(color: Colors.amber)),
         );
         break;
       case OrderStatus.DELIVERING:
         return Text(
           Order.statusToString(status),
-          style: textTheme.merge(TextStyle(color: Colors.amber)),
+          style: textTheme!.merge(TextStyle(color: Colors.amber)),
         );
         break;
       case OrderStatus.DELIVERED:
         return Text(
           Order.statusToString(status),
-          style: textTheme.merge(TextStyle(color: Colors.green)),
+          style: textTheme!.merge(TextStyle(color: Colors.green)),
         );
         break;
       default:
         return Text(
           Order.statusToString(status),
-          style: textTheme.merge(TextStyle(color: Colors.grey)),
+          style: textTheme!.merge(TextStyle(color: Colors.grey)),
         );
         break;
     }

@@ -8,12 +8,12 @@ class ProductEntity extends Equatable {
     this.available,
   );
 
-  final String id;
+  final String? id;
   final String name;
   final bool available;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         this.id,
         this.name,
         this.available,
@@ -23,15 +23,13 @@ class ProductEntity extends Equatable {
   String toString() =>
       "ProductEntity { id: $id, category: $name, available: $available }";
 
-  static ProductEntity fromJson(Map<String, Object> json) =>
-      ProductEntity(
+  static ProductEntity fromJson(Map<String, Object> json) => ProductEntity(
         json["id"] as String,
         json["name"] as String,
         json["available"] as bool,
       );
 
-  static ProductEntity fromSnapshot(DocumentSnapshot snapshot) =>
-      ProductEntity(
+  static ProductEntity fromSnapshot(DocumentSnapshot snapshot) => ProductEntity(
         snapshot.id,
         snapshot.get("name") as String,
         snapshot.get("available") as bool,

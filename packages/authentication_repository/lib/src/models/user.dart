@@ -9,15 +9,12 @@ import 'package:meta/meta.dart';
 class User extends Equatable {
   /// {@macro user}
   const User({
-    @required this.email,
-    @required this.id,
-    @required this.admin,
-    @required this.name,
-    @required this.photo,
-  })  : assert(email != null),
-        assert(admin != null),
-        assert(name != null),
-        assert(id != null);
+    required this.email,
+    required this.id,
+    required this.admin,
+    required this.name,
+    this.photo,
+  });
 
   /// The current user's email address.
   final String email;
@@ -31,12 +28,12 @@ class User extends Equatable {
   final String name;
 
   /// Url for the current user's photo.
-  final String photo;
+  final String? photo;
 
   /// Empty user which represents an unauthenticated user.
   static const empty =
       User(email: '', id: '', admin: false, name: "", photo: null);
 
   @override
-  List<Object> get props => [email, id, admin, name, photo];
+  List<Object?> get props => [email, id, admin, name, photo];
 }

@@ -28,10 +28,10 @@ class OrderAdminState extends Equatable {
       ];
 
   OrderAdminState copyWith({
-    Map<OrderStatus, List<Order>> orders,
-    Map<String, bool> expandedOrders,
-    Map<OrderStatus, bool> selectedStatus,
-    Map<Place, bool> selectedPlaces,
+    Map<OrderStatus, List<Order>>? orders,
+    Map<String, bool>? expandedOrders,
+    Map<OrderStatus, bool>? selectedStatus,
+    Map<Place, bool>? selectedPlaces,
   }) {
     return OrderAdminState(
       orders: orders ?? this.orders,

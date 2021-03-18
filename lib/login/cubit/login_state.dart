@@ -16,9 +16,9 @@ class LoginState extends Equatable {
   List<Object> get props => [isSignIn, showSignInWithApple, status];
 
   LoginState copyWith({
-    bool isSignIn,
-    bool showSignInWithApple,
-    FormzStatus status,
+    bool? isSignIn,
+    bool? showSignInWithApple,
+    FormzStatus? status,
   }) {
     return LoginState(
       isSignIn: isSignIn ?? this.isSignIn,

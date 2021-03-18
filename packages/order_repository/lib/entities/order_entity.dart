@@ -13,16 +13,16 @@ class OrderEntity extends Equatable {
     this.room,
   );
 
-  final String id;
+  final String? id;
   final String owner;
   final OrderStatus status;
   final DateTime createdAt;
-  final DateTime deliveredAt;
+  final DateTime? deliveredAt;
   final String place;
   final String room;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         this.id,
         this.status,
         this.createdAt,
@@ -40,8 +40,8 @@ class OrderEntity extends Equatable {
         json["id"] as String,
         OrderStatus.values[(json["status"] as int)],
         json["owner"] as String,
-        DateTime.parse(json["created_at"]),
-        DateTime.parse(json["delivered_at"]),
+        DateTime.parse(json["created_at"].toString()),
+        DateTime.parse(json["delivered_at"].toString()),
         json["place"] as String,
         json["room"] as String,
       );
@@ -51,12 +51,12 @@ class OrderEntity extends Equatable {
         OrderStatus.values[(snapshot.get("status") as int)],
         snapshot.get("owner") as String,
         (snapshot.get("created_at") as Timestamp).toDate(),
-        (snapshot.get("delivered_at") as Timestamp ?? Timestamp(0, 0)).toDate(),
+        (snapshot.get("delivered_at") as Timestamp?)?.toDate(),
         snapshot.get("place") as String,
         snapshot.get("room") as String,
       );
 
-  Map<String, Object> toDocument() => {
+  Map<String, Object?> toDocument() => {
         "status": status.index,
         "owner": owner,
         "created_at": createdAt,

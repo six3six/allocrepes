@@ -7,14 +7,12 @@ import 'product.dart';
 class Article extends Equatable {
   const Article({
     this.id,
-    @required this.productId,
-    @required this.categoryId,
-    @required this.amount,
-  })  : assert(amount != null),
-        assert(categoryId != null),
-        assert(productId != null);
+    required this.productId,
+    required this.categoryId,
+    required this.amount,
+  });
 
-  final String id;
+  final String? id;
   final String productId;
   final String categoryId;
   final int amount;
@@ -23,7 +21,7 @@ class Article extends Equatable {
       Article(id: "", productId: "", categoryId: "", amount: 0);
 
   @override
-  List<Object> get props => [id, productId, categoryId, amount];
+  List<Object?> get props => [id, productId, categoryId, amount];
 
   ArticleEntity toEntity() {
     return ArticleEntity(id, productId, categoryId, amount);

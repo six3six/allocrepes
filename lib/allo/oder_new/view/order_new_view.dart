@@ -11,7 +11,7 @@ import 'package:order_repository/models/product.dart';
 import 'package:order_repository/order_repository_firestore.dart';
 
 class OrderNewView extends StatelessWidget {
-  const OrderNewView({Key key}) : super(key: key);
+  const OrderNewView({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -33,8 +33,8 @@ class OrderNewView extends StatelessWidget {
                 BlocBuilder<OrderNewCubit, OrderNewState>(
                   buildWhen: (prev, next) => prev.placeError != next.placeError,
                   builder: (context, state) => Text(
-                    state.placeError ?? "",
-                    style: theme.textTheme.bodyText2
+                    state.placeError,
+                    style: theme.textTheme.bodyText2!
                         .merge(TextStyle(color: Colors.red)),
                   ),
                 ),
@@ -49,7 +49,7 @@ class OrderNewView extends StatelessWidget {
                     buildWhen: (prev, next) => prev.place != next.place,
                     builder: (context, state) => DropdownButton<Place>(
                       value: state.place,
-                      onChanged: (Place place) =>
+                      onChanged: (Place? place) =>
                           BlocProvider.of<OrderNewCubit>(context)
                               .updatePlace(place),
                       items: RepositoryProvider.of<OrderRepositoryFirestore>(
@@ -67,8 +67,8 @@ class OrderNewView extends StatelessWidget {
                 BlocBuilder<OrderNewCubit, OrderNewState>(
                   buildWhen: (prev, next) => prev.roomError != next.roomError,
                   builder: (context, state) => Text(
-                    state.roomError ?? "",
-                    style: theme.textTheme.bodyText2
+                    state.roomError,
+                    style: theme.textTheme.bodyText2!
                         .merge(TextStyle(color: Colors.red)),
                   ),
                 ),
@@ -132,10 +132,8 @@ class _OrderNewCategory extends StatelessWidget {
   final List<Product> products;
 
   const _OrderNewCategory(
-      {Key key, @required this.category, @required this.products})
-      : assert(category != null),
-        assert(products != null),
-        super(key: key);
+      {Key? key, required this.category, required this.products})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -172,11 +170,8 @@ class _OrderNewItem extends StatelessWidget {
   final Category category;
   final Product product;
 
-  const _OrderNewItem(
-      {Key key, @required this.category, @required this.product})
-      : assert(product != null),
-        assert(category != null),
-        super(key: key);
+  const _OrderNewItem({Key? key, required this.category, required this.product})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -210,8 +205,8 @@ class _OrderNewItem extends StatelessWidget {
             icon: Icon(Icons.arrow_drop_down_circle_outlined),
             iconSize: 24,
             elevation: 16,
-            onChanged: (int val) => BlocProvider.of<OrderNewCubit>(context)
-                .updateQuantity(category, product, val),
+            onChanged: (int? val) => BlocProvider.of<OrderNewCubit>(context)
+                .updateQuantity(category, product, val ?? 0),
             items: <int>[0, 1, 2, 3, 4].map<DropdownMenuItem<int>>((int value) {
               return DropdownMenuItem<int>(
                 value: value,

@@ -14,8 +14,7 @@ import 'order_new_state.dart';
 
 class OrderNewCubit extends Cubit<OrderNewState> {
   OrderNewCubit(this.orderRepository, this.user)
-      : assert(orderRepository != null),
-        super(const OrderNewState()) {
+      : super(const OrderNewState()) {
     getProducts();
   }
 
@@ -49,7 +48,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     return state.quantities["${category.id};${product.id}"] ?? 0;
   }
 
-  void updateRoom(String room) {
+  void updateRoom(String? room) {
     emit(state.copyWith(room: room));
     if (room == null || room == "") {
       emit(state.copyWith(roomError: "Salle non définie"));
@@ -58,7 +57,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     }
   }
 
-  void updatePlace(Place place) {
+  void updatePlace(Place? place) {
     emit(state.copyWith(place: place));
     if (place == null) {
       emit(state.copyWith(placeError: "Lieu non défini"));
@@ -81,7 +80,9 @@ class OrderNewCubit extends Cubit<OrderNewState> {
               final q = getQuantity(category, product);
               if (q > 0)
                 articles.add(Article(
-                    productId: product.id, categoryId: category.id, amount: q));
+                    productId: product.id ?? "",
+                    categoryId: category.id ?? "",
+                    amount: q));
             }));
 
     if (articles.length == 0) {
@@ -91,13 +92,15 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
     try {
       emit(state.copyWith(loading: true));
+      if (state.place == null) throw Exception("Il manque le batiment");
+      if (state.room == null) throw Exception("Il manque la piece");
       await orderRepository.createOrder(Order(
         status: OrderStatus.VALIDATING,
         owner: user.id,
         createdAt: DateTime.now(),
         articles: articles,
-        place: state.place.name,
-        room: state.room,
+        place: state.place?.name ?? "",
+        room: state.room ?? "",
       ));
       return true;
     } catch (e, stacktrace) {
@@ -125,7 +128,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Confirmer'),
               onPressed: () {
                 Navigator.of(context).pop();

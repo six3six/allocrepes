@@ -4,11 +4,11 @@ class NewsCard extends StatelessWidget {
   final image;
   final title;
 
-  const NewsCard({Key key, this.image, this.title}) : super(key: key);
+  const NewsCard({Key? key, this.image, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final headStyle = Theme.of(context).textTheme.bodyText1.merge(TextStyle(
+    final headStyle = Theme.of(context).textTheme.bodyText1!.merge(TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ));

@@ -12,22 +12,18 @@ class OrderNewState extends Equatable {
     this.placeError = "",
     this.loading = false,
     this.roomError = "",
-  })  : assert(categories != null),
-        assert(placeError != null),
-        assert(roomError != null),
-        assert(loading != null),
-        assert(quantities != null);
+  });
 
   final Map<Category, List<Product>> categories;
   final Map<String, int> quantities;
-  final Place place;
-  final String room;
+  final Place? place;
+  final String? room;
   final String placeError;
   final String roomError;
   final bool loading;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         categories.values,
         categories.entries.toList(),
         quantities.values,
@@ -40,13 +36,13 @@ class OrderNewState extends Equatable {
       ];
 
   OrderNewState copyWith({
-    Map<Category, List<Product>> categories,
-    Map<String, int> quantities,
-    Place place,
-    String room,
-    String placeError,
-    String roomError,
-    bool loading,
+    Map<Category, List<Product>>? categories,
+    Map<String, int>? quantities,
+    Place? place,
+    String? room,
+    String? placeError,
+    String? roomError,
+    bool? loading,
   }) {
     return OrderNewState(
       categories: categories ?? this.categories,

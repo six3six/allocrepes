@@ -9,13 +9,13 @@ class ArticleEntity extends Equatable {
     this.amount,
   );
 
-  final String id;
+  final String? id;
   final String productId;
   final String categoryId;
   final int amount;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         this.id,
         this.productId,
         this.categoryId,

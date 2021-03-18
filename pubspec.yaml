@@ -8,7 +8,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -20,19 +20,19 @@ dependencies:
   order_repository:
     path: packages/order_repository
 
-  firebase_core: ^0.7.0
-  firebase_analytics: ^7.0.1
-  firebase_crashlytics: ^0.4.0+1
+  firebase_core: ^1.0.1
+  firebase_analytics: ^7.1.1
+  firebase_crashlytics: ^1.0.0
 
-  font_awesome_flutter: ^8.11.0
+  font_awesome_flutter: ^9.0.0-nullsafety
 
-  bloc: ^6.1.3
-  flutter_bloc: ^6.1.3
+  bloc: ^7.0.0
+  flutter_bloc: ^7.0.0
 
   equatable: ^2.0.0
-  formz: ^0.3.2
+  formz: ^0.4.0-nullsafety.0
 
-  loading_overlay: ^0.2.1
+  loading_overlay: ^0.3.0
   cupertino_icons: ^1.0.2
 
 dev_dependencies:

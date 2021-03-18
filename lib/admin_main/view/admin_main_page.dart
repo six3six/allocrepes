@@ -8,7 +8,7 @@ class AdminMainPage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => AdminMainPage());
   }
 
-  AdminMainPage({Key key}) : super(key: key);
+  AdminMainPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

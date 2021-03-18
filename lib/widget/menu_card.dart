@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class MenuCard extends StatelessWidget {
   final String title;
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
-  const MenuCard({Key key, this.title = "", this.onTap}) : super(key: key);
+  const MenuCard({Key? key, this.title = "", this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

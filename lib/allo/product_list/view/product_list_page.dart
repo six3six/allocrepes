@@ -12,7 +12,7 @@ class ProductListPage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => ProductListPage());
   }
 
-  ProductListPage({Key key}) : super(key: key);
+  ProductListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

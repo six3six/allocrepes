@@ -8,7 +8,7 @@ import 'package:formz/formz.dart';
 import 'login_widgets.dart';
 
 class LoginForm extends StatelessWidget {
-  LoginForm({Key key}) : super();
+  LoginForm({Key? key}) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +24,8 @@ class LoginForm extends StatelessWidget {
       },
       child: Column(children: <Widget>[
         const SizedBox(height: 60.0),
-        GoogleLoginButton(),
-        const SizedBox(height: 60.0),
         DebugLoginButton(),
         const SizedBox(height: 10),
-        BlocBuilder<LoginCubit, LoginState>(
-          buildWhen: (previous, current) =>
-              previous.showSignInWithApple != current.showSignInWithApple,
-          builder: (context, LoginState state) {
-            return state.showSignInWithApple ? AppleLoginButton() : SizedBox();
-          },
-        ),
       ]),
     );
   }

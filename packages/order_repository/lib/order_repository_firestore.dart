@@ -130,11 +130,11 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   @override
   Stream<List<Order>> orders({
-    List<OrderStatus> orderStatus,
-    List<Place> places,
-    DateTime start,
-    DateTime stop,
-    String userId,
+    List<OrderStatus>? orderStatus,
+    List<Place>? places,
+    DateTime? start,
+    DateTime? stop,
+    String? userId,
   }) async* {
     Query query = orderRoot.limit(10000);
 
@@ -245,7 +245,7 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Future<ImageProvider> getProductImage(String productId) async {
+  Future<ImageProvider?> getProductImage(String productId) async {
     try {
       final url = await _getImageURL(productId + ".jpg");
       return NetworkImage(url);
@@ -256,7 +256,9 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   @override
   Future<void> setProductImage(Product product, Uint8List data) async {
-    await _productImageBase.child(product.id + ".jpg").putData(Uint8List(20));
+    await _productImageBase
+        .child(product.id ?? "" + ".jpg")
+        .putData(Uint8List(20));
   }
 
   static Future<String> _getImageURL(String image) async {

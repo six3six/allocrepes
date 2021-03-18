@@ -12,7 +12,7 @@ class OrderAdminPage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => OrderAdminPage());
   }
 
-  const OrderAdminPage({Key key}) : super(key: key);
+  const OrderAdminPage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

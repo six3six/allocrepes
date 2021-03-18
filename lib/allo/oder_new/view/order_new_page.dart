@@ -14,7 +14,7 @@ class OrderNewPage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => OrderNewPage());
   }
 
-  const OrderNewPage({Key key}) : super(key: key);
+  const OrderNewPage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

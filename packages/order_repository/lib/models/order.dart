@@ -9,33 +9,29 @@ export "order_status.dart";
 class Order extends Equatable {
   const Order({
     this.id,
-    @required this.owner,
+    required this.owner,
     this.status = OrderStatus.VALIDATING,
-    @required this.createdAt,
-    @required this.articles,
-    @required this.place,
-    @required this.room,
+    required this.createdAt,
+    required this.articles,
+    required this.place,
+    required this.room,
     this.deliveredAt,
-  })  : assert(status != null),
-        assert(place != null),
-        assert(room != null),
-        assert(owner != null),
-        assert(articles != null);
+  });
 
-  final String id;
+  final String? id;
   final String owner;
   final OrderStatus status;
   final DateTime createdAt;
-  final DateTime deliveredAt;
+  final DateTime? deliveredAt;
   final List<Article> articles;
   final String place;
   final String room;
 
-  static const empty = Order(
+  static final empty = Order(
     id: "",
     owner: "",
     status: OrderStatus.UNKNOWN,
-    createdAt: null,
+    createdAt: DateTime.now(),
     deliveredAt: null,
     articles: [],
     place: "",
@@ -43,18 +39,26 @@ class Order extends Equatable {
   );
 
   @override
-  List<Object> get props =>
-      [id, status, createdAt, deliveredAt, articles, place, room, owner];
+  List<Object?> get props => [
+        id,
+        status,
+        createdAt,
+        deliveredAt,
+        articles,
+        place,
+        room,
+        owner,
+      ];
 
   Order copyWith({
-    final String id,
-    String owner,
-    OrderStatus status,
-    DateTime createdAt,
-    DateTime deliveredAt,
-    List<Article> articles,
-    String place,
-    String room,
+    final String? id,
+    String? owner,
+    OrderStatus? status,
+    DateTime? createdAt,
+    DateTime? deliveredAt,
+    List<Article>? articles,
+    String? place,
+    String? room,
   }) {
     return Order(
       id: id ?? this.id,

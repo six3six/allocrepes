@@ -10,7 +10,7 @@ class ProductPage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => ProductPage());
   }
 
-  const ProductPage({Key key}) : super(key: key);
+  const ProductPage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

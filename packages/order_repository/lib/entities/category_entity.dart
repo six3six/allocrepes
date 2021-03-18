@@ -7,11 +7,11 @@ class CategoryEntity extends Equatable {
     this.name,
   );
 
-  final String id;
+  final String? id;
   final String name;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         this.id,
         this.name,
       ];
