@@ -10,10 +10,13 @@ import 'dart:ui' as ui show TextHeightBehavior;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
+import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
+import 'package:order_repository/order_repository_firestore.dart';
 
 class OrderAdminView extends StatelessWidget {
   OrderAdminView({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -28,6 +31,18 @@ class OrderAdminView extends StatelessWidget {
             prev.orders.keys.toList() != next.orders.keys.toList(),
         builder: (context, state) {
           List<Widget> slivers = [];
+
+          slivers.add(
+            BlocBuilder<OrderAdminCubit, OrderAdminState>(
+              buildWhen: (prev, next) =>
+                  prev.selectedPlaces.keys.toList() !=
+                  next.selectedPlaces.keys.toList(),
+              builder: (context, state) => _FilterView(
+                selectedPlaces: state.selectedPlaces,
+                selectedStatus: state.selectedStatus,
+              ),
+            ),
+          );
 
           state.orders.keys.forEach((status) {
             slivers.add(SliverPersistentHeader(
@@ -51,7 +66,7 @@ class OrderAdminView extends StatelessWidget {
                 child: BlocBuilder<OrderAdminCubit, OrderAdminState>(
                   buildWhen: (prev, next) =>
                       prev.orders[status]?.toList() !=
-                          next.orders[status].toList() ||
+                          next.orders[status]?.toList() ||
                       prev.expandedOrders != next.expandedOrders,
                   builder: (context, state) {
                     return ExpansionPanelList(
@@ -61,34 +76,8 @@ class OrderAdminView extends StatelessWidget {
                         !isExpanded,
                       ),
                       children: state.orders[status]
-                          .map((order) => ExpansionPanel(
-                                isExpanded:
-                                    state.expandedOrders[order.id] ?? false,
-                                headerBuilder:
-                                    (BuildContext context, bool isExpanded) {
-                                  if (isExpanded)
-                                    return ListTile(
-                                      title: Text("Commande : " + order.id),
-                                    );
-                                  else
-                                    return ListTile(
-                                      title: Text("Commande : " + order.id),
-                                      subtitle: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: order.articles
-                                            .map((article) =>
-                                                _ArticleToProductLabel(
-                                                  article: article,
-                                                ))
-                                            .toList(),
-                                      ),
-                                    );
-                                },
-                                body: _OrderCompleteView(
-                                  order: order,
-                                ),
-                              ))
+                          .map((order) => orderToPanel(
+                              order, state.expandedOrders[order.id] ?? false))
                           .toList(),
                     );
                   },
@@ -103,6 +92,118 @@ class OrderAdminView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  ExpansionPanel orderToPanel(Order order, bool expanded) {
+    return ExpansionPanel(
+      isExpanded: expanded,
+      headerBuilder: (BuildContext context, bool isExpanded) {
+        if (isExpanded)
+          return ListTile(
+            title: Text("Commande : " + order.id),
+          );
+        else
+          return ListTile(
+            title: Text("Commande : " + order.id),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: order.articles
+                  .map((article) => _ArticleToProductLabel(
+                        article: article,
+                      ))
+                  .toList(),
+            ),
+          );
+      },
+      body: _OrderCompleteView(
+        order: order,
+      ),
+    );
+  }
+}
+
+class _FilterView extends StatelessWidget {
+  final Map<OrderStatus, bool> selectedStatus;
+  final Map<Place, bool> selectedPlaces;
+
+  const _FilterView({Key key, this.selectedStatus, this.selectedPlaces})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return SliverToBoxAdapter(
+      child: ExpansionTile(
+        title: Text("Filtres"),
+        childrenPadding: EdgeInsets.symmetric(horizontal: 10),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Batiment :",
+            style: theme.textTheme.caption,
+          ),
+          BlocBuilder<OrderAdminCubit, OrderAdminState>(
+            buildWhen: (prev, next) =>
+                prev.selectedPlaces != next.selectedPlaces,
+            builder: (context, state) {
+              return ExpansionTile(
+                title: Text(
+                  "Batiment",
+                  overflow: TextOverflow.clip,
+                ),
+                children:
+                    RepositoryProvider.of<OrderRepositoryFirestore>(context)
+                        .places()
+                        .map((place) => CheckboxListTile(
+                              title: Text(place.name),
+                              value: state.selectedPlaces[place] ?? false,
+                              onChanged: (bool activate) =>
+                                  BlocProvider.of<OrderAdminCubit>(context)
+                                      .updateFilterRoom(place, activate),
+                            ))
+                        .toList(),
+              );
+            },
+          ),
+          Text(
+            "Etat :",
+            style: theme.textTheme.caption,
+          ),
+          ExpansionTile(
+              title: Text("Etat"),
+              children: OrderStatus.values
+                  .map((status) => CheckboxListTile(
+                        title: Text(
+                          Order.statusToString(status),
+                          overflow: TextOverflow.clip,
+                        ),
+                        value: selectedStatus[status] ?? false,
+                        onChanged: (bool activate) =>
+                            BlocProvider.of<OrderAdminCubit>(context)
+                                .updateFilterStatus(status, activate),
+                      ))
+                  .toList()),
+        ],
+      ),
+    );
+  }
+
+  String labelGen(Map<dynamic, bool> m) {
+    /*
+    if (m.values.every((element) => true)) {
+      return "Tous";
+    }
+    */
+
+    String ret = "";
+    m.forEach((key, value) {
+      if (value == false) return;
+      ret += key.toString() + " ";
+    });
+
+    return ret;
   }
 }
 
@@ -260,7 +361,7 @@ class _UserLabel extends Text {
           if (snap.hasData)
             return Text("${snap.data.name}");
           else
-            return Text("${userId}");
+            return Text("$userId");
         });
   }
 }

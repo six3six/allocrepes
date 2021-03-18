@@ -3,30 +3,54 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
+import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
 import 'package:order_repository/order_repository.dart';
 
 class OrderAdminCubit extends Cubit<OrderAdminState> {
   OrderAdminCubit(this._authenticationRepository, this._orderRepository)
-      : super(const OrderAdminState()) {
+      : super(
+          OrderAdminState(
+            selectedPlaces: _orderRepository.places().asMap().map(
+                  (key, value) => MapEntry(value, true),
+                ),
+            selectedStatus: OrderStatus.values.asMap().map(
+                  (key, value) => MapEntry(value, true),
+                ),
+          ),
+        ) {
     getOrders();
   }
 
   final OrderRepository _orderRepository;
   final AuthenticationRepository _authenticationRepository;
 
-  void getOrders() {
-    OrderStatus.values.forEach((status) {
-      _orderRepository.orders(orderStatus: [status]).forEach(
-          (orders) => _changeOrderList(status, orders));
-    });
-  }
+  Stream<List<Order>> orderStream;
 
-  void _changeOrderList(OrderStatus status, List<Order> orders) {
-    Map<OrderStatus, List<Order>> ordersMap = {};
-    ordersMap.addAll(state.orders);
-    ordersMap[status] = orders;
-    emit(state.copyWith(orders: ordersMap));
+  void getOrders() {
+    orderStream = null;
+
+    final List<OrderStatus> status = [];
+    state.selectedStatus.forEach((sStatus, selected) {
+      if (selected) status.add(sStatus);
+    });
+
+    final List<Place> places = [];
+    state.selectedPlaces.forEach((sPlaces, selected) {
+      if (selected) places.add(sPlaces);
+    });
+
+    orderStream = _orderRepository.orders(orderStatus: status, places: places);
+
+    orderStream.forEach((orders) {
+      Map<OrderStatus, List<Order>> ordersMap = {};
+      orders.forEach((order) {
+        if (!ordersMap.containsKey(order.status)) ordersMap[order.status] = [];
+        ordersMap[order.status].add(order);
+      });
+
+      emit(state.copyWith(orders: ordersMap));
+    });
   }
 
   Future<Product> getProduct(Article article) {
@@ -52,5 +76,21 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
 
   void updateOrderStatus(Order order, OrderStatus status) {
     _orderRepository.editOrder(order.copyWith(status: status));
+  }
+
+  void updateFilterStatus(OrderStatus status, bool activate) {
+    emit(state.copyWith(
+        selectedStatus: {}
+          ..addAll(state.selectedStatus)
+          ..[status] = activate));
+    getOrders();
+  }
+
+  void updateFilterRoom(Place place, bool activate) {
+    emit(state.copyWith(
+        selectedPlaces: {}
+          ..addAll(state.selectedPlaces)
+          ..[place] = activate));
+    getOrders();
   }
 }

@@ -15,6 +15,7 @@ import 'package:order_repository/order_repository.dart';
 import 'entities/product_entity.dart';
 import 'models/article.dart';
 import 'models/order_status.dart';
+import 'models/place.dart';
 import 'models/product.dart';
 
 class OrderRepositoryFirestore extends OrderRepository {
@@ -29,6 +30,15 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   static final _productImageBase =
       FirebaseStorage.instance.ref().child("products").child("images");
+
+  List<Place> places() {
+    return [
+      Place(name: "Ampère A"),
+      Place(name: "Ampère B"),
+      Place(name: "Ampère C"),
+      Place(name: "Arago"),
+    ];
+  }
 
   @override
   Future<void> createOrder(Order order) async {
@@ -121,11 +131,13 @@ class OrderRepositoryFirestore extends OrderRepository {
   @override
   Stream<List<Order>> orders({
     List<OrderStatus> orderStatus,
+    List<Place> places,
     DateTime start,
     DateTime stop,
     String userId,
   }) async* {
     Query query = orderRoot.limit(10000);
+
     if (orderStatus != null) {
       query = query.where("status",
           whereIn: orderStatus.map((e) => e.index).toList());
@@ -143,13 +155,14 @@ class OrderRepositoryFirestore extends OrderRepository {
     print(query.parameters);
 
     await for (QuerySnapshot snapshot in query.snapshots()) {
-      List<Order> orders =
-          List<Order>.filled(snapshot.docs.length, Order.empty);
+      List<Order> orders = [];
 
-      int i = 0;
       for (QueryDocumentSnapshot doc in snapshot.docs) {
-        orders[i] = await _orderFromEntity(OrderEntity.fromSnapshot(doc));
-        i++;
+        final order = await _orderFromEntity(OrderEntity.fromSnapshot(doc));
+
+        if (places != null && !places.map((e) => e.name).contains(order.place))
+          continue;
+        orders.add(order);
       }
 
       yield orders;

@@ -5,14 +5,19 @@ import 'package:flutter/widgets.dart';
 import 'package:order_repository/models/category.dart';
 
 import 'models/order.dart';
+import 'models/place.dart';
 import 'models/product.dart';
 
 abstract class OrderRepository {
-  Stream<List<Order>> orders(
-      {List<OrderStatus> orderStatus,
-      DateTime start,
-      DateTime stop,
-      String userId});
+  List<Place> places();
+
+  Stream<List<Order>> orders({
+    List<OrderStatus> orderStatus,
+    List<Place> places,
+    DateTime start,
+    DateTime stop,
+    String userId,
+  });
 
   Stream<List<Product>> products();
 

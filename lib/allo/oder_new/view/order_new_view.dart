@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
+import 'package:order_repository/order_repository_firestore.dart';
 
 class OrderNewView extends StatelessWidget {
   const OrderNewView({Key key}) : super(key: key);
@@ -51,12 +52,10 @@ class OrderNewView extends StatelessWidget {
                       onChanged: (Place place) =>
                           BlocProvider.of<OrderNewCubit>(context)
                               .updatePlace(place),
-                      items: [
-                        Place(name: "Ampère A"),
-                        Place(name: "Ampère B"),
-                        Place(name: "Ampère C"),
-                        Place(name: "Arago")
-                      ].map<DropdownMenuItem<Place>>((Place place) {
+                      items: RepositoryProvider.of<OrderRepositoryFirestore>(
+                              context)
+                          .places()
+                          .map<DropdownMenuItem<Place>>((Place place) {
                         return DropdownMenuItem<Place>(
                           value: place,
                           child: Text(place.name),
