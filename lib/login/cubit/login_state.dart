@@ -2,28 +2,18 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
 class LoginState extends Equatable {
-  const LoginState({
-    this.isSignIn = true,
-    this.showSignInWithApple = false,
-    this.status = FormzStatus.pure,
-  });
+  const LoginState({this.showLoginForm = false});
 
-  final bool isSignIn;
-  final bool showSignInWithApple;
-  final FormzStatus status;
+  final bool showLoginForm;
 
   @override
-  List<Object> get props => [isSignIn, showSignInWithApple, status];
+  List<Object> get props => [];
 
   LoginState copyWith({
-    bool? isSignIn,
-    bool? showSignInWithApple,
-    FormzStatus? status,
+    bool? showLoginForm,
   }) {
     return LoginState(
-      isSignIn: isSignIn ?? this.isSignIn,
-      showSignInWithApple: showSignInWithApple ?? this.showSignInWithApple,
-      status: status ?? this.status,
+      showLoginForm: showLoginForm ?? this.showLoginForm,
     );
   }
 }

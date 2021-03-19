@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
+import 'package:http/http.dart' as http;
 
 import 'login_state.dart';
 
@@ -9,15 +11,14 @@ class LoginCubit extends Cubit<LoginState> {
 
   final AuthenticationRepository _authenticationRepository;
 
-  Future<void> loginDebug() async {
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    try {
-      await _authenticationRepository.loginDebug();
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    } on NoSuchMethodError {
-      emit(state.copyWith(status: FormzStatus.pure));
-    }
+  void showLoginForm() {
+    emit(state.copyWith(showLoginForm: true));
+  }
+
+  Future<void> login(String url) async {
+    final response = await http.get(Uri.parse(url));
+    final decodedData = jsonDecode(response.body);
+
+    _authenticationRepository.logInWithToken(token: decodedData["token"]);
   }
 }

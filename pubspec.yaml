@@ -33,6 +33,8 @@ dependencies:
   formz: ^0.4.0-nullsafety.0
 
   loading_overlay: ^0.3.0
+  webview_flutter: ^2.0.2
+
   cupertino_icons: ^1.0.2
 
 dev_dependencies:

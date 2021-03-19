@@ -1,4 +1,6 @@
 import 'package:allocrepes/login/cubit/login_cubit.dart';
+import 'package:allocrepes/login/cubit/login_state.dart';
+import 'package:allocrepes/login/view/login_welcome.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,32 +15,34 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(),
-        child: ConstrainedBox(
-          constraints:
-              BoxConstraints(minHeight: double.infinity, maxWidth: 1000),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                constraints: BoxConstraints(maxWidth: 700),
-                padding: EdgeInsets.symmetric(horizontal: 30)
-                    .add(EdgeInsets.only(top: 50)),
-                child: Column(
-                  children: <Widget>[
-                    BlocProvider(
-                      create: (_) => LoginCubit(
-                        context.read<AuthenticationRepository>(),
-                      ),
-                      child: LoginForm(),
-                    ),
-                  ],
-                ),
+      body: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          children: <Widget>[
+            Center(
+              child: Text(
+                "XANTHOS",
+                style:
+                    textTheme.headline2!.merge(TextStyle(fontFamily: "Oswald")),
               ),
             ),
-          ),
+            const SizedBox(height: 20.0),
+            BlocProvider(
+              create: (_) => LoginCubit(
+                context.read<AuthenticationRepository>(),
+              ),
+              child: BlocBuilder<LoginCubit, LoginState>(
+                builder: (context, state) {
+                  if (state.showLoginForm) return LoginForm();
+                  return LoginWelcome();
+                },
+              ),
+              //child: LoginForm(),
+            ),
+          ],
         ),
       ),
     );

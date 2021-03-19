@@ -12,20 +12,23 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return BlocListener<LoginCubit, LoginState>(
-      listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
-            );
-        }
-      },
+      listener: (context, state) {},
       child: Column(children: <Widget>[
-        const SizedBox(height: 60.0),
-        DebugLoginButton(),
-        const SizedBox(height: 10),
+        Text(
+          "Pour commencer l'aventure Xanthos entrez vos identifants ESIEE ci-dessous",
+        ),
+        const SizedBox(height: 5.0),
+        Text(
+          "Cette page est une page officielle ESIEE, nous ne pouvons à aucun moment voire votre mot de passe",
+        ),
+        const SizedBox(height: 20.0),
+        SizedBox(
+          width: double.infinity,
+          height: 800,
+          child: AuthWebView(),
+        ),
       ]),
     );
   }

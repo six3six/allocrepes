@@ -1,51 +1,47 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:allocrepes/login/cubit/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 part 'login_theme.dart';
 
-class DebugLoginButton extends StatelessWidget {
+class AuthWebView extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton.icon(
-        key: const Key('loginForm_appleLogin_raisedButton'),
-        label: Text(
-          'Pour le debugage : voici une connexion fictive',
-          overflow: TextOverflow.fade,
-          style: TextStyle(color: Colors.white),
-          softWrap: false,
-        ),
-        icon: Icon(FontAwesomeIcons.robot, color: Colors.white),
-        onPressed: () => context.read<LoginCubit>().loginDebug(),
-      ),
-    );
-  }
+  AuthWebViewState createState() => AuthWebViewState();
 }
 
-class TokenLoginButton extends StatelessWidget {
+class AuthWebViewState extends State<AuthWebView> {
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
+
+  @override
+  void initState() {
+    super.initState();
+    CookieManager().clearCookies();
+    // Enable hybrid composition.
+    //if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(children: [
-      SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: ElevatedButton.icon(
-          label: Text(
-            'TOKEN',
-            overflow: TextOverflow.fade,
-            style: TextStyle(color: Colors.white),
-            softWrap: false,
-          ),
-          icon: Icon(FontAwesomeIcons.robot, color: Colors.white),
-          onPressed: () => context.read<LoginCubit>().loginDebug(),
-        ),
-      ),
-    ]);
+    return WebView(
+      debuggingEnabled: true,
+      javascriptMode: JavascriptMode.unrestricted,
+      initialUrl:
+          'https://sso.esiee.fr/cas/login?service=https%3A%2F%2Fus-central1-allocrepes-4f992.cloudfunctions.net%2FssoLogin/',
+      gestureNavigationEnabled: true,
+      navigationDelegate: (NavigationRequest request) {
+        if (request.url.startsWith(
+            'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin/')) {
+          BlocProvider.of<LoginCubit>(context).login(request.url);
+          return NavigationDecision.prevent;
+        }
+        return NavigationDecision.navigate;
+      },
+    );
   }
 }
