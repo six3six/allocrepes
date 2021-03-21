@@ -46,6 +46,7 @@ class _AppViewState extends State<AppView> {
       navigatorKey: _navigatorKey,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
+          listenWhen: (prev, next) => prev.status != next.status,
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:

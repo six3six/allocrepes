@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:stream_transform/stream_transform.dart';
 
 import 'models/models.dart';
 
@@ -174,10 +175,13 @@ extension on firebase_auth.User {
     User user = User.empty.copyWith(
       id: uid,
     );
-    await for (DocumentSnapshot snap in adminCollection.snapshots()) {
-      bool admin = snap.data()?.keys.contains(uid) ?? false;
-      yield user.copyWith(admin: admin);
-      await for (DocumentSnapshot snap in userCollection.snapshots()) {
+    Stream<DocumentSnapshot> mStream =
+        userCollection.snapshots().merge(adminCollection.snapshots());
+
+    await for (DocumentSnapshot snap in mStream) {
+      if (snap.reference == adminCollection) {
+        yield user.copyWith(admin: snap.data()?.keys.contains(uid) ?? false);
+      } else {
         String? email;
         String? name;
 
@@ -189,7 +193,7 @@ extension on firebase_auth.User {
           name = snap["name"];
         } catch (e) {}
 
-        user.copyWith(
+        yield user.copyWith(
           email: email,
           name: name,
           photo: photoURL,

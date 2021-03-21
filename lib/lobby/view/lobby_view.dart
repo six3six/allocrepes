@@ -10,24 +10,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'lobby_twitch.dart';
+
 class LobbyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return CustomScrollView(
-      primary: false,
       slivers: [
         SliverPadding(
           padding: const EdgeInsets.all(20),
           sliver: SliverToBoxAdapter(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Text(
                     "XANTHOS",
-                    style: textTheme.headline2!
-                        .merge(TextStyle(fontFamily: "Oswald")),
+                    style: textTheme.headline2
+                        ?.merge(TextStyle(fontFamily: "Oswald")),
                   ),
                 ),
                 SizedBox.fromSize(
@@ -75,11 +75,38 @@ class LobbyView extends StatelessWidget {
             ],
           ),
         ),
+        SliverToBoxAdapter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Text(
+                  "Suivre Xanthos sur Twitch",
+                  style: textTheme.headline5,
+                ),
+              ),
+              SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: LobbyTwitchViewer(),
+              ),
+            ],
+          ),
+        ),
         SliverPadding(
           padding: const EdgeInsets.all(20),
           sliver: SliverToBoxAdapter(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  "Suivre les actu Xanthos",
+                  style: textTheme.headline5,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 BlocBuilder<LobbyCubit, LobbyState>(
                   builder: (context, state) {
                     return Column(
