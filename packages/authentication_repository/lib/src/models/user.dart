@@ -33,6 +33,21 @@ class User extends Equatable {
   static const empty =
       User(email: '', id: '', admin: false, name: "", photo: null);
 
+  User copyWith({
+    String? email,
+    String? id,
+    bool? admin,
+    String? name,
+    String? photo,
+  }) {
+    return User(
+      email: email ?? this.email,
+      id: id ?? this.id,
+      admin: admin ?? this.admin,
+      name: name ?? this.name,
+    );
+  }
+
   @override
   List<Object?> get props => [email, id, admin, name, photo];
 }

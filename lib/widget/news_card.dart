@@ -1,10 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsCard extends StatelessWidget {
-  final image;
-  final title;
+  final String image;
+  final String title;
+  final GestureTapCallback? onTap;
 
-  const NewsCard({Key? key, this.image, this.title}) : super(key: key);
+  const NewsCard({
+    Key? key,
+    required this.image,
+    required this.title,
+    this.onTap,
+  }) : super(key: key);
+
+  static NewsCard tapUrl({
+    Key? key,
+    required String image,
+    required String title,
+    required String url,
+  }) {
+    return NewsCard(
+        image: image,
+        title: title,
+        onTap: () async {
+          await canLaunch(url)
+              ? await launch(url)
+              : throw 'Could not launch $url';
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +43,7 @@ class NewsCard extends StatelessWidget {
         semanticContainer: true,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: InkWell(
-          onTap: () {},
+          onTap: onTap,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

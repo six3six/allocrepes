@@ -41,7 +41,13 @@ class AuthenticationRepository {
   Stream<User> get user async* {
     final Stream<firebase_auth.User?> stream = _firebaseAuth.authStateChanges();
     await for (firebase_auth.User? firebaseUser in stream) {
-      yield firebaseUser == null ? User.empty : await firebaseUser.toUser;
+      if (firebaseUser == null)
+        yield User.empty;
+      else {
+        await for (User user in firebaseUser.toUserStream) {
+          yield user;
+        }
+      }
     }
   }
 
@@ -160,29 +166,35 @@ class AuthenticationRepository {
 }
 
 extension on firebase_auth.User {
-  Future<User> get toUser async {
-    bool admin = false;
-    try {
-      final DocumentSnapshot admins = await FirebaseFirestore.instance
-          .collection("roles")
-          .doc("admins")
-          .get();
+  Stream<User> get toUserStream async* {
+    final adminCollection =
+        FirebaseFirestore.instance.collection("roles").doc("admins");
+    final userCollection =
+        FirebaseFirestore.instance.collection("users").doc(uid);
+    User user = User.empty.copyWith(
+      id: uid,
+    );
+    await for (DocumentSnapshot snap in adminCollection.snapshots()) {
+      bool admin = snap.data()?.keys.contains(uid) ?? false;
+      yield user.copyWith(admin: admin);
+      await for (DocumentSnapshot snap in userCollection.snapshots()) {
+        String? email;
+        String? name;
 
-      admin = admins.data()!.keys.contains(uid);
-    } on StateError {
-      admin = false;
+        try {
+          email = snap["email"];
+        } catch (e) {}
+
+        try {
+          name = snap["name"];
+        } catch (e) {}
+
+        user.copyWith(
+          email: email,
+          name: name,
+          photo: photoURL,
+        );
+      }
     }
-
-    String name = "";
-    try {
-      DocumentSnapshot user =
-          await FirebaseFirestore.instance.collection("users").doc(uid).get();
-      name = user.get("name");
-    } catch (e) {
-      name = displayName ?? "";
-    }
-
-    return User(
-        id: uid, admin: admin, email: email ?? "", name: name, photo: photoURL);
   }
 }

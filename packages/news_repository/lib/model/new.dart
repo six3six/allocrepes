@@ -7,9 +7,9 @@ class New extends Equatable {
   final List<String> authors;
   final String title;
   final String summary;
-  final String? content;
-  final String? url;
-  final String? media;
+  final String content;
+  final String url;
+  final String media;
   final DateTime? updated;
 
   const New({
@@ -17,9 +17,9 @@ class New extends Equatable {
     required this.title,
     required this.summary,
     this.updated,
-    this.content,
-    this.url,
-    this.media,
+    required this.content,
+    required this.url,
+    required this.media,
   });
 
   static New fromAtom(AtomItem item) {

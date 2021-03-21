@@ -1,6 +1,8 @@
 import 'package:allocrepes/admin_main/view/admin_main_page.dart';
 import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
+import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
+import 'package:allocrepes/lobby/cubit/lobby_state.dart';
 import 'package:allocrepes/widget/menu_card.dart';
 import 'package:allocrepes/widget/news_card.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -46,8 +48,11 @@ class LobbyView extends StatelessWidget {
             mainAxisSpacing: 10,
             crossAxisCount: 2,
             children: <Widget>[
-              const MenuCard(
-                title: "News",
+              MenuCard(
+                title: "Allo !",
+                onTap: () {
+                  Navigator.push(context, OrderListPage.route());
+                },
               ),
               const MenuCard(
                 title: "Concours",
@@ -55,18 +60,18 @@ class LobbyView extends StatelessWidget {
               const MenuCard(
                 title: "En savoir +",
               ),
-              MenuCard(
-                title: "Allo !",
-                onTap: () {
-                  Navigator.push(context, OrderListPage.route());
-                },
-              ),
-              MenuCard(
-                title: "Admin",
-                onTap: () {
-                  Navigator.push(context, AdminMainPage.route());
-                },
-              ),
+              BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  builder: (context, state) {
+                if (state.user.admin)
+                  return MenuCard(
+                    title: "Admin",
+                    onTap: () {
+                      Navigator.push(context, AdminMainPage.route());
+                    },
+                  );
+                else
+                  return SizedBox();
+              }),
             ],
           ),
         ),
@@ -75,27 +80,24 @@ class LobbyView extends StatelessWidget {
           sliver: SliverToBoxAdapter(
             child: Column(
               children: [
-                NewsCard(
-                  title:
-                      "Concours : Arriverez vous à trouver la tête de Miguel dans ces montagnes ?",
-                  image:
-                      "https://wp-fr.oberlo.com/wp-content/uploads/sites/4/2019/09/banque-images.jpg",
-                ),
-                NewsCard(
-                  title: "Décrouvrez Notre Programme",
-                  image:
-                      "https://d1fmx1rbmqrxrr.cloudfront.net/cnet/i/edit/2019/04/eso1644bsmall.jpg",
-                ),
-                NewsCard(
-                  title: "5 Raisons De Ne Pas Voter Pour Les Autres",
-                  image:
-                      "https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg",
+                BlocBuilder<LobbyCubit, LobbyState>(
+                  builder: (context, state) {
+                    return Column(
+                      children: state.news
+                          .map((_new) => NewsCard.tapUrl(
+                                title: _new.title,
+                                image: _new.media,
+                                url: _new.url,
+                              ))
+                          .toList(),
+                    );
+                  },
                 ),
                 TextButton(
                   onPressed: () =>
                       RepositoryProvider.of<AuthenticationRepository>(context)
                           .logOut(),
-                  child: Text("Logout"),
+                  child: Text("Se déconnecter"),
                 ),
                 Text("Aucun test n'a été dev pour ce projet"),
                 Text(
