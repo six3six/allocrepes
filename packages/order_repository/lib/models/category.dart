@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:order_repository/entities/category_entity.dart';
 
 class Category extends Equatable {

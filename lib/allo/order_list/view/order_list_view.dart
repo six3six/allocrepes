@@ -174,37 +174,31 @@ class _OrderSummaryStatus extends StatelessWidget {
           Order.statusToString(status),
           style: textTheme!.merge(TextStyle(color: Colors.red)),
         );
-        break;
       case OrderStatus.VALIDATING:
         return Text(
           Order.statusToString(status),
           style: textTheme!.merge(TextStyle(color: Colors.grey)),
         );
-        break;
       case OrderStatus.PENDING:
         return Text(
           Order.statusToString(status),
           style: textTheme!.merge(TextStyle(color: Colors.amber)),
         );
-        break;
       case OrderStatus.DELIVERING:
         return Text(
           Order.statusToString(status),
           style: textTheme!.merge(TextStyle(color: Colors.amber)),
         );
-        break;
       case OrderStatus.DELIVERED:
         return Text(
           Order.statusToString(status),
           style: textTheme!.merge(TextStyle(color: Colors.green)),
         );
-        break;
       default:
         return Text(
           Order.statusToString(status),
           style: textTheme!.merge(TextStyle(color: Colors.grey)),
         );
-        break;
     }
   }
 }

@@ -59,14 +59,13 @@ class ProductListCubit extends Cubit<ProductListState> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Annuler'),
-              textColor: Colors.redAccent,
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.addCategory(Category(name: controller.text));
@@ -104,14 +103,13 @@ class ProductListCubit extends Cubit<ProductListState> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Annuler'),
-              textColor: Colors.redAccent,
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.addProduct(
@@ -146,14 +144,13 @@ class ProductListCubit extends Cubit<ProductListState> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Annuler'),
-              textColor: Colors.redAccent,
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.updateCategory(category.copyWith(

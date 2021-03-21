@@ -1,4 +1,3 @@
-import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';

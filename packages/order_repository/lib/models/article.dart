@@ -1,8 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:order_repository/entities/article_entity.dart';
-
-import 'product.dart';
 
 class Article extends Equatable {
   const Article({

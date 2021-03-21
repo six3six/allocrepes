@@ -20,17 +20,20 @@ dependencies:
   order_repository:
     path: packages/order_repository
 
+  news_repository:
+    path: packages/news_repository
+
+
   firebase_core: ^1.0.1
   firebase_analytics: ^7.1.1
   firebase_crashlytics: ^1.0.0
 
-  font_awesome_flutter: ^9.0.0-nullsafety
+  font_awesome_flutter: ^9.0.0
 
   bloc: ^7.0.0
   flutter_bloc: ^7.0.0
 
   equatable: ^2.0.0
-  formz: ^0.4.0-nullsafety.0
 
   loading_overlay: ^0.3.0
   webview_flutter: ^2.0.2

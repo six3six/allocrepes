@@ -1,7 +1,6 @@
 import 'package:allocrepes/allo/order_list/cubit/order_list_cubit.dart';
 import 'package:allocrepes/allo/order_list/cubit/order_list_state.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';

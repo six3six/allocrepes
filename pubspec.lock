@@ -105,7 +105,7 @@ packages:
       name: firebase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.0.0"
+    version: "9.0.1"
   firebase_analytics:
     dependency: "direct main"
     description:
@@ -232,42 +232,21 @@ packages:
       name: font_awesome_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.0.0-nullsafety"
-  formz:
-    dependency: "direct main"
-    description:
-      name: formz
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0-nullsafety.0"
-  google_sign_in:
+    version: "9.0.0"
+  html_unescape:
     dependency: transitive
     description:
-      name: google_sign_in
+      name: html_unescape
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.1"
-  google_sign_in_platform_interface:
-    dependency: transitive
-    description:
-      name: google_sign_in_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
-  google_sign_in_web:
-    dependency: transitive
-    description:
-      name: google_sign_in_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.0"
+    version: "1.0.2"
   http:
     dependency: transitive
     description:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.0"
+    version: "0.13.1"
   http_parser:
     dependency: transitive
     description:
@@ -317,6 +296,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  news_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/news_repository"
+      relative: true
+    source: path
+    version: "1.0.0"
   order_repository:
     dependency: "direct main"
     description:
@@ -338,6 +324,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.0"
+  petitparser:
+    dependency: transitive
+    description:
+      name: petitparser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.2"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -352,13 +345,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -420,6 +406,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  webfeed:
+    dependency: transitive
+    description:
+      path: "packages/webfeed"
+      relative: true
+    source: path
+    version: "0.6.0"
   webview_flutter:
     dependency: "direct main"
     description:
@@ -427,6 +420,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.2"
 sdks:
   dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.22.0"

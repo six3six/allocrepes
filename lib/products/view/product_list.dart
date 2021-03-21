@@ -78,7 +78,7 @@ class ItemList extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FlatButton(
+                TextButton(
                   onPressed: () {
                     _addCategoryDialog(context);
                   },

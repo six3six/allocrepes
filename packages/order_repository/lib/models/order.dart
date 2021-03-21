@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../entities/order_entity.dart';
 import 'article.dart';
@@ -93,22 +92,16 @@ class Order extends Equatable {
     switch (status) {
       case OrderStatus.CANCELED:
         return "Annulé";
-        break;
       case OrderStatus.VALIDATING:
         return "En cours de validation";
-        break;
       case OrderStatus.PENDING:
         return "En cours de préparation";
-        break;
       case OrderStatus.DELIVERING:
         return "En cours de livraison";
-        break;
       case OrderStatus.DELIVERED:
         return "Livrée";
-        break;
       default:
         return "Etat inconnu";
-        break;
     }
   }
 }

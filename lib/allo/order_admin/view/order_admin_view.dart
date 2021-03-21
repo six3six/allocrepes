@@ -302,8 +302,7 @@ class _ArticleToProductLabel extends StatelessWidget {
   const _ArticleToProductLabel({
     Key? key,
     required this.article,
-  })   : assert(article != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -107,8 +107,7 @@ class OrderNewView extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SizedBox(
               height: 50,
-              child: RaisedButton(
-                color: theme.primaryColor,
+              child: ElevatedButton(
                 onPressed: () {
                   BlocProvider.of<OrderNewCubit>(context)
                       .checkout(context)

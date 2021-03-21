@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
 
 class LoginState extends Equatable {
   const LoginState({this.showLoginForm = false});
