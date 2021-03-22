@@ -184,14 +184,6 @@ class _OrderNewItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           SizedBox(
-            width: 100,
-            height: 100,
-            child: Image(
-              image: product.image,
-              fit: BoxFit.fill,
-            ),
-          ),
-          SizedBox(
             width: 10,
           ),
           Expanded(

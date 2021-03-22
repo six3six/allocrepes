@@ -180,7 +180,8 @@ extension on firebase_auth.User {
 
     await for (DocumentSnapshot snap in mStream) {
       if (snap.reference == adminCollection) {
-        yield user.copyWith(admin: snap.data()?.keys.contains(uid) ?? false);
+        print("admin " + (snap.data()?.keys.contains(uid) ?? false).toString());
+        user = user.copyWith(admin: snap.data()?.keys.contains(uid) ?? false);
       } else {
         String? email;
         String? name;
@@ -193,12 +194,13 @@ extension on firebase_auth.User {
           name = snap["name"];
         } catch (e) {}
 
-        yield user.copyWith(
+        user = user.copyWith(
           email: email,
           name: name,
           photo: photoURL,
         );
       }
+      yield user;
     }
   }
 }

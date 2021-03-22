@@ -34,8 +34,7 @@ class LobbyView extends StatelessWidget {
                   size: Size(0, 30),
                 ),
                 BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                  builder: (context, state) =>
-                      Text("Bonjour " + state.user.name),
+                  builder: (context, state) => Text("Bonjour " + state.user.id),
                 ),
               ],
             ),
