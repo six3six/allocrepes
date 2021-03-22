@@ -14,6 +14,8 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
 
     const url = `https://sso.esiee.fr/cas/serviceValidate?service=${encUrl}&ticket=${ticket}`;
 
+    console.log(`URL: ${url}`);
+
     const requestCall = new Promise<string>((resolve, reject) => {
         https.get(url,
             (response) => {
@@ -44,7 +46,7 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
     console.log(result);
 
     const user: string = xmlS.get("cas:authenticationSuccess").front()
-        .get("cas:user").front().getValue();
+        .get("cas:user").front().getValue().toLowerCase();
 
     console.log(`User: ${user}`);
 

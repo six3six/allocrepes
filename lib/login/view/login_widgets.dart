@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:allocrepes/login/cubit/login_cubit.dart';
 import 'package:flutter/foundation.dart';
@@ -22,7 +23,7 @@ class AuthWebViewState extends State<AuthWebView> {
     super.initState();
     CookieManager().clearCookies();
     // Enable hybrid composition.
-    //if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
   @override

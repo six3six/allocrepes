@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 
 import 'app.dart';
 import 'app_observer.dart';
@@ -12,7 +14,22 @@ import 'app_observer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // Force enable crashlytics collection enabled if we're testing it.
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  // Pass all uncaught errors to Crashlytics.
+  Function? originalOnError = FlutterError.onError;
+  FlutterError.onError = (FlutterErrorDetails errorDetails) async {
+    await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    // Forward to original handler.
+    originalOnError!(errorDetails);
+  };
+
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = AppObserver();
-  runApp(App(authenticationRepository: AuthenticationRepository()));
+  runZonedGuarded(() {
+    runApp(App(authenticationRepository: AuthenticationRepository()));
+  }, (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
 }
