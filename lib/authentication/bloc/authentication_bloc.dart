@@ -16,21 +16,16 @@ class AuthenticationBloc
   })   : _authenticationRepository = authenticationRepository,
         super(const AuthenticationState.unknown()) {
     _userSubscription = _authenticationRepository.user.listen(
-      (user) async {
-        if (user.email.endsWith("esiee.fr")) {
+      (userStream) async {
+        userStream.listen((user) {
           add(AuthenticationUserChanged(user));
-        } else {
-          if (user.email.contains("@"))
-            _authenticationRepository.logOut();
-          else
-            add(AuthenticationUserChanged(user));
-        }
+        });
       },
     );
   }
 
   final AuthenticationRepository _authenticationRepository;
-  StreamSubscription<User>? _userSubscription;
+  StreamSubscription<Stream<User>>? _userSubscription;
 
   @override
   Stream<AuthenticationState> mapEventToState(

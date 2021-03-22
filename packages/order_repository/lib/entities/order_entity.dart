@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:order_repository/models/order_status.dart';
+import 'package:order_repository/models/place.dart';
 
 class OrderEntity extends Equatable {
   OrderEntity(
@@ -18,7 +19,7 @@ class OrderEntity extends Equatable {
   final OrderStatus status;
   final DateTime createdAt;
   final DateTime? deliveredAt;
-  final String place;
+  final Place place;
   final String room;
 
   @override
@@ -42,7 +43,7 @@ class OrderEntity extends Equatable {
         json["owner"] as String,
         DateTime.parse(json["created_at"].toString()),
         DateTime.parse(json["delivered_at"].toString()),
-        json["place"] as String,
+        Place.values[json["place"] as int],
         json["room"] as String,
       );
 
@@ -52,7 +53,7 @@ class OrderEntity extends Equatable {
         snapshot.get("owner") as String,
         (snapshot.get("created_at") as Timestamp).toDate(),
         (snapshot.get("delivered_at") as Timestamp?)?.toDate(),
-        snapshot.get("place") as String,
+        Place.values[snapshot.get("place") as int],
         snapshot.get("room") as String,
       );
 

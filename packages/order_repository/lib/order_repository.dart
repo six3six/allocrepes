@@ -9,7 +9,6 @@ import 'models/place.dart';
 import 'models/product.dart';
 
 abstract class OrderRepository {
-  List<Place> places();
 
   Stream<List<Order>> orders({
     List<OrderStatus>? orderStatus,

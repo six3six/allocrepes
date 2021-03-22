@@ -98,7 +98,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         owner: user.id,
         createdAt: DateTime.now(),
         articles: articles,
-        place: state.place?.name ?? "",
+        place: state.place ?? Place.UNKNOWN,
         room: state.room ?? "",
       ));
       return true;

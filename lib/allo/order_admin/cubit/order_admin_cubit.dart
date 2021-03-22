@@ -11,7 +11,7 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
   OrderAdminCubit(this._authenticationRepository, this._orderRepository)
       : super(
           OrderAdminState(
-            selectedPlaces: _orderRepository.places().asMap().map(
+            selectedPlaces: Place.values.asMap().map(
                   (key, value) => MapEntry(value, true),
                 ),
             selectedStatus: OrderStatus.values.asMap().map(

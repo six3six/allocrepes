@@ -52,13 +52,11 @@ class OrderNewView extends StatelessWidget {
                       onChanged: (Place? place) =>
                           BlocProvider.of<OrderNewCubit>(context)
                               .updatePlace(place),
-                      items: RepositoryProvider.of<OrderRepositoryFirestore>(
-                              context)
-                          .places()
+                      items: Place.values
                           .map<DropdownMenuItem<Place>>((Place place) {
                         return DropdownMenuItem<Place>(
                           value: place,
-                          child: Text(place.name),
+                          child: Text(PlaceUtils.placeToString(place)),
                         );
                       }).toList(),
                     ),

@@ -39,15 +39,14 @@ class AuthenticationRepository {
   /// the authentication state changes.
   ///
   /// Emits [User.empty] if the user is not authenticated.
-  Stream<User> get user async* {
+  Stream<Stream<User>> get user async* {
     final Stream<firebase_auth.User?> stream = _firebaseAuth.authStateChanges();
+
     await for (firebase_auth.User? firebaseUser in stream) {
       if (firebaseUser == null)
-        yield User.empty;
+        yield Stream.value(User.empty);
       else {
-        await for (User user in firebaseUser.toUserStream) {
-          yield user;
-        }
+        yield firebaseUser.toUserStream;
       }
     }
   }
@@ -154,13 +153,14 @@ class AuthenticationRepository {
     final DocumentSnapshot snapshot =
         await _firestore.collection("users").doc(uid).get();
 
-    if (!snapshot.exists) return User.empty;
+    if (!snapshot.exists) return User.empty.copyWith(id: uid, name: uid);
     final data = snapshot.data()!;
+    final name = data["name"] ?? uid;
     return User(
       email: (data["email"]) as String,
       id: uid,
       admin: await getUserRole(uid),
-      name: data["name"] as String,
+      name: name,
       photo: null,
     );
   }

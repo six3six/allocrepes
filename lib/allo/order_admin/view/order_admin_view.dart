@@ -12,7 +12,6 @@ import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
-import 'package:order_repository/order_repository_firestore.dart';
 
 class OrderAdminView extends StatelessWidget {
   OrderAdminView({Key? key}) : super(key: key);
@@ -101,11 +100,14 @@ class OrderAdminView extends StatelessWidget {
       headerBuilder: (BuildContext context, bool isExpanded) {
         if (isExpanded)
           return ListTile(
-            title: Text("Commande : " + (order.id ?? "")),
+            title: Text("Nom : " + (order.owner)),
+            tileColor: PlaceUtils.placeToColor(order.place),
           );
         else
           return ListTile(
-            title: Text("Commande : " + (order.id ?? "")),
+            title: Text("Nom : " + (order.owner)),
+            tileColor: PlaceUtils.placeToColor(order.place),
+            selectedTileColor: PlaceUtils.placeToColor(order.place),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: order.articles
@@ -157,18 +159,15 @@ class _FilterView extends StatelessWidget {
                   "Batiment",
                   overflow: TextOverflow.clip,
                 ),
-                children:
-                    RepositoryProvider.of<OrderRepositoryFirestore>(context)
-                        .places()
-                        .map((place) => CheckboxListTile(
-                              title: Text(place.name),
-                              value: state.selectedPlaces[place] ?? false,
-                              onChanged: (bool? activate) =>
-                                  BlocProvider.of<OrderAdminCubit>(context)
-                                      .updateFilterRoom(
-                                          place, activate ?? false),
-                            ))
-                        .toList(),
+                children: Place.values
+                    .map((place) => CheckboxListTile(
+                          title: Text(PlaceUtils.placeToString(place)),
+                          value: state.selectedPlaces[place] ?? false,
+                          onChanged: (bool? activate) =>
+                              BlocProvider.of<OrderAdminCubit>(context)
+                                  .updateFilterRoom(place, activate ?? false),
+                        ))
+                    .toList(),
               );
             },
           ),
@@ -240,7 +239,7 @@ class _OrderCompleteView extends StatelessWidget {
             style: theme.textTheme.caption,
           ),
           Text(
-            "${order.place}  -  ${order.room}",
+            "${PlaceUtils.placeToString(order.place)}  -  ${order.room}",
           ),
           SizedBox(
             height: 10,

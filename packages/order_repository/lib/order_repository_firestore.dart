@@ -30,15 +30,6 @@ class OrderRepositoryFirestore extends OrderRepository {
   static final _productImageBase =
       FirebaseStorage.instance.ref().child("products").child("images");
 
-  List<Place> places() {
-    return [
-      Place(name: "Ampère A"),
-      Place(name: "Ampère B"),
-      Place(name: "Ampère C"),
-      Place(name: "Arago"),
-    ];
-  }
-
   @override
   Future<void> createOrder(Order order) async {
     final orderRef = await orderRoot.add(order.toEntity().toDocument());
@@ -159,7 +150,7 @@ class OrderRepositoryFirestore extends OrderRepository {
       for (QueryDocumentSnapshot doc in snapshot.docs) {
         final order = await _orderFromEntity(OrderEntity.fromSnapshot(doc));
 
-        if (places != null && !places.map((e) => e.name).contains(order.place))
+        if (places != null && !places.map((e) => e).contains(order.place))
           continue;
         orders.add(order);
       }

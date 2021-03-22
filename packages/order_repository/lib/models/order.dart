@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:order_repository/models/place.dart';
 
 import '../entities/order_entity.dart';
 import 'article.dart';
@@ -23,7 +24,7 @@ class Order extends Equatable {
   final DateTime createdAt;
   final DateTime? deliveredAt;
   final List<Article> articles;
-  final String place;
+  final Place place;
   final String room;
 
   static final empty = Order(
@@ -33,7 +34,7 @@ class Order extends Equatable {
     createdAt: DateTime.now(),
     deliveredAt: null,
     articles: [],
-    place: "",
+    place: Place.UNKNOWN,
     room: "",
   );
 
@@ -56,7 +57,7 @@ class Order extends Equatable {
     DateTime? createdAt,
     DateTime? deliveredAt,
     List<Article>? articles,
-    String? place,
+    Place? place,
     String? room,
   }) {
     return Order(
