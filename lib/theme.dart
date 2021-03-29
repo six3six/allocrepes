@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-const Color primaryColor = Color(0xffffdc81);
-const Color primaryColorLight = Color(0xffffffb2);
-const Color primaryColorDark = Color(0xffcaab52);
+const Color primaryColor = Color(0xffa6ced3);
+const Color primaryColorLight = Color(0xffd8ffff);
+const Color primaryColorDark = Color(0xff769da2);
 const Color accentColor = Color(0xff7b8b8d);
 const Color lightColor = Color(0xfffffff5);
-const Color blue = Color(0xff6bafb8);
+const Color blue = Color(0xffa6ced3);
 const Color lightBlue = Color(0xffa7f5ff);
 
 final theme = ThemeData(

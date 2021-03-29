@@ -12,6 +12,9 @@ class User extends Equatable {
     required this.id,
     required this.admin,
     required this.name,
+    required this.surname,
+    required this.classe,
+    required this.point,
     this.photo,
   });
 
@@ -25,26 +28,45 @@ class User extends Equatable {
 
   /// The current user's name (display name).
   final String name;
+  final String surname;
+
+  final String classe;
 
   /// Url for the current user's photo.
   final String? photo;
 
-  /// Empty user which represents an unauthenticated user.
-  static const empty =
-      User(email: '', id: '', admin: false, name: "", photo: null);
+  final int point;
 
-  User copyWith({
-    String? email,
-    String? id,
-    bool? admin,
-    String? name,
-    String? photo,
-  }) {
+  /// Empty user which represents an unauthenticated user.
+  static const empty = User(
+    email: '',
+    id: '',
+    admin: false,
+    name: "",
+    surname: "",
+    classe: "",
+    point: 0,
+    photo: null,
+  );
+
+  User copyWith(
+      {String? email,
+      String? id,
+      bool? admin,
+      String? name,
+      String? surname,
+      String? classe,
+      String? photo,
+      int? point}) {
     return User(
       email: email ?? this.email,
       id: id ?? this.id,
       admin: admin ?? this.admin,
       name: name ?? this.name,
+      surname: surname ?? this.surname,
+      classe: classe ?? this.classe,
+      photo: photo ?? this.photo,
+      point: point ?? this.point,
     );
   }
 

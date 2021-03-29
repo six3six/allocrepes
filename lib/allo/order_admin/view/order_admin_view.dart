@@ -163,6 +163,7 @@ class _FilterView extends StatelessWidget {
                     .map((place) => CheckboxListTile(
                           title: Text(PlaceUtils.placeToString(place)),
                           value: state.selectedPlaces[place] ?? false,
+                          tileColor: PlaceUtils.placeToColor(place),
                           onChanged: (bool? activate) =>
                               BlocProvider.of<OrderAdminCubit>(context)
                                   .updateFilterRoom(place, activate ?? false),
@@ -176,19 +177,22 @@ class _FilterView extends StatelessWidget {
             style: theme.textTheme.caption,
           ),
           ExpansionTile(
-              title: Text("Etat"),
-              children: OrderStatus.values
-                  .map((status) => CheckboxListTile(
-                        title: Text(
-                          Order.statusToString(status),
-                          overflow: TextOverflow.clip,
-                        ),
-                        value: selectedStatus[status] ?? false,
-                        onChanged: (bool? activate) =>
-                            BlocProvider.of<OrderAdminCubit>(context)
-                                .updateFilterStatus(status, activate ?? false),
-                      ))
-                  .toList()),
+            title: Text("Etat"),
+            children: OrderStatus.values
+                .map(
+                  (status) => CheckboxListTile(
+                    title: Text(
+                      Order.statusToString(status),
+                      overflow: TextOverflow.clip,
+                    ),
+                    value: selectedStatus[status] ?? false,
+                    onChanged: (bool? activate) =>
+                        BlocProvider.of<OrderAdminCubit>(context)
+                            .updateFilterStatus(status, activate ?? false),
+                  ),
+                )
+                .toList(),
+          ),
         ],
       ),
     );

@@ -33,7 +33,7 @@ class New extends Equatable {
       authors: authors,
       title: unescape.convert(item.title),
       updated: item.updated ?? DateTime(0),
-      content: unescape.convert(item.content) ?? "",
+      content: unescape.convert(item.content),
       summary: unescape.convert(item.summary),
       url: item.id,
       media: "",

@@ -24,7 +24,7 @@ dependencies:
     path: packages/news_repository
 
 
-  firebase_core: ^1.0.1
+  firebase_core: ^1.0.2
   firebase_analytics: ^7.1.1
   firebase_crashlytics: ^1.0.0
 
@@ -45,6 +45,16 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/xanthos.png"
+  adaptive_icon_background: "assets/back.png"
+  adaptive_icon_foreground: "assets/tete.png"
+
 
 flutter:
   uses-material-design: true

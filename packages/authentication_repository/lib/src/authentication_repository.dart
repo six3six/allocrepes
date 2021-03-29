@@ -161,6 +161,9 @@ class AuthenticationRepository {
       id: uid,
       admin: await getUserRole(uid),
       name: name,
+      surname: data["surname"] ?? "",
+      classe: data["classe"] ?? "",
+      point: data["point"] ?? 0,
       photo: null,
     );
   }
