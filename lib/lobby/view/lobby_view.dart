@@ -22,19 +22,34 @@ class LobbyView extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           sliver: SliverToBoxAdapter(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Text(
-                    "XANTHOS",
-                    style: textTheme.headline2
-                        ?.merge(TextStyle(fontFamily: "Oswald")),
+                  child: Image.asset(
+                    "assets/logo.png",
+                    height: 250,
                   ),
                 ),
                 SizedBox.fromSize(
                   size: Size(0, 30),
                 ),
-                BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                  builder: (context, state) => Text("Bonjour " + state.user.id),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                      builder: (context, state) => Text(
+                        "Bonjour " + state.user.id,
+                        style: textTheme.subtitle1,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                      builder: (context, state) =>
+                          Text("Points : " + state.user.point.toString()),
+                    ),
+                  ],
                 ),
               ],
             ),

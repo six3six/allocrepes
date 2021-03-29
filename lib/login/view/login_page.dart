@@ -23,10 +23,9 @@ class LoginPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           children: <Widget>[
             Center(
-              child: Text(
-                "XANTHOS",
-                style:
-                    textTheme.headline2!.merge(TextStyle(fontFamily: "Oswald")),
+              child: Image.asset(
+                "assets/logo.png",
+                height: 250,
               ),
             ),
             const SizedBox(height: 20.0),
