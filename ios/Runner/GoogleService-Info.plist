@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>373860676050-f62pqi9h15bao6ajllnigns1brbj69n4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.373860676050-f62pqi9h15bao6ajllnigns1brbj69n4</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>373860676050-j8agpm2pkmq9nu4f9d4324avtqhojegr.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCEdJbtkbGydGcrFEjzekS05b6XeApnD6o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>373860676050</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>fr.bde2020.allocrepes</string>
+	<key>PROJECT_ID</key>
+	<string>allocrepes-4f992</string>
+	<key>STORAGE_BUCKET</key>
+	<string>allocrepes-4f992.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:373860676050:ios:af4053b9293e1b7197980b</string>
+	<key>DATABASE_URL</key>
+	<string>https://allocrepes-4f992.firebaseio.com</string>
+</dict>
+</plist>
