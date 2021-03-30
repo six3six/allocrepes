@@ -10,14 +10,14 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text("AlloCrepe"),
-              ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: Center(
+            child: Hero(
+              tag: "logo",
+              child: Image.asset(
+                "assets/logo.png",
+              ),
             ),
           ),
         ),

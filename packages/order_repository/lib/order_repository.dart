@@ -9,7 +9,6 @@ import 'models/place.dart';
 import 'models/product.dart';
 
 abstract class OrderRepository {
-
   Stream<List<Order>> orders({
     List<OrderStatus>? orderStatus,
     List<Place>? places,
@@ -24,9 +23,8 @@ abstract class OrderRepository {
 
   Future<Product> getProduct(
     String categoryId,
-    String productId, {
-    bool loadImage = true,
-  });
+    String productId,
+  );
 
   Future<void> updateCategory(Category category);
 
@@ -55,8 +53,4 @@ abstract class OrderRepository {
   Future<void> editOrder(Order order);
 
   Future<void> cancelOrder(Order order);
-
-  Future<ImageProvider?> getProductImage(String productId);
-
-  Future<void> setProductImage(Product product, Uint8List data);
 }

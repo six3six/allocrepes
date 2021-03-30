@@ -87,8 +87,7 @@ class OrderRepositoryFirestore extends OrderRepository {
   Future<List<Product>> productsFromSnapshot(QuerySnapshot snapshot) async {
     List<Product> products = [];
     for (final doc in snapshot.docs) {
-      Product product = Product.fromEntityWithImage(
-          ProductEntity.fromSnapshot(doc), await getProductImage(doc.id));
+      Product product = Product.fromEntity(ProductEntity.fromSnapshot(doc));
 
       products.add(product);
     }
@@ -180,20 +179,14 @@ class OrderRepositoryFirestore extends OrderRepository {
   @override
   Future<Product> getProduct(
     String categoryId,
-    String productId, {
-    bool loadImage = true,
-  }) async {
+    String productId,
+  ) async {
     final snapshot = await productCategoryRoot
         .doc(categoryId)
         .collection("products")
         .doc(productId)
         .get();
-    if (loadImage) {
-      final image = await getProductImage(productId);
-      return Product.fromEntityWithImage(
-          ProductEntity.fromSnapshot(snapshot), image);
-    } else
-      return Product.fromEntity(ProductEntity.fromSnapshot(snapshot));
+    return Product.fromEntity(ProductEntity.fromSnapshot(snapshot));
   }
 
   @override
@@ -232,27 +225,5 @@ class OrderRepositoryFirestore extends OrderRepository {
         .collection("products")
         .doc(product.id)
         .update({"available": available});
-  }
-
-  @override
-  Future<ImageProvider?> getProductImage(String productId) async {
-    try {
-      final url = await _getImageURL(productId + ".jpg");
-      return NetworkImage(url);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  @override
-  Future<void> setProductImage(Product product, Uint8List data) async {
-    await _productImageBase
-        .child(product.id ?? "" + ".jpg")
-        .putData(Uint8List(20));
-  }
-
-  static Future<String> _getImageURL(String image) async {
-    final path = _productImageBase.child(image);
-    return await path.getDownloadURL();
   }
 }

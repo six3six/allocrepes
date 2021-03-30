@@ -35,6 +35,9 @@ class NewsCard extends StatelessWidget {
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ));
+
+    print("Sexe : " + image);
+    print("Sexe : " + image.length.toString());
     return ConstrainedBox(
       constraints: const BoxConstraints(
         maxWidth: 600.0,
@@ -49,12 +52,14 @@ class NewsCard extends StatelessWidget {
             children: [
               SizedBox(
                 height: 200,
-                child: Image.network(
-                  image,
-                  fit: BoxFit.fill,
-                  height: double.infinity,
-                  width: double.infinity,
-                ),
+                child: image.length != 0
+                    ? Image.network(
+                        image,
+                        fit: BoxFit.fill,
+                        height: double.infinity,
+                        width: double.infinity,
+                      )
+                    : Image.asset("assets/logo.png"),
               ),
               ListTile(
                 title: Container(

@@ -139,7 +139,6 @@ class _ItemListCategory extends StatelessWidget {
               Column(
                 children: products
                     .map((Product product) => _ItemListTile(
-                          image: product.image,
                           product: product,
                           category: category,
                         ))
@@ -224,16 +223,14 @@ class _ItemListCategory extends StatelessWidget {
 }
 
 class _ItemListTile extends StatelessWidget {
-  final ImageProvider image;
   final Product product;
   final Category category;
 
-  const _ItemListTile(
-      {Key? key,
-      required this.image,
-      required this.product,
-      required this.category})
-      : super(key: key);
+  const _ItemListTile({
+    Key? key,
+    required this.product,
+    required this.category,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -246,17 +243,6 @@ class _ItemListTile extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: Image(
-              image: image,
-              fit: BoxFit.fill,
-            ),
-          ),
           SizedBox(
             width: 10,
           ),

@@ -57,7 +57,6 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
     return _orderRepository.getProduct(
       article.categoryId,
       article.productId,
-      loadImage: false,
     );
   }
 

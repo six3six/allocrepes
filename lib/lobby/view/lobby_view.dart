@@ -25,9 +25,12 @@ class LobbyView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Image.asset(
-                    "assets/logo.png",
-                    height: 250,
+                  child: Hero(
+                    tag: "logo",
+                    child: Image.asset(
+                      "assets/logo.png",
+                      height: 250,
+                    ),
                   ),
                 ),
                 SizedBox.fromSize(
@@ -67,9 +70,6 @@ class LobbyView extends StatelessWidget {
                 onTap: () {
                   Navigator.push(context, OrderListPage.route());
                 },
-              ),
-              const MenuCard(
-                title: "Concours",
               ),
               const MenuCard(
                 title: "En savoir +",

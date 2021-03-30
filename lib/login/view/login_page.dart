@@ -23,9 +23,12 @@ class LoginPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           children: <Widget>[
             Center(
-              child: Image.asset(
-                "assets/logo.png",
-                height: 250,
+              child: Hero(
+                tag: "logo",
+                child: Image.asset(
+                  "assets/logo.png",
+                  height: 250,
+                ),
               ),
             ),
             const SizedBox(height: 20.0),

@@ -84,11 +84,6 @@ class _ProductEntry extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             SizedBox(
-              width: 70,
-              height: 70,
-              child: Image(image: product.image),
-            ),
-            SizedBox(
               width: 10,
             ),
             Expanded(
