@@ -10,8 +10,7 @@ dependencies:
   equatable: ^2.0.0
   html_unescape: ^2.0.0
 
-  webfeed:
-    path: ../webfeed
+  dart_rss: ^2.0.0
 
 
   http: ^0.13.1

@@ -1,4 +1,5 @@
-import 'package:webfeed/webfeed.dart';
+import 'package:dart_rss/domain/rss_feed.dart';
+import 'package:dart_rss/domain/rss_item.dart';
 import 'package:http/http.dart' as http;
 
 import 'model/new.dart';

@@ -1,0 +1,6 @@
+[submodule "webfeed"]
+	path = webfeed
+	url = https://github.com/six3six/webfeed
+[submodule "packages/webfeed"]
+	path = packages/webfeed
+	url = https://github.com/six3six/webfeed
