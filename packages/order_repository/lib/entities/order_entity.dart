@@ -62,7 +62,7 @@ class OrderEntity extends Equatable {
         "owner": owner,
         "created_at": createdAt,
         "delivered_at": deliveredAt,
-        "place": place,
+        "place": place.index,
         "room": room,
       };
 }
