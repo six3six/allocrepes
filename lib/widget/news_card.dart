@@ -36,8 +36,6 @@ class NewsCard extends StatelessWidget {
           fontSize: 20,
         ));
 
-    print("Sexe : " + image);
-    print("Sexe : " + image.length.toString());
     return ConstrainedBox(
       constraints: const BoxConstraints(
         maxWidth: 600.0,

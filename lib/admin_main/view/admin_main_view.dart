@@ -16,12 +16,10 @@ class AdminMainView extends StatelessWidget {
       body: CustomScrollView(
         primary: false,
         slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.all(20),
-            sliver: SliverGrid.count(
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              crossAxisCount: 2,
+          SliverToBoxAdapter(
+            child: Wrap(
+              spacing: 10,
+              alignment: WrapAlignment.center,
               children: <Widget>[
                 MenuCard(
                   title: "Afficher les commandes",

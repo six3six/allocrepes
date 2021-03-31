@@ -9,22 +9,18 @@ class MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxHeight: 30.0,
-          maxWidth: 30.0,
-        ),
-        child: Card(
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: EdgeInsets.all(15),
-              child: Center(
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                ),
+    return SizedBox(
+      width: 200,
+      height: 200,
+      child: Card(
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: EdgeInsets.all(15),
+            child: Center(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
               ),
             ),
           ),
