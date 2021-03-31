@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
+import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
 
 class OrderListView extends StatelessWidget {
@@ -119,7 +120,8 @@ class _OrderSummary extends StatelessWidget {
             ),
             Text(
                 "Commandé le ${order.createdAt.toLocal().toString().split(".")[0]}"),
-            Text("Livraison à ${order.place}, salle/appartement ${order.room}"),
+            Text(
+                "Livraison à ${PlaceUtils.placeToString(order.place)}, salle/appartement ${order.room}"),
             _OrderSummaryStatus(order.status),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
