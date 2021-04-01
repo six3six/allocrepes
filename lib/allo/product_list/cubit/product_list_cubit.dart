@@ -35,6 +35,12 @@ class ProductListCubit extends Cubit<ProductListState> {
     orderRepository.updateProductAvailability(category, product, availability);
   }
 
+  void updateProductMaxAmount(
+      Category category, Product product, int maxAmount) {
+    orderRepository.updateProductMaxAmount(category, product, maxAmount);
+  }
+
+
   void removeProduct(Category category, Product product) {
     orderRepository.removeProduct(category, product);
   }
@@ -113,7 +119,9 @@ class ProductListCubit extends Cubit<ProductListState> {
               child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.addProduct(
-                    category, Product(name: controller.text, available: false));
+                    category,
+                    Product(
+                        name: controller.text, available: false, maxAmount: 0));
                 Navigator.of(context).pop();
               },
             ),

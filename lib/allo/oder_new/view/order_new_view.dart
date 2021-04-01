@@ -48,11 +48,12 @@ class OrderNewView extends StatelessWidget {
                   child: BlocBuilder<OrderNewCubit, OrderNewState>(
                     buildWhen: (prev, next) => prev.place != next.place,
                     builder: (context, state) => DropdownButton<Place>(
-                      value: state.place,
+                      value: state.place ?? Place.values[1],
                       onChanged: (Place? place) =>
                           BlocProvider.of<OrderNewCubit>(context)
                               .updatePlace(place),
                       items: Place.values
+                          .sublist(1)
                           .map<DropdownMenuItem<Place>>((Place place) {
                         return DropdownMenuItem<Place>(
                           value: place,
@@ -196,7 +197,8 @@ class _OrderNewItem extends StatelessWidget {
             elevation: 16,
             onChanged: (int? val) => BlocProvider.of<OrderNewCubit>(context)
                 .updateQuantity(category, product, val ?? 0),
-            items: <int>[0, 1, 2, 3, 4].map<DropdownMenuItem<int>>((int value) {
+            items: List<int>.generate(product.maxAmount + 1, (index) => index)
+                .map<DropdownMenuItem<int>>((int value) {
               return DropdownMenuItem<int>(
                 value: value,
                 child: Text(" " + value.toString() + " "),
