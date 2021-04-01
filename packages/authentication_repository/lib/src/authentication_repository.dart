@@ -168,15 +168,30 @@ class AuthenticationRepository {
     );
   }
 
-  Stream<Map<String, User>> getUsers() async* {
+  Stream<Map<String, User>> getUsers({
+    String? username,
+    SortUser sort = SortUser.Name,
+  }) async* {
     final adminCollection = FirebaseFirestore.instance.collection("roles");
     final userCollection = FirebaseFirestore.instance.collection("users");
+    Query userQuery = userCollection;
+    switch (sort) {
+      case SortUser.Name:
+        break;
+      case SortUser.Point:
+        userQuery = userQuery.orderBy("point");
+        break;
+    }
+
+    if (username != null) {
+      userQuery = userQuery.where("name", isGreaterThanOrEqualTo: username);
+    }
 
     Map<String, User> users = {};
     Map<String, bool> isAdmin = {};
 
     Stream<QuerySnapshot> mStream =
-        userCollection.snapshots().merge(adminCollection.snapshots());
+        userQuery.snapshots().merge(adminCollection.snapshots());
     await for (var snap in mStream) {
       if (snap.docs.first.reference.parent == userCollection) {
         users = {};
@@ -198,6 +213,49 @@ class AuthenticationRepository {
       yield users;
     }
   }
+
+  void updateUser(User user) {
+    setUserInfo(user.id, user.surname, user.name, user.email, user.point);
+    setUserAdmin(user.id, user.admin);
+  }
+
+  void setUserInfo(
+      String uid, String surname, String name, String email, int point) {
+    final userCollection =
+        FirebaseFirestore.instance.collection("users").doc(uid);
+
+    userCollection.update(
+      User(
+        id: uid,
+        surname: surname,
+        name: name,
+        email: email,
+        point: point,
+        classe: "",
+        photo: "",
+        admin: false,
+      ).toDocument(),
+    );
+  }
+
+  void setUserAdmin(String uid, bool admin) {
+    final adminCollection =
+        FirebaseFirestore.instance.collection("roles").doc("admins");
+    if (admin) {
+      adminCollection.update({
+        "$uid": true,
+      });
+    } else {
+      adminCollection.update({
+        "$uid": FieldValue.delete(),
+      });
+    }
+  }
+}
+
+enum SortUser {
+  Name,
+  Point,
 }
 
 extension on firebase_auth.User {
