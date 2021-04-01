@@ -71,6 +71,15 @@ class User extends Equatable {
     );
   }
 
+  Map<String, Object?> toDocument() {
+    return {
+      "surname": surname,
+      "name": name,
+      "email": email,
+      "point": point,
+    };
+  }
+
   static User fromDocument(QueryDocumentSnapshot document) {
     var data = document.data() ?? {};
     return User(
