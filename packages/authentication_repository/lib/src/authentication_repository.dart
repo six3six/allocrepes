@@ -167,6 +167,37 @@ class AuthenticationRepository {
       photo: null,
     );
   }
+
+  Stream<Map<String, User>> getUsers() async* {
+    final adminCollection = FirebaseFirestore.instance.collection("roles");
+    final userCollection = FirebaseFirestore.instance.collection("users");
+
+    Map<String, User> users = {};
+    Map<String, bool> isAdmin = {};
+
+    Stream<QuerySnapshot> mStream =
+        userCollection.snapshots().merge(adminCollection.snapshots());
+    await for (var snap in mStream) {
+      if (snap.docs.first.reference.parent == userCollection) {
+        users = {};
+      }
+      for (var doc in snap.docs) {
+        if (doc.reference.parent == adminCollection) {
+          if (doc.reference == adminCollection.doc("admins")) {
+            isAdmin =
+                doc.data()?.map((key, value) => MapEntry(key, true)) ?? {};
+          }
+        } else if (doc.reference.parent == userCollection) {
+          users[doc.id] = User.fromDocument(doc);
+        }
+      }
+
+      users = users.map((id, user) =>
+          MapEntry(id, user.copyWith(admin: isAdmin.containsKey(id))));
+
+      yield users;
+    }
+  }
 }
 
 extension on firebase_auth.User {

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 /// {@template user}
@@ -67,6 +68,19 @@ class User extends Equatable {
       classe: classe ?? this.classe,
       photo: photo ?? this.photo,
       point: point ?? this.point,
+    );
+  }
+
+  static User fromDocument(QueryDocumentSnapshot document) {
+    var data = document.data() ?? {};
+    return User(
+      email: data.containsKey("email") ? data["email"] : "",
+      id: document.id,
+      admin: false,
+      name: data.containsKey("name") ? data["name"] : "",
+      surname: data.containsKey("surname") ? data["surname"] : "",
+      classe: data.containsKey("classe") ? data["classe"] : "",
+      point: data.containsKey("point") ? data["point"] : 0,
     );
   }
 

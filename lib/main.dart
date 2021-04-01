@@ -28,15 +28,18 @@ void main() async {
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
+  await messaging.requestPermission(
+    provisional: true,
   );
+
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    await Firebase.initializeApp();
+
+    print("Handling a background message: ${message.messageId}");
+  }
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = AppObserver();

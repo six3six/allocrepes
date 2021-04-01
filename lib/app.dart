@@ -1,8 +1,11 @@
+import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
 import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'authentication/bloc/authentication_bloc.dart';
 import 'lobby/view/lobby_page.dart';
@@ -39,6 +42,37 @@ class _AppViewState extends State<AppView> {
 
   NavigatorState get _navigator => _navigatorKey.currentState!;
 
+  Future<void> getNotif(RemoteMessage? initialMessage) async {
+    if (initialMessage == null) return;
+    if (initialMessage.data.containsKey("link")) {
+      await canLaunch(initialMessage.data["link"])
+          ? await launch(initialMessage.data["link"])
+          : throw 'Could not launch ${initialMessage.data["link"]}';
+      return;
+    }
+
+    if (initialMessage.data.containsKey("type")) {
+      switch (initialMessage.data["type"] as String) {
+        case "order":
+          Navigator.of(context).push(OrderNewPage.route());
+          return;
+        default:
+          return;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((initialMessage) async => {getNotif(initialMessage)});
+  }
+
+  String prevUserId = "";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,12 +86,17 @@ class _AppViewState extends State<AppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 print("authenticated");
+                FirebaseMessaging.instance
+                    .subscribeToTopic("user${state.user.id}");
+                prevUserId = state.user.id;
                 _navigator.pushAndRemoveUntil<void>(
                   LobbyPage.route(),
                   (route) => false,
                 );
                 break;
               case AuthenticationStatus.unauthenticated:
+                FirebaseMessaging.instance
+                    .unsubscribeFromTopic("user${prevUserId}");
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
                   (route) => false,

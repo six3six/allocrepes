@@ -1,3 +1,4 @@
+import 'package:allocrepes/admin_user/view/admin_user_page.dart';
 import 'package:allocrepes/allo/order_admin/view/order_admin_page.dart';
 import 'package:allocrepes/allo/product_list/view/product_list_page.dart';
 import 'package:allocrepes/widget/menu_card.dart';
@@ -31,6 +32,12 @@ class AdminMainView extends StatelessWidget {
                   title: "Modifier les produits",
                   onTap: () {
                     Navigator.push(context, ProductListPage.route());
+                  },
+                ),
+                MenuCard(
+                  title: "Afficher les utilisateurs",
+                  onTap: () {
+                    Navigator.push(context, AdminUserPage.route());
                   },
                 ),
               ],
