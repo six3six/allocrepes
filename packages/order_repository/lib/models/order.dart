@@ -27,6 +27,7 @@ class Order extends Equatable {
   final Place place;
   final String room;
 
+
   static final empty = Order(
     id: "",
     owner: "",

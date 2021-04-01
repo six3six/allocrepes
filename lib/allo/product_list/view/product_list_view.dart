@@ -51,16 +51,19 @@ class _ProductEntry extends StatelessWidget {
   final Product product;
   final Category category;
 
-  const _ProductEntry({
+  _ProductEntry({
     Key? key,
     required this.product,
     required this.category,
   }) : super(key: key);
 
+  TextEditingController quantityController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    quantityController..text = product.maxAmount.toString();
 
     return Dismissible(
       key: Key("${category.id};${product.id}"),
@@ -80,22 +83,52 @@ class _ProductEntry extends StatelessWidget {
           .removeProduct(category, product),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
+        child: Column(
           children: [
-            SizedBox(
-              width: 10,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  flex: 7,
+                  child: Text(product.name, style: textTheme.headline6),
+                ),
+                Checkbox(
+                  value: product.available,
+                  onChanged: (bool? availability) =>
+                      BlocProvider.of<ProductListCubit>(context)
+                          .updateProductAvailability(
+                              category, product, availability ?? false),
+                ),
+              ],
             ),
-            Expanded(
-              flex: 7,
-              child: Text(product.name, style: textTheme.headline6),
-            ),
-            Checkbox(
-              value: product.available,
-              onChanged: (bool? availability) =>
-                  BlocProvider.of<ProductListCubit>(context)
-                      .updateProductAvailability(
-                          category, product, availability ?? false),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  flex: 7,
+                  child: Text(
+                    "Quantité max",
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: quantityController,
+                    onChanged: (val) {
+                      BlocProvider.of<ProductListCubit>(context)
+                          .updateProductMaxAmount(
+                              category, product, int.tryParse(val) ?? 0);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

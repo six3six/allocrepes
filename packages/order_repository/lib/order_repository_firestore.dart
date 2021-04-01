@@ -226,4 +226,16 @@ class OrderRepositoryFirestore extends OrderRepository {
         .doc(product.id)
         .update({"available": available});
   }
+
+  Future<void> updateProductMaxAmount(
+    Category category,
+    Product product,
+    int maxAmount,
+  ) {
+    return productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .doc(product.id)
+        .update({"maxAmount": maxAmount});
+  }
 }
