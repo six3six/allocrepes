@@ -41,7 +41,7 @@ class LobbyView extends StatelessWidget {
                   children: [
                     BlocBuilder<AuthenticationBloc, AuthenticationState>(
                       builder: (context, state) => Text(
-                        "Bonjour " + state.user.id,
+                        "Bonjour " + state.user.surname,
                         style: textTheme.subtitle1,
                       ),
                     ),
