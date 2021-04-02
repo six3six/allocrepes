@@ -177,13 +177,16 @@ class AuthenticationRepository {
     Query userQuery = userCollection;
     switch (sort) {
       case SortUser.Name:
+        userQuery.orderBy("name", descending: true);
         break;
       case SortUser.Point:
-        userQuery = userQuery.orderBy("point");
+        userQuery = userQuery.orderBy("point", descending: true);
         break;
     }
 
-    if (username != null) {
+    userQuery = userQuery.limit(50);
+
+    if (username != null && sort == SortUser.Name) {
       userQuery = userQuery.where("name", isGreaterThanOrEqualTo: username);
     }
 
@@ -218,6 +221,17 @@ class AuthenticationRepository {
     setUserInfo(user.id, user.surname, user.name, user.email, user.point);
     setUserAdmin(user.id, user.admin);
   }
+
+  void removeUser(String uid) {
+    final adminCollection = FirebaseFirestore.instance.collection("roles").doc("admins");
+    final userCollection = FirebaseFirestore.instance.collection("users").doc(uid);
+
+    userCollection.delete();
+    adminCollection.update({
+      "$uid": FieldValue.delete(),
+    });
+  }
+
 
   void setUserInfo(
       String uid, String surname, String name, String email, int point) {
