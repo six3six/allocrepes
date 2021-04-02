@@ -61,7 +61,7 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
   }
 
   Future<User> getUser(String user) {
-    return _authenticationRepository.getUserFromUid(user);
+    return _authenticationRepository.getUserFromUid(user.toLowerCase());
   }
 
   void expandOrder(Order order, bool expand) {

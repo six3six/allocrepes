@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/place.dart';
