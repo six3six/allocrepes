@@ -12,8 +12,10 @@ class AdminUserCubit extends Cubit<AdminUserState> {
 
   void getUser({
     String? username,
+    SortUser? sortUser,
   }) {
-    userStream = _authenticationRepository.getUsers(username: username);
+    userStream = _authenticationRepository.getUsers(
+        username: username, sort: sortUser ?? SortUser.Name);
 
     userStream?.listen((users) {
       emit(
@@ -54,8 +56,15 @@ class AdminUserCubit extends Cubit<AdminUserState> {
     ));
   }
 
-  void updateUserQuery(String username){
-    emit(state.copyWith(usernameQuery: username));
-    getUser(username: username);
+  void removeUser(String uid){
+    _authenticationRepository.removeUser(uid);
+  }
+
+  void updateUserQuery({
+    String? username,
+    SortUser? sortUser,
+  }) {
+    emit(state.copyWith(usernameQuery: username, sortUser: sortUser));
+    getUser(username: username ?? state.usernameQuery, sortUser: sortUser ?? state.sortUser);
   }
 }

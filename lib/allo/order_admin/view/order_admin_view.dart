@@ -100,12 +100,16 @@ class OrderAdminView extends StatelessWidget {
       headerBuilder: (BuildContext context, bool isExpanded) {
         if (isExpanded)
           return ListTile(
-            title: Text("Nom : " + (order.owner)),
+            title: _UserLabel(
+              userId: order.owner,
+            ),
             tileColor: PlaceUtils.placeToColor(order.place),
           );
         else
           return ListTile(
-            title: Text("Nom : " + (order.owner)),
+            title: _UserLabel(
+              userId: order.owner,
+            ),
             tileColor: PlaceUtils.placeToColor(order.place),
             selectedTileColor: PlaceUtils.placeToColor(order.place),
             subtitle: Column(
@@ -234,6 +238,7 @@ class _OrderCompleteView extends StatelessWidget {
           ),
           _UserLabel(
             userId: order.owner,
+            classe: true,
           ),
           SizedBox(
             height: 10,
@@ -322,8 +327,16 @@ class _ArticleToProductLabel extends StatelessWidget {
 
 class _UserLabel extends Text {
   final String userId;
+  final bool surname;
+  final bool name;
+  final bool classe;
+  final bool id;
 
   const _UserLabel({
+    this.surname = true,
+    this.name = true,
+    this.classe = false,
+    this.id = false,
     Key? key,
     required this.userId,
     TextStyle? style,
@@ -360,9 +373,14 @@ class _UserLabel extends Text {
     return FutureBuilder<User>(
         future: BlocProvider.of<OrderAdminCubit>(context).getUser(userId),
         builder: (context, snap) {
-          if (snap.hasData)
-            return Text("${snap.data!.name}");
-          else
+          if (snap.hasData) {
+            String res = "";
+            if (id) res += (snap.data?.id ?? "") + " ";
+            if (surname) res += (snap.data?.surname ?? "") + " ";
+            if (name) res += (snap.data?.name ?? "") + " ";
+            if (classe) res += (snap.data?.classe ?? "") + " ";
+            return Text(res);
+          } else
             return Text("$userId");
         });
   }
