@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminUserView extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +30,6 @@ class AdminUserView extends StatelessWidget {
 }
 
 class _FilterView extends StatelessWidget {
-
   _FilterView({
     Key? key,
   }) : super(key: key);
@@ -53,9 +50,9 @@ class _FilterView extends StatelessWidget {
         ),
         TextField(
           onChanged: (value) {
-            BlocProvider.of<AdminUserCubit>(context).updateUserQuery(value);
+            BlocProvider.of<AdminUserCubit>(context)
+                .updateUserQuery(username: value);
           },
-
         ),
         SizedBox(
           height: 10,
@@ -64,10 +61,35 @@ class _FilterView extends StatelessWidget {
           "Trié par :",
           style: theme.textTheme.caption,
         ),
-        ExpansionTile(
-          title: Text("Trié par : "),
-          children: [],
-        ),
+        BlocBuilder<AdminUserCubit, AdminUserState>(
+            buildWhen: (prev, next) => prev.sortUser != next.sortUser,
+            builder: (context, state) {
+              return ExpansionTile(
+                title: Text("Trié par : "),
+                children: [
+                  ListTile(
+                    title: Text("Par identifiant"),
+                    leading: Radio<SortUser>(
+                      value: SortUser.Name,
+                      groupValue: state.sortUser,
+                      onChanged: (value) =>
+                          BlocProvider.of<AdminUserCubit>(context)
+                              .updateUserQuery(sortUser: value),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text("Par points"),
+                    leading: Radio<SortUser>(
+                      value: SortUser.Point,
+                      groupValue: state.sortUser,
+                      onChanged: (value) =>
+                          BlocProvider.of<AdminUserCubit>(context)
+                              .updateUserQuery(sortUser: value),
+                    ),
+                  ),
+                ],
+              );
+            }),
       ],
     );
   }
@@ -197,11 +219,12 @@ class _UserTile extends StatelessWidget {
                     width: 10,
                   ),
                   TextButton(
-                    onPressed: () {},
                     child: Text("Supprimer"),
                     style: TextButton.styleFrom(
                       primary: Colors.red,
                     ),
+                    onPressed: () =>
+                        BlocProvider.of<AdminUserCubit>(context).removeUser(id),
                   ),
                 ],
               ),
