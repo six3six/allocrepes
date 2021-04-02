@@ -277,6 +277,8 @@ extension on firebase_auth.User {
       } else {
         String? email;
         String? name;
+        String? surname;
+        int? point;
 
         try {
           email = snap["email"];
@@ -285,11 +287,20 @@ extension on firebase_auth.User {
         try {
           name = snap["name"];
         } catch (e) {}
+        try {
+          surname = snap["surname"];
+        } catch (e) {}
+
+        try {
+          point = snap["point"];
+        } catch (e) {}
 
         user = user.copyWith(
           email: email,
           name: name,
+          surname: surname,
           photo: photoURL,
+          point: point,
         );
       }
       yield user;

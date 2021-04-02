@@ -39,3 +39,7 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+cred.json
+BDE_MES_GROUPES.csv
+export.csv
