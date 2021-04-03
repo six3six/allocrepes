@@ -57,7 +57,7 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
     });
 });
 
-exports.onUserEdition = functions.firestore
+exports.onPointChange = functions.firestore
     .document("users/{docId}")
     .onWrite(async (change, context) => {
         const prevData = change.before.data() ?? {"points": 0};
@@ -86,4 +86,68 @@ exports.onUserEdition = functions.firestore
             );
         }
     });
+
+
+exports.sendNotif = functions.https.onCall(async (requestData, context) => {
+    let data = {};
+
+    const notification: admin.messaging.NotificationMessagePayload = {
+        title: requestData.title,
+        body: requestData.body,
+        sound: "default",
+        // badge: '1'
+    };
+
+    const option: admin.messaging.MessagingOptions = {
+        contentAvailable: true,
+        priority: "high",
+        timeToLive: 60 * 60 * 24,
+    };
+
+
+    if (requestData.action == NotifAction.LinkPage) {
+        data = {
+            "link": requestData.link,
+        };
+    } else if (requestData.action == NotifAction.OrderPage) {
+        data = {
+            "type": "order",
+        };
+    }
+
+    const payload: admin.messaging.MessagingPayload = {
+        data: data,
+        notification: notification,
+    };
+
+    let topic = "/topics/allusers";
+    if (requestData.recipient == NotifRecipient.Ios) {
+        topic = "/topics/iosusers";
+    } else if (requestData.recipient == NotifRecipient.Android) {
+        topic = "/topics/androidusers";
+    } else if (requestData.recipient == NotifRecipient.User) {
+        topic = "/topics/user" + requestData.user;
+    }
+
+    await admin.messaging().sendToTopic(
+        topic,
+        payload,
+        option,
+    );
+
+    return "ok";
+});
+
+enum NotifRecipient {
+    Everybody,
+    Android,
+    Ios,
+    User,
+}
+
+enum NotifAction {
+    MainPage,
+    OrderPage,
+    LinkPage,
+}
 

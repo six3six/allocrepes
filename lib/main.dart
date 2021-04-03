@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -27,6 +28,9 @@ void main() async {
   };
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  messaging.subscribeToTopic("allusers");
+  if(Platform.isAndroid) messaging.subscribeToTopic("androidusers");
+  if(Platform.isIOS) messaging.subscribeToTopic("iosusers");
 
   await messaging.requestPermission(
     provisional: true,

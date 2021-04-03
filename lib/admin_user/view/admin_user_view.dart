@@ -135,8 +135,7 @@ class _UserTile extends StatelessWidget {
     final textTheme = theme.textTheme;
 
     return BlocBuilder<AdminUserCubit, AdminUserState>(
-      buildWhen: (prev, next) =>
-          prev.users[id] != next.users[id] || prev.admin[id] != next.admin[id],
+      buildWhen: (prev, next) => prev.users[id] != next.users[id],
       builder: (context, state) {
         User user = state.users[id] ?? User.empty;
         return ExpansionTile(
@@ -197,22 +196,25 @@ class _UserTile extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        BlocProvider.of<AdminUserCubit>(context).setUserInfo(
-                          id,
-                          surnameController.text,
-                          nameController.text,
-                          emailController.text,
-                          int.tryParse(pointsController.text) ?? 0,
-                        );
+                    child: BlocBuilder<AdminUserCubit, AdminUserState>(
+                      buildWhen: (prev, next) => prev.admin[id] != next.admin[id],
+                      builder: (context, state) => OutlinedButton(
+                        onPressed: () {
+                          BlocProvider.of<AdminUserCubit>(context).setUserInfo(
+                            id,
+                            surnameController.text,
+                            nameController.text,
+                            emailController.text,
+                            int.tryParse(pointsController.text) ?? 0,
+                          );
 
-                        BlocProvider.of<AdminUserCubit>(context).setUserAdmin(
-                          id,
-                          state.admin[id] ?? false,
-                        );
-                      },
-                      child: Text("Valider"),
+                          BlocProvider.of<AdminUserCubit>(context).setUserAdmin(
+                            id,
+                            state.admin[id] ?? false,
+                          );
+                        },
+                        child: Text("Valider"),
+                      ),
                     ),
                   ),
                   SizedBox(
