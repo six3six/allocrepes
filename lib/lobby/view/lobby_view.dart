@@ -9,6 +9,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'lobby_twitch.dart';
 
@@ -52,6 +53,13 @@ class LobbyView extends StatelessWidget {
                       builder: (context, state) =>
                           Text("Points : " + state.user.point.toString()),
                     ),
+                    TextButton(
+                      onPressed: () =>
+                          RepositoryProvider.of<AuthenticationRepository>(
+                                  context)
+                              .logOut(),
+                      child: Text("Se déconnecter"),
+                    ),
                   ],
                 ),
               ],
@@ -68,9 +76,16 @@ class LobbyView extends StatelessWidget {
                 onTap: () {
                   Navigator.push(context, OrderListPage.route());
                 },
+                icon: Icons.shopping_cart,
               ),
-              const MenuCard(
+              MenuCard(
                 title: "En savoir +",
+                onTap: () {
+                  try {
+                    launch("https://xanthos.fr/a-propos");
+                  } catch (e) {}
+                },
+                icon: Icons.mood_rounded,
               ),
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
@@ -80,6 +95,7 @@ class LobbyView extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context, AdminMainPage.route());
                     },
+                    icon: Icons.admin_panel_settings_outlined,
                   );
                 else
                   return SizedBox();
@@ -132,16 +148,31 @@ class LobbyView extends StatelessWidget {
                     );
                   },
                 ),
-                TextButton(
-                  onPressed: () =>
-                      RepositoryProvider.of<AuthenticationRepository>(context)
-                          .logOut(),
-                  child: Text("Se déconnecter"),
-                ),
-                Text("Aucun test n'a été dev pour ce projet"),
-                Text(
-                  "Tester c'est douter",
-                  style: Theme.of(context).textTheme.bodyText1,
+                Center(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text("Fait avec le ❤"),
+                      Text("par Louis DESPLANCHE"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text("Aucun test n'a été dev pour ce projet"),
+                      Text(
+                        "Tester c'est douter",
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text("(c) Liste BDE ESIEE Paris 2021-2022"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
