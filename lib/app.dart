@@ -79,6 +79,7 @@ class _AppViewState extends State<AppView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Xanthos",
       theme: theme,
       navigatorKey: _navigatorKey,
       builder: (context, child) {

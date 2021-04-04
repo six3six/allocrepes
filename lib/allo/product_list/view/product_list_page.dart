@@ -9,7 +9,10 @@ import 'package:order_repository/order_repository_firestore.dart';
 
 class ProductListPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => ProductListPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => ProductListPage(),
+      settings: RouteSettings(name: "AdminProductList"),
+    );
   }
 
   ProductListPage({Key? key}) : super(key: key);

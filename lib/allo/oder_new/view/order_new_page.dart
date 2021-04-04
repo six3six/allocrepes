@@ -10,7 +10,10 @@ import 'order_new_view.dart';
 
 class OrderNewPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => OrderNewPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => OrderNewPage(),
+      settings: RouteSettings(name: "OrderNew"),
+    );
   }
 
   const OrderNewPage({Key? key}) : super(key: key);

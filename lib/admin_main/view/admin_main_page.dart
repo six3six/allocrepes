@@ -4,7 +4,10 @@ import 'admin_main_view.dart';
 
 class AdminMainPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => AdminMainPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => AdminMainPage(),
+      settings: RouteSettings(name: "AdminMain"),
+    );
   }
 
   AdminMainPage({Key? key}) : super(key: key);

@@ -9,7 +9,7 @@ import 'order_admin_view.dart';
 
 class OrderAdminPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => OrderAdminPage());
+    return MaterialPageRoute<void>(builder: (_) => OrderAdminPage(), settings: RouteSettings(name: "OrderAdmin"),);
   }
 
   const OrderAdminPage({Key? key}) : super(key: key);
