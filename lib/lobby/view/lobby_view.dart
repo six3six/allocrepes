@@ -7,6 +7,7 @@ import 'package:allocrepes/widget/menu_card.dart';
 import 'package:allocrepes/widget/news_card.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -114,10 +115,10 @@ class LobbyView extends StatelessWidget {
                   style: textTheme.headline5,
                 ),
               ),
-              SizedBox(
+              if(!kIsWeb) SizedBox(
                 height: 300,
                 width: double.infinity,
-                child: LobbyTwitchViewer(),
+                child:  LobbyTwitchViewer(),
               ),
             ],
           ),

@@ -17,24 +17,26 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // Force enable crashlytics collection enabled if we're testing it.
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  // Pass all uncaught errors to Crashlytics.
-  Function? originalOnError = FlutterError.onError;
-  FlutterError.onError = (FlutterErrorDetails errorDetails) async {
-    await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
-    // Forward to original handler.
-    originalOnError!(errorDetails);
-  };
+  if(!kIsWeb) {
+    // Force enable crashlytics collection enabled if we're testing it.
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    // Pass all uncaught errors to Crashlytics.
+    Function? originalOnError = FlutterError.onError;
+    FlutterError.onError = (FlutterErrorDetails errorDetails) async {
+      await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+      // Forward to original handler.
+      originalOnError!(errorDetails);
+    };
 
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  messaging.subscribeToTopic("allusers");
-  if(Platform.isAndroid) messaging.subscribeToTopic("androidusers");
-  if(Platform.isIOS) messaging.subscribeToTopic("iosusers");
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging.subscribeToTopic("allusers");
+    if (Platform.isAndroid) messaging.subscribeToTopic("androidusers");
+    if (Platform.isIOS) messaging.subscribeToTopic("iosusers");
 
-  await messaging.requestPermission(
-    provisional: true,
-  );
+    await messaging.requestPermission(
+      provisional: true,
+    );
+  }
 
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
