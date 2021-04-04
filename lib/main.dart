@@ -17,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  if(!kIsWeb) {
+  if (!kIsWeb) {
     // Force enable crashlytics collection enabled if we're testing it.
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     // Pass all uncaught errors to Crashlytics.
@@ -49,9 +49,12 @@ void main() async {
 
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = AppObserver();
-  runZonedGuarded(() {
-    runApp(App(authenticationRepository: AuthenticationRepository()));
-  }, (error, stackTrace) {
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
-  });
+  if (!kIsWeb) {
+    runZonedGuarded(() {
+      runApp(App(authenticationRepository: AuthenticationRepository()));
+    }, (error, stackTrace) {
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+    });
+  }
+  else runApp(App(authenticationRepository: AuthenticationRepository()));
 }
