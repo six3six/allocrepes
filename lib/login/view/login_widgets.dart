@@ -5,6 +5,7 @@ import 'package:allocrepes/login/cubit/login_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 part 'login_theme.dart';
@@ -46,6 +47,35 @@ class AuthWebViewState extends State<AuthWebView> {
         }
         return NavigationDecision.navigate;
       },
+    );
+  }
+}
+
+class AuthTokenView extends StatelessWidget {
+  TextEditingController tokenController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+            child: Text('Get link'),
+            onPressed: () => launch(
+                'https://sso.esiee.fr/cas/login?service=https%3A%2F%2Fus-central1-allocrepes-4f992.cloudfunctions.net%2FssoLogin/')),
+        SizedBox(
+          height: 15,
+        ),
+        Text("Token : "),
+        TextField(
+          controller: tokenController,
+        ),
+        OutlinedButton(
+          onPressed: () => BlocProvider.of<LoginCubit>(context)
+              .loginWithToken(tokenController.text),
+          child: Text("Valider"),
+        ),
+      ],
     );
   }
 }

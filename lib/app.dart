@@ -3,6 +3,7 @@ import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -88,8 +89,10 @@ class _AppViewState extends State<AppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 print("authenticated");
-                FirebaseMessaging.instance
-                    .subscribeToTopic("user${state.user.id}");
+                if(!kIsWeb) {
+                  FirebaseMessaging.instance
+                      .subscribeToTopic("user${state.user.id}");
+                }
                 prevUserId = state.user.id;
                 _navigator.pushAndRemoveUntil<void>(
                   LobbyPage.route(),
@@ -97,8 +100,10 @@ class _AppViewState extends State<AppView> {
                 );
                 break;
               case AuthenticationStatus.unauthenticated:
-                FirebaseMessaging.instance
-                    .unsubscribeFromTopic("user${prevUserId}");
+                if(!kIsWeb) {
+                  FirebaseMessaging.instance
+                      .unsubscribeFromTopic("user${prevUserId}");
+                }
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
                       (route) => false,
