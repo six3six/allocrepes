@@ -6,7 +6,10 @@ import 'admin_notif_view.dart';
 
 class AdminNotifPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => AdminNotifPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => AdminNotifPage(),
+      settings: RouteSettings(name: "AdminNotif"),
+    );
   }
 
   AdminNotifPage({Key? key}) : super(key: key);

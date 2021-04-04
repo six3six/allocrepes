@@ -10,7 +10,10 @@ import 'login_form.dart';
 
 class LoginPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => LoginPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => LoginPage(),
+      settings: RouteSettings(name: "Login"),
+    );
   }
 
   @override

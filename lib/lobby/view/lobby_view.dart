@@ -104,7 +104,7 @@ class LobbyView extends StatelessWidget {
             ],
           ),
         ),
-        SliverToBoxAdapter(
+        if(!kIsWeb) SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -115,7 +115,7 @@ class LobbyView extends StatelessWidget {
                   style: textTheme.headline5,
                 ),
               ),
-              if(!kIsWeb) SizedBox(
+               SizedBox(
                 height: 300,
                 width: double.infinity,
                 child:  LobbyTwitchViewer(),
@@ -124,7 +124,7 @@ class LobbyView extends StatelessWidget {
           ),
         ),
         SliverPadding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           sliver: SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,6 +139,7 @@ class LobbyView extends StatelessWidget {
                 BlocBuilder<LobbyCubit, LobbyState>(
                   builder: (context, state) {
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: state.news
                           .map((_new) => NewsCard.tapUrl(
                                 title: _new.title,
