@@ -86,7 +86,7 @@ class OrderListView extends StatelessWidget {
                 prev.previousOrders != next.previousOrders,
             builder: (BuildContext context, OrderListState state) {
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: state.previousOrders
                     .map<_OrderSummary>((e) => _OrderSummary(order: e))
                     .toList(),

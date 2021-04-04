@@ -8,7 +8,10 @@ import 'lobby_twitch.dart';
 
 class LobbyPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => LobbyPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => LobbyPage(),
+      settings: RouteSettings(name: "Main"),
+    );
   }
 
   const LobbyPage({Key? key}) : super(key: key);

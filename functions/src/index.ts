@@ -5,12 +5,14 @@ import * as sxml from "sxml";
 
 admin.initializeApp();
 
+interface Token {
+    user: string;
+    token: string;
+}
 
-exports.ssoLogin = functions.https.onRequest(async (req, res) => {
-    const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
+const getSSOToken = async (fncUrl: string, ticket: string): Promise<Token> => {
     const encUrl = encodeURIComponent(fncUrl);
 
-    const ticket = req.query.ticket;
 
     const url = `https://sso.esiee.fr/cas/serviceValidate?service=${encUrl}&ticket=${ticket}`;
 
@@ -50,11 +52,26 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
     console.log(`User: ${user}`);
 
     const token = await admin.auth().createCustomToken(user);
-
-    res.json({
+    return {
         user: user,
         token: token,
-    });
+    };
+};
+
+exports.ssoLogin = functions.https.onRequest(async (req, res) => {
+    const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
+    const ticket = typeof req.query.ticket === "string" ? req.query.ticket : "";
+
+    const token = await getSSOToken(fncUrl, ticket);
+    res.json(token);
+});
+
+exports.ssoLoginToken = functions.https.onRequest(async (req, res) => {
+    const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
+    const ticket = typeof req.query.ticket === "string" ? req.query.ticket : "";
+    const token = await getSSOToken(fncUrl, ticket);
+
+    res.send(token.token);
 });
 
 exports.onPointChange = functions.firestore

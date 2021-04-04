@@ -10,7 +10,10 @@ import 'order_list_view.dart';
 
 class OrderListPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => OrderListPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => OrderListPage(),
+      settings: RouteSettings(name: "OrderList"),
+    );
   }
 
   const OrderListPage({Key? key}) : super(key: key);
