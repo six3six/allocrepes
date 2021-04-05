@@ -91,6 +91,7 @@ class _AppViewState extends State<AppView> {
               case AuthenticationStatus.authenticated:
                 print("authenticated");
                 if(!kIsWeb) {
+                  print("subscribeToTopic(user${state.user.id})");
                   FirebaseMessaging.instance
                       .subscribeToTopic("user${state.user.id}");
                 }
@@ -102,6 +103,7 @@ class _AppViewState extends State<AppView> {
                 break;
               case AuthenticationStatus.unauthenticated:
                 if(!kIsWeb) {
+                  print("unsubscribeFromTopic(user${prevUserId})");
                   FirebaseMessaging.instance
                       .unsubscribeFromTopic("user${prevUserId}");
                 }

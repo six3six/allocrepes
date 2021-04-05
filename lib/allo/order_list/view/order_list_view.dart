@@ -115,11 +115,9 @@ class _OrderSummary extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Commande n°${order.id}",
+              "${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
               style: theme.textTheme.headline6,
             ),
-            Text(
-                "Commandé le ${order.createdAt.toLocal().toString().split(".")[0]}"),
             Text(
                 "Livraison à ${PlaceUtils.placeToString(order.place)}, salle/appartement ${order.room}"),
             _OrderSummaryStatus(order.status),
@@ -145,8 +143,7 @@ class _ArticleToProductLabel extends StatelessWidget {
   const _ArticleToProductLabel({
     Key? key,
     required this.article,
-  })   : assert(article != null),
-        super(key: key);
+  }) :super(key: key);
 
   @override
   Widget build(BuildContext context) {
