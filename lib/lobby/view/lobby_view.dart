@@ -68,61 +68,60 @@ class LobbyView extends StatelessWidget {
           ),
         ),
         SliverToBoxAdapter(
-          child: Wrap(
-            spacing: 10,
-            alignment: WrapAlignment.center,
-            children: <Widget>[
-              MenuCard(
-                title: "Passer commande",
-                onTap: () {
-                  Navigator.push(context, OrderListPage.route());
-                },
-                icon: Icons.shopping_cart,
-              ),
-              MenuCard(
-                title: "En savoir +",
-                onTap: () {
-                  try {
-                    launch("https://xanthos.fr/a-propos");
-                  } catch (e) {}
-                },
-                icon: Icons.mood_rounded,
-              ),
-              BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                  builder: (context, state) {
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+            return Wrap(
+              spacing: 10,
+              alignment: WrapAlignment.center,
+              children: <Widget>[
+                MenuCard(
+                  title: "Passer commande",
+                  onTap: () {
+                    Navigator.push(context, OrderListPage.route());
+                  },
+                  icon: Icons.shopping_cart,
+                ),
+                MenuCard(
+                  title: "En savoir +",
+                  onTap: () {
+                    try {
+                      launch("https://xanthos.fr/a-propos");
+                    } catch (e) {}
+                  },
+                  icon: Icons.mood_rounded,
+                ),
                 if (state.user.admin)
-                  return MenuCard(
+                  MenuCard(
                     title: "Admin",
                     onTap: () {
                       Navigator.push(context, AdminMainPage.route());
                     },
                     icon: Icons.admin_panel_settings_outlined,
-                  );
-                else
-                  return SizedBox();
-              }),
-            ],
-          ),
+                  )
+              ],
+            );
+          }),
         ),
-        if(!kIsWeb) SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Text(
-                  "Suivre Xanthos sur Twitch",
-                  style: textTheme.headline5,
+        if (!kIsWeb)
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Text(
+                    "Suivre Xanthos sur Twitch",
+                    style: textTheme.headline5,
+                  ),
                 ),
-              ),
-               SizedBox(
-                height: 300,
-                width: double.infinity,
-                child:  LobbyTwitchViewer(),
-              ),
-            ],
+                SizedBox(
+                  height: 300,
+                  width: double.infinity,
+                  child: LobbyTwitchViewer(),
+                ),
+              ],
+            ),
           ),
-        ),
         SliverPadding(
           padding: const EdgeInsets.all(10),
           sliver: SliverToBoxAdapter(
@@ -138,16 +137,18 @@ class LobbyView extends StatelessWidget {
                 ),
                 BlocBuilder<LobbyCubit, LobbyState>(
                   builder: (context, state) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: state.news
-                          .map((_new) => NewsCard.tapUrl(
-                                title: _new.title,
-                                image: _new.media,
-                                url: _new.url,
-                              ))
-                          .toList(),
-                    );
+                    return SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: state.news
+                              .map((_new) => NewsCard.tapUrl(
+                                    title: _new.title,
+                                    image: _new.media,
+                                    url: _new.url,
+                                  ))
+                              .toList(),
+                        ));
                   },
                 ),
                 Center(

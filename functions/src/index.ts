@@ -143,8 +143,10 @@ exports.sendNotif = functions.https.onCall(async (requestData, context) => {
     } else if (requestData.recipient == NotifRecipient.Android) {
         topic = "/topics/androidusers";
     } else if (requestData.recipient == NotifRecipient.User) {
+        console.log(`sending message to ${requestData.user}`);
         topic = "/topics/user" + requestData.user;
     }
+
 
     await admin.messaging().sendToTopic(
         topic,

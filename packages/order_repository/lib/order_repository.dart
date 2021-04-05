@@ -39,12 +39,17 @@ abstract class OrderRepository {
     Product product,
     bool available,
   );
+
   Future<void> updateProductMaxAmount(
-      Category category,
-      Product product,
-      int maxAmount,
-      );
-  Stream<List<Product>> productsFromCategory(Category category);
+    Category category,
+    Product product,
+    int maxAmount,
+  );
+
+  Stream<List<Product>> productsFromCategory(
+    Category category, {
+    bool? available,
+  });
 
   Stream<List<Category>> categories();
 

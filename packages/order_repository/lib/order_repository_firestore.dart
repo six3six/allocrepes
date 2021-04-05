@@ -75,11 +75,18 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Stream<List<Product>> productsFromCategory(Category category) async* {
-    await for (final snapshot in productCategoryRoot
-        .doc(category.id)
-        .collection("products")
-        .snapshots()) {
+  Stream<List<Product>> productsFromCategory(
+    Category category, {
+    bool? available,
+  }) async* {
+    Query query = productCategoryRoot.doc(category.id).collection("products");
+    if (available != null) {
+      query = query.where(
+        "available",
+        isEqualTo: available,
+      );
+    }
+    await for (final snapshot in query.snapshots()) {
       yield await productsFromSnapshot(snapshot);
     }
   }
