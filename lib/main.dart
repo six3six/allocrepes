@@ -29,6 +29,7 @@ void main() async {
     };
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
+
     messaging.subscribeToTopic("allusers");
     if (Platform.isAndroid) messaging.subscribeToTopic("androidusers");
     if (Platform.isIOS) messaging.subscribeToTopic("iosusers");
