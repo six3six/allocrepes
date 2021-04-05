@@ -26,7 +26,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
       cats.forEach((cat) {
         categories[cat] = [];
-        orderRepository.productsFromCategory(cat).forEach((prods) {
+        orderRepository.productsFromCategory(cat, available: true).forEach((prods) {
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });

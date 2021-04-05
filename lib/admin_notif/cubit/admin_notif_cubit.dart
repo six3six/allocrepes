@@ -46,6 +46,7 @@ class AdminNotifCubit extends Cubit<AdminNotifState> {
         "action": state.action.index,
         "recipient": state.recipient.index,
         "link": state.link,
+        "user": state.userId,
       });
       Navigator.pop(context);
     } on Exception catch (e, stacktrace) {

@@ -210,6 +210,7 @@ class AuthenticationRepository {
         }
       }
 
+
       users = users.map((id, user) =>
           MapEntry(id, user.copyWith(admin: isAdmin.containsKey(id))));
 
