@@ -132,7 +132,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     DateTime? stop,
     String? userId,
   }) async* {
-    Query query = orderRoot.limit(10000);
+    Query query = orderRoot;
 
     if (orderStatus != null) {
       query = query.where("status",
@@ -146,7 +146,6 @@ class OrderRepositoryFirestore extends OrderRepository {
     if (stop != null)
       query = query.where("create_at", isLessThanOrEqualTo: start);
 
-    query = query.orderBy("create_at", descending: false);
 
     print(query.parameters);
 
@@ -160,7 +159,7 @@ class OrderRepositoryFirestore extends OrderRepository {
           continue;
         orders.add(order);
       }
-
+      orders.sort((a, b) => a.createdAt.compareTo(b.createdAt));
       yield orders;
     }
   }
