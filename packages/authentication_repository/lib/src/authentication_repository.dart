@@ -203,7 +203,7 @@ class AuthenticationRepository {
         if (doc.reference.parent == adminCollection) {
           if (doc.reference == adminCollection.doc("admins")) {
             isAdmin =
-                doc.data()?.map((key, value) => MapEntry(key, true)) ?? {};
+                doc.data().map((key, value) => MapEntry(key, true));
           }
         } else if (doc.reference.parent == userCollection) {
           users[doc.id] = User.fromDocument(doc);
