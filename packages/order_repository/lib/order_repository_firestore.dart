@@ -146,7 +146,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     if (stop != null)
       query = query.where("create_at", isLessThanOrEqualTo: start);
 
-    query.orderBy("create_at", descending: false);
+    query = query.orderBy("create_at", descending: false);
 
     print(query.parameters);
 
