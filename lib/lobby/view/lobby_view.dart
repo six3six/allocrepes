@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'lobby_twitch.dart';
@@ -17,7 +18,9 @@ import 'lobby_twitch.dart';
 class LobbyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -42,10 +45,11 @@ class LobbyView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                      builder: (context, state) => Text(
-                        "Bonjour " + state.user.surname,
-                        style: textTheme.subtitle1,
-                      ),
+                      builder: (context, state) =>
+                          Text(
+                            "Bonjour " + state.user.surname,
+                            style: textTheme.subtitle1,
+                          ),
                     ),
                     SizedBox(
                       height: 10,
@@ -57,7 +61,7 @@ class LobbyView extends StatelessWidget {
                     TextButton(
                       onPressed: () =>
                           RepositoryProvider.of<AuthenticationRepository>(
-                                  context)
+                              context)
                               .logOut(),
                       child: Text("Se déconnecter"),
                     ),
@@ -70,37 +74,37 @@ class LobbyView extends StatelessWidget {
         SliverToBoxAdapter(
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
-            return Wrap(
-              spacing: 10,
-              alignment: WrapAlignment.center,
-              children: <Widget>[
-                MenuCard(
-                  title: "Passer commande",
-                  onTap: () {
-                    Navigator.push(context, OrderListPage.route());
-                  },
-                  icon: Icons.shopping_cart,
-                ),
-                MenuCard(
-                  title: "En savoir +",
-                  onTap: () {
-                    try {
-                      launch("https://xanthos.fr/a-propos");
-                    } catch (e) {}
-                  },
-                  icon: Icons.mood_rounded,
-                ),
-                if (state.user.admin)
-                  MenuCard(
-                    title: "Admin",
-                    onTap: () {
-                      Navigator.push(context, AdminMainPage.route());
-                    },
-                    icon: Icons.admin_panel_settings_outlined,
-                  )
-              ],
-            );
-          }),
+                return Wrap(
+                  spacing: 10,
+                  alignment: WrapAlignment.center,
+                  children: <Widget>[
+                    MenuCard(
+                      title: "Passer commande",
+                      onTap: () {
+                        Navigator.push(context, OrderListPage.route());
+                      },
+                      icon: Icons.shopping_cart,
+                    ),
+                    MenuCard(
+                      title: "En savoir +",
+                      onTap: () {
+                        try {
+                          launch("https://xanthos.fr/a-propos");
+                        } catch (e) {}
+                      },
+                      icon: Icons.mood_rounded,
+                    ),
+                    if (state.user.admin)
+                      MenuCard(
+                        title: "Admin",
+                        onTap: () {
+                          Navigator.push(context, AdminMainPage.route());
+                        },
+                        icon: Icons.admin_panel_settings_outlined,
+                      )
+                  ],
+                );
+              }),
         ),
         if (!kIsWeb)
           SliverToBoxAdapter(
@@ -142,11 +146,12 @@ class LobbyView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: state.news
-                              .map((_new) => NewsCard.tapUrl(
-                                    title: _new.title,
-                                    image: _new.media,
-                                    url: _new.url,
-                                  ))
+                              .map((_new) =>
+                              NewsCard.tapUrl(
+                                title: _new.title,
+                                image: _new.media,
+                                url: _new.url,
+                              ))
                               .toList(),
                         ));
                   },
@@ -165,12 +170,29 @@ class LobbyView extends StatelessWidget {
                       Text("Aucun test n'a été dev pour ce projet"),
                       Text(
                         "Tester c'est douter",
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyText1,
                       ),
                       SizedBox(
                         height: 20,
                       ),
                       Text("(c) Liste BDE ESIEE Paris 2021-2022"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      FutureBuilder(
+                        future: PackageInfo.fromPlatform(),
+                        builder: (conext, snapshot) {
+                          if (snapshot.hasData) {
+                            PackageInfo infos = snapshot.data! as PackageInfo;
+                            return Text("Version : ${infos.version} build ${infos.buildNumber}", style: textTheme.overline,);
+                          }
+                          else
+                            return SizedBox();
+                        },),
+
                       SizedBox(
                         height: 20,
                       ),
