@@ -26,7 +26,9 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
       cats.forEach((cat) {
         categories[cat] = [];
-        orderRepository.productsFromCategory(cat, available: true).forEach((prods) {
+        orderRepository
+            .productsFromCategory(cat, available: true)
+            .forEach((prods) {
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });
@@ -65,6 +67,10 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     }
   }
 
+  void updateMessage(String message) {
+    emit(state.copyWith(message: message));
+  }
+
   Future<bool> checkout(BuildContext context) async {
     updateRoom(state.room);
     updatePlace(state.place);
@@ -100,6 +106,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         articles: articles,
         place: state.place ?? Place.UNKNOWN,
         room: state.room ?? "",
+        message: state.message,
       ));
       return true;
     } catch (e, stacktrace) {

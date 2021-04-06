@@ -16,6 +16,7 @@ class Order extends Equatable {
     required this.place,
     required this.room,
     this.deliveredAt,
+    required this.message,
   });
 
   final String? id;
@@ -26,7 +27,7 @@ class Order extends Equatable {
   final List<Article> articles;
   final Place place;
   final String room;
-
+  final String message;
 
   static final empty = Order(
     id: "",
@@ -37,6 +38,7 @@ class Order extends Equatable {
     articles: [],
     place: Place.UNKNOWN,
     room: "",
+    message: "",
   );
 
   @override
@@ -49,6 +51,7 @@ class Order extends Equatable {
         place,
         room,
         owner,
+        message,
       ];
 
   Order copyWith({
@@ -60,6 +63,7 @@ class Order extends Equatable {
     List<Article>? articles,
     Place? place,
     String? room,
+    String? message,
   }) {
     return Order(
       id: id ?? this.id,
@@ -70,11 +74,12 @@ class Order extends Equatable {
       articles: articles ?? this.articles,
       place: place ?? this.place,
       room: room ?? this.room,
+      message: message ?? this.message,
     );
   }
 
   OrderEntity toEntity() {
-    return OrderEntity(id, status, owner, createdAt, deliveredAt, place, room);
+    return OrderEntity(id, status, owner, createdAt, deliveredAt, place, room, message);
   }
 
   static Order fromEntity(OrderEntity entity, List<Article> articles) {
@@ -87,6 +92,7 @@ class Order extends Equatable {
       articles: articles,
       place: entity.place,
       room: entity.room,
+      message: entity.message,
     );
   }
 

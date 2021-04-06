@@ -12,6 +12,7 @@ class OrderNewState extends Equatable {
     this.placeError = "",
     this.loading = false,
     this.roomError = "",
+    this.message = "",
   });
 
   final Map<Category, List<Product>> categories;
@@ -21,6 +22,7 @@ class OrderNewState extends Equatable {
   final String placeError;
   final String roomError;
   final bool loading;
+  final String message;
 
   @override
   List<Object?> get props => [
@@ -33,6 +35,7 @@ class OrderNewState extends Equatable {
         placeError,
         roomError,
         loading,
+        message,
       ];
 
   OrderNewState copyWith({
@@ -43,6 +46,7 @@ class OrderNewState extends Equatable {
     String? placeError,
     String? roomError,
     bool? loading,
+    String? message,
   }) {
     return OrderNewState(
       categories: categories ?? this.categories,
@@ -52,6 +56,7 @@ class OrderNewState extends Equatable {
       placeError: placeError ?? this.placeError,
       roomError: roomError ?? this.roomError,
       loading: loading ?? this.loading,
+      message: message ?? this.message,
     );
   }
 }

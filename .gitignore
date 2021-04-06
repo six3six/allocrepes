@@ -43,3 +43,6 @@ app.*.map.json
 cred.json
 BDE_MES_GROUPES.csv
 export.csv
+
+.ipynb_checkpoints
+.firebase
