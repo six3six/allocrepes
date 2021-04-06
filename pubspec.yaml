@@ -5,7 +5,7 @@ description: Allo Crêpes
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.2+8
+version: 0.0.2+9
 
 
 environment:
@@ -25,11 +25,13 @@ dependencies:
     path: packages/news_repository
 
 
-  firebase_core: ^1.0.2
+  firebase_core: ^1.0.3
   firebase_analytics: ^7.1.1
-  firebase_crashlytics: ^1.0.0
-  firebase_messaging: ^9.1.0
-  cloud_functions: ^1.0.2
+  firebase_crashlytics: ^2.0.0
+  firebase_messaging: ^9.1.1
+  cloud_functions: ^1.0.3
+
+  package_info_plus: ^1.0.0
 
   font_awesome_flutter: ^9.0.0
 

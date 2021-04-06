@@ -81,7 +81,7 @@ class User extends Equatable {
   }
 
   static User fromDocument(QueryDocumentSnapshot document) {
-    var data = document.data() ?? {};
+    var data = document.data();
     return User(
       email: data.containsKey("email") ? data["email"] : "",
       id: document.id,
