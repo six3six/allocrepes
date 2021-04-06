@@ -100,16 +100,12 @@ class OrderAdminView extends StatelessWidget {
       headerBuilder: (BuildContext context, bool isExpanded) {
         if (isExpanded)
           return ListTile(
-            title: _UserLabel(
-              userId: order.owner,
-            ),
+            title: Text("${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",),
             tileColor: PlaceUtils.placeToColor(order.place),
           );
         else
           return ListTile(
-            title: _UserLabel(
-              userId: order.owner,
-            ),
+            title: Text("${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",),
             tileColor: PlaceUtils.placeToColor(order.place),
             selectedTileColor: PlaceUtils.placeToColor(order.place),
             subtitle: Column(
