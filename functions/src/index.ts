@@ -104,6 +104,82 @@ exports.onPointChange = functions.firestore
         }
     });
 
+exports.onCommandStatusChange = functions.firestore
+    .document("orders/{docId}")
+    .onWrite(async (change, context) => {
+        const prevData = change.before.data() ?? {"status": 0};
+        const nextData = change.after.data() ?? {"status": 0};
+
+        if (prevData["status"] == nextData["status"]) return;
+
+        let title = "";
+        let body = "";
+
+        switch (nextData["status"]) {
+        case OrderStatus.UNKNOWN:
+            title = "Oh non, votre commande est tombée dans la matrice...";
+            body = "Votre commande est dans un état inconnu";
+            break;
+        case OrderStatus.CANCELED:
+            title = "Oh non, votre commande a été annulé";
+            body = "Malheureusement, votre commande a été annulé";
+            break;
+        case OrderStatus.VALIDATING:
+            title = "Votre commande est encours de validation !";
+            body = "";
+            break;
+        case OrderStatus.DELIVERING:
+            title = "Votre commande arrive !";
+            body = "Préparez vous, votre commande est encours de livraison";
+            break;
+        case OrderStatus.DELIVERED:
+            title = "Bon appétit";
+            body = "Votre commande est arrivée et est prête à être degustée\n" +
+                "Bon appétit et merci pour votre commande";
+            break;
+        case OrderStatus.PENDING:
+            title = "On cuisine pour vous !";
+            body = "Votre commande est encours de fabrication";
+            break;
+        default:
+            console.error("bad state " + nextData["status"].toString());
+            return;
+        }
+
+        const user = nextData["owner"].toLowerCase();
+
+        await admin.messaging().sendToTopic(
+            "/topics/user" + user,
+            {
+                data: {"type": "order"},
+                notification: {
+                    title: title,
+                    body: body,
+                    sound: "default",
+                    // badge: '1'
+                },
+            },
+            {
+                collapseKey: "point",
+                contentAvailable: true,
+                priority: "high",
+                timeToLive: 60 * 60 * 24,
+            },
+        );
+
+        console.log("Sending order modif to " + user);
+    });
+
+
+enum OrderStatus {
+    UNKNOWN,
+    VALIDATING,
+    PENDING,
+    DELIVERING,
+    DELIVERED,
+    CANCELED,
+}
+
 
 exports.sendNotif = functions.https.onCall(async (requestData, context) => {
     let data = {};
