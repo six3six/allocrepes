@@ -12,6 +12,7 @@ class OrderEntity extends Equatable {
     this.deliveredAt,
     this.place,
     this.room,
+    this.message,
   );
 
   final String? id;
@@ -21,6 +22,7 @@ class OrderEntity extends Equatable {
   final DateTime? deliveredAt;
   final Place place;
   final String room;
+  final String message;
 
   @override
   List<Object?> get props => [
@@ -31,11 +33,12 @@ class OrderEntity extends Equatable {
         this.place,
         this.room,
         this.owner,
+        this.message,
       ];
 
   @override
   String toString() =>
-      "OrderEntity { id: $id, status: $status, created_at: $createdAt, delivered_at: $deliveredAt, place: $place, room: $room, owner: $owner }";
+      "OrderEntity { id: $id, status: $status, created_at: $createdAt, delivered_at: $deliveredAt, place: $place, room: $room, owner: $owner, message: $message }";
 
   static OrderEntity fromJson(Map<String, Object> json) => OrderEntity(
         json["id"] as String,
@@ -45,6 +48,7 @@ class OrderEntity extends Equatable {
         DateTime.parse(json["delivered_at"].toString()),
         Place.values[json["place"] as int],
         json["room"] as String,
+        json["message"] as String,
       );
 
   static OrderEntity fromSnapshot(DocumentSnapshot snapshot) => OrderEntity(
@@ -55,6 +59,7 @@ class OrderEntity extends Equatable {
         (snapshot.get("delivered_at") as Timestamp?)?.toDate(),
         Place.values[snapshot.get("place") as int],
         snapshot.get("room") as String,
+        snapshot.data()?["message"] ?? "",
       );
 
   Map<String, Object?> toDocument() => {
@@ -64,5 +69,6 @@ class OrderEntity extends Equatable {
         "delivered_at": deliveredAt,
         "place": place.index,
         "room": room,
+        "message": message,
       };
 }

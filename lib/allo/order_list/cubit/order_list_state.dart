@@ -5,6 +5,8 @@ class OrderListState extends Equatable {
   final List<Order> previousOrders;
   final List<Order> currentOrders;
 
+
+
   final bool isLoading;
 
   const OrderListState({

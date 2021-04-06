@@ -102,6 +102,25 @@ class OrderNewView extends StatelessWidget {
               );
             },
           ),
+          SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Commentaire :"),
+                Text(
+                  "(un anniversaire, un message à nous passer...)",
+                  style: theme.textTheme.caption,
+                ),
+                TextField(
+                  maxLines: 5,
+                  onChanged: (message) => BlocProvider.of<OrderNewCubit>(context).updateMessage(message),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SizedBox(
@@ -187,7 +206,7 @@ class _OrderNewItem extends StatelessWidget {
           ),
           Expanded(
             flex: 7,
-            child: Text(product.name, style: textTheme.headline5),
+            child: Text(product.name, style: textTheme.headline6),
           ),
           DropdownButton<int>(
             value: BlocProvider.of<OrderNewCubit>(context)
