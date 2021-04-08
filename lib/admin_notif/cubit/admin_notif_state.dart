@@ -9,6 +9,7 @@ class AdminNotifState extends Equatable {
   final String link;
   final String title;
   final String body;
+  final bool isSending;
 
   AdminNotifState({
     this.action = AdminNotifAction.MainPage,
@@ -18,6 +19,7 @@ class AdminNotifState extends Equatable {
     this.link = "",
     this.title = "",
     this.body = "",
+    this.isSending = false,
   });
 
   @override
@@ -29,6 +31,7 @@ class AdminNotifState extends Equatable {
         link,
         title,
         body,
+        isSending,
       ];
 
   AdminNotifState copyWith({
@@ -39,6 +42,7 @@ class AdminNotifState extends Equatable {
     String? link,
     String? title,
     String? body,
+    bool? isSending,
   }) {
     return AdminNotifState(
       action: action ?? this.action,
@@ -48,6 +52,7 @@ class AdminNotifState extends Equatable {
       link: link ?? this.link,
       title: title ?? this.title,
       body: body ?? this.body,
+      isSending: isSending ?? this.isSending,
     );
   }
 }

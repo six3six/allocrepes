@@ -155,48 +155,6 @@ class LobbyView extends StatelessWidget {
                         ));
                   },
                 ),
-                Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text("Fait avec le ❤"),
-                      Text("par Louis DESPLANCHE"),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text("Aucun test n'a été dev pour ce projet"),
-                      Text(
-                        "Tester c'est douter",
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text("(c) Liste BDE ESIEE Paris 2021-2022"),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      FutureBuilder(
-                        future: PackageInfo.fromPlatform(),
-                        builder: (conext, snapshot) {
-                          if (snapshot.hasData) {
-                            PackageInfo infos = snapshot.data! as PackageInfo;
-                            return Text(
-                              "Version : ${infos.version} build ${infos.buildNumber}",
-                              style: textTheme.overline,
-                            );
-                          } else
-                            return SizedBox();
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),

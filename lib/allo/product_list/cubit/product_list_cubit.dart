@@ -214,10 +214,10 @@ class ProductListCubit extends Cubit<ProductListState> {
     );
   }
 
-  Future<void> deleteProductDialog(BuildContext context, Category category, Product product) {
+  Future<bool> deleteProductDialog(BuildContext context, Category category, Product product) async {
     TextEditingController controller =
     TextEditingController(text: category.name);
-    return showDialog<void>(
+    return await showDialog<bool>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
@@ -237,19 +237,19 @@ class ProductListCubit extends Cubit<ProductListState> {
                 style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(false);
               },
             ),
             TextButton(
               child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.removeProduct(category, product);
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(true);
               },
             ),
           ],
         );
       },
-    );
+    ) ?? false;
   }
 }

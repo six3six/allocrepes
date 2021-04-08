@@ -79,7 +79,7 @@ class _ProductEntry extends StatelessWidget {
           ),
         ),
       ),
-      onDismissed: (direction) => BlocProvider.of<ProductListCubit>(context)
+      confirmDismiss: (direction) async => await BlocProvider.of<ProductListCubit>(context)
           .deleteProductDialog(context, category, product),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),

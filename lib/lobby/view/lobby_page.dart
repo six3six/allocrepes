@@ -1,4 +1,5 @@
 import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
+import 'package:allocrepes/lobby/view/lobby_about.dart';
 import 'package:allocrepes/lobby/view/lobby_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,18 @@ class LobbyPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("XANTHOS"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'A propos',
+            onPressed: () {
+              showDialog<void>(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) => LobbyAbout());
+            },
+          ),
+        ],
       ),
       body: BlocProvider<LobbyCubit>(
         create: (context) => LobbyCubit(),

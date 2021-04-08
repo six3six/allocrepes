@@ -39,6 +39,7 @@ class AdminNotifCubit extends Cubit<AdminNotifState> {
   }
 
   Future<void> sendNotification(BuildContext context) async {
+    emit(state.copyWith(isSending: true));
     try {
       await funcSendNotif({
         "title": state.title,
@@ -48,8 +49,10 @@ class AdminNotifCubit extends Cubit<AdminNotifState> {
         "link": state.link,
         "user": state.userId,
       });
+      emit(state.copyWith(isSending: false));
       Navigator.pop(context);
     } on Exception catch (e, stacktrace) {
+      emit(state.copyWith(isSending: false));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: Duration(seconds: 30),
