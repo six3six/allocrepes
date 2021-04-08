@@ -5,7 +5,7 @@ description: Allo Crêpes
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.1.0+13
+version: 0.1.1+14
 
 
 environment:
@@ -43,7 +43,7 @@ dependencies:
   url_launcher: ^6.0.2
 
   loading_overlay: ^0.3.0
-  webview_flutter: ^2.0.3
+  webview_flutter: ^2.0.4
 
   cupertino_icons: ^1.0.2
 
