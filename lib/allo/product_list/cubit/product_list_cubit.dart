@@ -213,4 +213,43 @@ class ProductListCubit extends Cubit<ProductListState> {
       },
     );
   }
+
+  Future<void> deleteProductDialog(BuildContext context, Category category, Product product) {
+    TextEditingController controller =
+    TextEditingController(text: category.name);
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Supprimer un produit'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Voulez-vous supprimer ${product.name} ?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Annuler',
+                style: TextStyle(color: Colors.redAccent),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Confirmer'),
+              onPressed: () {
+                orderRepository.removeProduct(category, product);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
