@@ -68,6 +68,7 @@ class OrderListView extends StatelessWidget {
                 );
               }
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: state.currentOrders
                     .map<_OrderSummary>((e) => _OrderSummary(order: e))
                     .toList(),
@@ -86,7 +87,7 @@ class OrderListView extends StatelessWidget {
                 prev.previousOrders != next.previousOrders,
             builder: (BuildContext context, OrderListState state) {
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: state.previousOrders
                     .map<_OrderSummary>((e) => _OrderSummary(order: e))
                     .toList(),
@@ -110,7 +111,7 @@ class _OrderSummary extends StatelessWidget {
 
     return InkWell(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -143,7 +144,7 @@ class _ArticleToProductLabel extends StatelessWidget {
   const _ArticleToProductLabel({
     Key? key,
     required this.article,
-  }) :super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

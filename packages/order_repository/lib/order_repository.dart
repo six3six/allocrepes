@@ -17,6 +17,10 @@ abstract class OrderRepository {
     String? userId,
   });
 
+  Future<void> removeOrders({
+    List<OrderStatus>? orderStatus,
+  });
+
   Stream<List<Product>> products();
 
   Future<void> addCategory(Category category);
@@ -34,6 +38,8 @@ abstract class OrderRepository {
 
   Future<void> removeProduct(Category category, Product product);
 
+
+
   Future<void> updateProductAvailability(
     Category category,
     Product product,
@@ -45,6 +51,12 @@ abstract class OrderRepository {
     Product product,
     int maxAmount,
   );
+
+  Future<void> updateProductInitialStock(
+      Category category,
+      Product product,
+      int initialStock,
+      );
 
   Stream<List<Product>> productsFromCategory(
     Category category, {
@@ -62,4 +74,5 @@ abstract class OrderRepository {
   Future<void> editOrder(Order order);
 
   Future<void> cancelOrder(Order order);
+
 }

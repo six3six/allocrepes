@@ -85,9 +85,10 @@ class OrderNewCubit extends Cubit<OrderNewState> {
               final q = getQuantity(category, product);
               if (q > 0)
                 articles.add(Article(
-                    productId: product.id ?? "",
-                    categoryId: category.id ?? "",
-                    amount: q));
+                  productId: product.id ?? "",
+                  categoryId: category.id ?? "",
+                  amount: q,
+                ));
             }));
 
     if (articles.length == 0) {

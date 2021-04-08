@@ -20,7 +20,6 @@ class ProductListCubit extends Cubit<ProductListState> {
       cats.forEach((cat) {
         categories[cat] = [];
         orderRepository.productsFromCategory(cat).forEach((prods) {
-          print("test");
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });
@@ -39,7 +38,6 @@ class ProductListCubit extends Cubit<ProductListState> {
       Category category, Product product, int maxAmount) {
     orderRepository.updateProductMaxAmount(category, product, maxAmount);
   }
-
 
   void removeProduct(Category category, Product product) {
     orderRepository.removeProduct(category, product);
@@ -121,7 +119,11 @@ class ProductListCubit extends Cubit<ProductListState> {
                 orderRepository.addProduct(
                     category,
                     Product(
-                        name: controller.text, available: false, maxAmount: 0));
+                      name: controller.text,
+                      available: false,
+                      maxAmount: 0,
+                      initialStock: 0,
+                    ));
                 Navigator.of(context).pop();
               },
             ),
@@ -190,14 +192,16 @@ class ProductListCubit extends Cubit<ProductListState> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-              child: Text('Annuler'),
-              textColor: Colors.redAccent,
+            TextButton(
+              child: Text(
+                'Annuler',
+                style: TextStyle(color: Colors.redAccent),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.deleteCategory(category);
