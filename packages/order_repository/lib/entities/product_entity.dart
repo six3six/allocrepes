@@ -7,12 +7,14 @@ class ProductEntity extends Equatable {
     this.name,
     this.available,
     this.maxAmount,
+    this.initialStock,
   );
 
   final String? id;
   final String name;
   final bool available;
   final int maxAmount;
+  final int initialStock;
 
   @override
   List<Object?> get props => [
@@ -20,17 +22,19 @@ class ProductEntity extends Equatable {
         this.name,
         this.available,
         this.maxAmount,
+        this.initialStock,
       ];
 
   @override
   String toString() =>
-      "ProductEntity { id: $id, category: $name, available: $available, maxAmount: $maxAmount }";
+      "ProductEntity { id: $id, category: $name, available: $available, maxAmount: $maxAmount, initialStock: $initialStock }";
 
   static ProductEntity fromJson(Map<String, Object> json) => ProductEntity(
         json["id"] as String,
         json["name"] as String,
         json["available"] as bool,
         json["maxAmount"] as int,
+        json["initialStock"] as int,
       );
 
   static ProductEntity fromSnapshot(DocumentSnapshot snapshot) => ProductEntity(
@@ -38,11 +42,13 @@ class ProductEntity extends Equatable {
         snapshot.get("name") as String,
         snapshot.get("available") as bool,
         snapshot.data()?["maxAmount"] ?? 0,
+        snapshot.data()?["initialStock"] ?? 0,
       );
 
   Map<String, Object> toDocument() => {
         "name": name,
         "available": available,
         "maxAmount": maxAmount,
+        "initialStock": initialStock,
       };
 }

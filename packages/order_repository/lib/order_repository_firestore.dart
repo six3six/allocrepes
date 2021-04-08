@@ -146,9 +146,6 @@ class OrderRepositoryFirestore extends OrderRepository {
     if (stop != null)
       query = query.where("create_at", isLessThanOrEqualTo: start);
 
-
-    print(query.parameters);
-
     await for (QuerySnapshot snapshot in query.snapshots()) {
       List<Order> orders = [];
 
@@ -175,6 +172,18 @@ class OrderRepositoryFirestore extends OrderRepository {
     }).toList();
 
     return Order.fromEntity(entity, articles);
+  }
+
+  Future<void> removeOrders({
+    List<OrderStatus>? orderStatus,
+  }) async {
+    Query query = orderRoot;
+    if (orderStatus != null) {
+      query = query.where("status",
+          whereIn: orderStatus.map((e) => e.index).toList());
+    }
+    await query.get().then(
+        (snapshot) => snapshot.docs.forEach((doc) => doc.reference.delete()));
   }
 
   @override
@@ -243,5 +252,17 @@ class OrderRepositoryFirestore extends OrderRepository {
         .collection("products")
         .doc(product.id)
         .update({"maxAmount": maxAmount});
+  }
+
+  Future<void> updateProductInitialStock(
+    Category category,
+    Product product,
+    int initialStock,
+  ) {
+    return productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .doc(product.id)
+        .update({"initialStock": initialStock});
   }
 }

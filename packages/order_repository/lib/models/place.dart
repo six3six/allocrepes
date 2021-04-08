@@ -13,6 +13,7 @@ enum Place {
   Kley,
   Kley_2,
   ESIEE,
+  Campusea,
 }
 
 class PlaceUtils {
@@ -30,6 +31,8 @@ class PlaceUtils {
         return Colors.orange;
       case Place.Kley_2:
         return Colors.green;
+      case Place.Campusea:
+        return Colors.purple;
       case Place.ESIEE:
         return Colors.grey;
     }
@@ -51,6 +54,8 @@ class PlaceUtils {
         return "Kley 2";
       case Place.ESIEE:
         return "ESIEE";
+      case Place.Campusea:
+        return "Campusea";
       case Place.UNKNOWN:
         return "UNKNOWN";
     }

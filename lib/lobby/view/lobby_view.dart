@@ -71,39 +71,41 @@ class LobbyView extends StatelessWidget {
         SliverToBoxAdapter(
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
-            return Wrap(
-              spacing: 10,
-              alignment: WrapAlignment.center,
-              children: <Widget>[
-                MenuCard(
-                  title: "Passer commande",
-                  onTap: () {
-                    Navigator.push(context, OrderListPage.route());
-                  },
-                  icon: Icons.shopping_cart,
-                ),
-                MenuCard(
-                  title: "En savoir +",
-                  onTap: () {
-                    try {
-                      launch("https://xanthos.fr/a-propos");
-                    } catch (e) {}
-                  },
-                  icon: Icons.mood_rounded,
-                ),
-                if (state.user.admin)
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Wrap(
+                spacing: 10,
+                alignment: WrapAlignment.center,
+                children: <Widget>[
                   MenuCard(
-                    title: "Admin",
+                    title: "Passer commande",
                     onTap: () {
-                      Navigator.push(context, AdminMainPage.route());
+                      Navigator.push(context, OrderListPage.route());
                     },
-                    icon: Icons.admin_panel_settings_outlined,
+                    icon: Icons.shopping_cart,
                   ),
-              ],
+                  MenuCard(
+                    title: "En savoir +",
+                    onTap: () {
+                      try {
+                        launch("https://xanthos.fr/a-propos");
+                      } catch (e) {}
+                    },
+                    icon: Icons.mood_rounded,
+                  ),
+                  if (state.user.admin)
+                    MenuCard(
+                      title: "Admin",
+                      onTap: () {
+                        Navigator.push(context, AdminMainPage.route());
+                      },
+                      icon: Icons.settings,
+                    ),
+                ],
+              ),
             );
           }),
         ),
-
         if (!kIsWeb)
           SliverToBoxAdapter(
             child: Column(

@@ -19,7 +19,6 @@ class ArticleEntity extends Equatable {
         this.id,
         this.productId,
         this.categoryId,
-        this.amount,
       ];
 
   @override

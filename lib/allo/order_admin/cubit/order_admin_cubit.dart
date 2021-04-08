@@ -1,7 +1,6 @@
 import 'package:allocrepes/allo/order_admin/cubit/order_admin_state.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
@@ -20,6 +19,11 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
           ),
         ) {
     getOrders();
+    _orderRepository.products().forEach((products) {
+      Map<String, Product> productsMap = {};
+      products.forEach((product) { productsMap[product.id ?? ""] = product;});
+      emit(state.copyWith(products: productsMap));
+    });
   }
 
   final OrderRepository _orderRepository;
@@ -51,13 +55,6 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
 
       emit(state.copyWith(orders: ordersMap));
     });
-  }
-
-  Future<Product> getProduct(Article article) {
-    return _orderRepository.getProduct(
-      article.categoryId,
-      article.productId,
-    );
   }
 
   Future<User> getUser(String user) {

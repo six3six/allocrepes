@@ -115,9 +115,17 @@ class OrderAdminView extends StatelessWidget {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: order.articles
-                  .map<Widget>((article) => _ArticleToProductLabel(
-                        article: article,
-                      ))
+                  .map<Widget>(
+                    (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
+                      buildWhen: (prev, next) =>
+                          prev.products.values.toList() !=
+                              next.products.values.toList() ||
+                          prev.products.keys.toList() !=
+                              next.products.keys.toList(),
+                      builder: (context, state) => Text(
+                          "${article.amount.toString()}x ${state.products[article.productId]?.name}"),
+                    ),
+                  )
                   .toList(),
             ),
           );
@@ -260,8 +268,14 @@ class _OrderCompleteView extends StatelessWidget {
           ]
             ..addAll(order.articles
                 .map(
-                  (article) => _ArticleToProductLabel(
-                    article: article,
+                  (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
+                    buildWhen: (prev, next) =>
+                    prev.products.values.toList() !=
+                        next.products.values.toList() ||
+                        prev.products.keys.toList() !=
+                            next.products.keys.toList(),
+                    builder: (context, state) => Text(
+                        "${article.amount.toString()}x ${state.products[article.productId]?.name}"),
                   ),
                 )
                 .toList())
@@ -313,27 +327,6 @@ class _StateSelector extends StatelessWidget {
           )
           .toList(),
     );
-  }
-}
-
-class _ArticleToProductLabel extends StatelessWidget {
-  final Article article;
-
-  const _ArticleToProductLabel({
-    Key? key,
-    required this.article,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Product>(
-        future: BlocProvider.of<OrderAdminCubit>(context).getProduct(article),
-        builder: (context, snap) {
-          if (snap.hasData)
-            return Text("${article.amount.toString()}x ${snap.data!.name}");
-          else
-            return Text("${article.amount.toString()}x ${article.productId}");
-        });
   }
 }
 
