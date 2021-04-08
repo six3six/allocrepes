@@ -43,7 +43,8 @@ class OrderAdminView extends StatelessWidget {
             ),
           );
 
-          state.orders.keys.forEach((status) {
+          OrderStatus.values.forEach((status) {
+            if(!state.orders.keys.contains(status)) return;
             slivers.add(SliverPersistentHeader(
               floating: true,
               delegate: _SliverAppBarDelegate(
