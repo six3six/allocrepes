@@ -16,86 +16,67 @@ class OrderListView extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Mes commandes"),
-      ),
-      floatingActionButton: SizedBox(
-        height: 70,
-        width: 70,
-        child: FloatingActionButton(
-          backgroundColor: theme.primaryColorDark,
-          onPressed: () {
-            Navigator.push(context, OrderNewPage.route());
-          },
-          child: const Icon(Icons.shopping_cart),
-          tooltip: "Commander",
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          child: Text(
+            "Mes commandes en cours",
+            style: textTheme.headline5,
+          ),
         ),
-      ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            child: Text(
-              "Mes commandes en cours",
-              style: textTheme.headline5,
-            ),
-          ),
-          BlocBuilder<OrderListCubit, OrderListState>(
-            buildWhen: (prev, next) => prev.currentOrders != next.currentOrders,
-            builder: (BuildContext context, OrderListState state) {
-              if (state.currentOrders.isEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: RichText(
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.bodyText1,
-                      children: [
-                        const TextSpan(
-                            text:
-                                "Commandez dès maintenant en appuyant sur l'icone "),
-                        const WidgetSpan(
-                          child: const Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: const Icon(Icons.shopping_cart),
-                          ),
+        BlocBuilder<OrderListCubit, OrderListState>(
+          buildWhen: (prev, next) => prev.currentOrders != next.currentOrders,
+          builder: (BuildContext context, OrderListState state) {
+            if (state.currentOrders.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyText1,
+                    children: [
+                      const TextSpan(
+                          text:
+                              "Commandez dès maintenant en appuyant sur l'icone "),
+                      const WidgetSpan(
+                        child: const Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: const Icon(Icons.shopping_cart),
                         ),
-                        const TextSpan(text: "en bas à droite"),
-                      ],
-                    ),
+                      ),
+                      const TextSpan(text: "en bas à droite"),
+                    ],
                   ),
-                );
-              }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: state.currentOrders
-                    .map<_OrderSummary>((e) => _OrderSummary(order: e))
-                    .toList(),
+                ),
               );
-            },
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: state.currentOrders
+                  .map<_OrderSummary>((e) => _OrderSummary(order: e))
+                  .toList(),
+            );
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          child: Text(
+            "Mes commandes passées",
+            style: textTheme.headline5,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            child: Text(
-              "Mes commandes passées",
-              style: textTheme.headline5,
-            ),
-          ),
-          BlocBuilder<OrderListCubit, OrderListState>(
-            buildWhen: (prev, next) =>
-                prev.previousOrders != next.previousOrders,
-            builder: (BuildContext context, OrderListState state) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: state.previousOrders
-                    .map<_OrderSummary>((e) => _OrderSummary(order: e))
-                    .toList(),
-              );
-            },
-          ),
-        ],
-      ),
+        ),
+        BlocBuilder<OrderListCubit, OrderListState>(
+          buildWhen: (prev, next) => prev.previousOrders != next.previousOrders,
+          builder: (BuildContext context, OrderListState state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: state.previousOrders
+                  .map<_OrderSummary>((e) => _OrderSummary(order: e))
+                  .toList(),
+            );
+          },
+        ),
+      ],
     );
   }
 }

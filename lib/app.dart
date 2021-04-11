@@ -24,10 +24,9 @@ class App extends StatelessWidget {
     return RepositoryProvider.value(
       value: authenticationRepository,
       child: BlocProvider(
-        create: (_) =>
-            AuthenticationBloc(
-              authenticationRepository: authenticationRepository,
-            ),
+        create: (_) => AuthenticationBloc(
+          authenticationRepository: authenticationRepository,
+        ),
         child: AppView(),
       ),
     );
@@ -67,11 +66,14 @@ class _AppViewState extends State<AppView> {
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.instance.getInitialMessage().then((initialMessage) =>
-        getNotif(initialMessage));
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((initialMessage) => getNotif(initialMessage));
     FirebaseMessaging.onMessageOpenedApp.listen((initialMessage) {
-    getNotif(initialMessage);
+      getNotif(initialMessage);
     });
+
+
   }
 
   String prevUserId = "";
@@ -85,12 +87,12 @@ class _AppViewState extends State<AppView> {
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listenWhen: (prev, next) =>
-          prev.status != next.status || prev.user.id != next.user.id,
+              prev.status != next.status || prev.user.id != next.user.id,
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 print("authenticated");
-                if(!kIsWeb) {
+                if (!kIsWeb) {
                   print("subscribeToTopic(user${state.user.id})");
                   FirebaseMessaging.instance
                       .subscribeToTopic("user${state.user.id}");
@@ -98,18 +100,18 @@ class _AppViewState extends State<AppView> {
                 prevUserId = state.user.id;
                 _navigator.pushAndRemoveUntil<void>(
                   LobbyPage.route(),
-                      (route) => false,
+                  (route) => false,
                 );
                 break;
               case AuthenticationStatus.unauthenticated:
-                if(!kIsWeb) {
+                if (!kIsWeb) {
                   print("unsubscribeFromTopic(user${prevUserId})");
                   FirebaseMessaging.instance
                       .unsubscribeFromTopic("user${prevUserId}");
                 }
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
-                      (route) => false,
+                  (route) => false,
                 );
                 break;
               default:
