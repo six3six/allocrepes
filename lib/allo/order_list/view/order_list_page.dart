@@ -1,3 +1,4 @@
+import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
 import 'package:allocrepes/allo/order_list/cubit/order_list_cubit.dart';
 import 'package:allocrepes/allo/order_list/cubit/order_list_state.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
@@ -21,37 +22,61 @@ class OrderListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return RepositoryProvider(
-      create: (context) => OrderRepositoryFirestore(),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (BuildContext context, AuthenticationState state) {
-        return BlocProvider<OrderListCubit>(
-          create: (context) => OrderListCubit(
-              RepositoryProvider.of<OrderRepositoryFirestore>(context),
-              state.user),
-          child: BlocBuilder<OrderListCubit, OrderListState>(
-            buildWhen: (prev, next) => prev.isLoading != next.isLoading,
-            builder: (context, state) => LoadingOverlay(
-              isLoading: state.isLoading,
-              color: theme.primaryColor,
-              progressIndicator: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CircularProgressIndicator(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Chargement...",
-                    style: theme.textTheme.headline6,
-                  ),
-                ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Mes commandes"),
+      ),
+      floatingActionButton: SizedBox(
+        height: 70,
+        width: 70,
+        child: FloatingActionButton(
+          backgroundColor: theme.primaryColorDark,
+          onPressed: () {
+            Navigator.push(context, OrderNewPage.route());
+          },
+          child: const Icon(Icons.shopping_cart),
+          tooltip: "Commander",
+        ),
+      ),
+      body: RepositoryProvider(
+        create: (context) => OrderRepositoryFirestore(),
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (BuildContext context, AuthenticationState state) {
+          return BlocProvider<OrderListCubit>(
+            create: (context) => OrderListCubit(
+                RepositoryProvider.of<OrderRepositoryFirestore>(context),
+                state.user),
+            child: BlocBuilder<OrderListCubit, OrderListState>(
+              buildWhen: (prev, next) =>
+                  prev.isLoading != next.isLoading ||
+                  prev.isConnected != next.isConnected,
+              builder: (context, state) => LoadingOverlay(
+                isLoading: state.isLoading || !state.isConnected,
+                color: theme.primaryColor,
+                progressIndicator: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Chargement...",
+                      style: theme.textTheme.headline6,
+                    ),
+                    if (!state.isConnected)
+                      Text(
+                        "En attente de connexion...",
+                        style: theme.textTheme.headline6,
+                      ),
+                  ],
+                ),
+                child: const OrderListView(),
               ),
-              child: const OrderListView(),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }
