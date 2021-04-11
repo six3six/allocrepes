@@ -24,9 +24,7 @@ class StockView extends StatelessWidget {
           BlocBuilder<StockCubit, StockState>(
             buildWhen: (prev, next) =>
                 prev.categories.keys.toList() !=
-                    next.categories.keys.toList() ||
-                prev.categories.values.toList() !=
-                    next.categories.values.toList(),
+                    next.categories.keys.toList(),
             builder: (context, state) {
               List<_ProductCategory> categories = [];
               state.categories.forEach((Category cat, List<Product> products) =>
@@ -71,7 +69,7 @@ class _StockEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    quantityController..text = product.initialStock.toString();
+    quantityController.text = product.initialStock.toString();
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -106,7 +104,7 @@ class _StockEntry extends StatelessWidget {
                 child: TextField(
                   keyboardType: TextInputType.number,
                   controller: quantityController,
-                  onChanged: (val) {
+                  onSubmitted: (val) {
                     BlocProvider.of<StockCubit>(context).updateProductMaxAmount(
                         category, product, int.tryParse(val) ?? 0);
                   },
