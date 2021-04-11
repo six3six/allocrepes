@@ -121,7 +121,7 @@ class _ProductEntry extends StatelessWidget {
                   child: TextField(
                     keyboardType: TextInputType.number,
                     controller: quantityController,
-                    onChanged: (val) {
+                    onSubmitted: (val) {
                       BlocProvider.of<ProductListCubit>(context)
                           .updateProductMaxAmount(
                               category, product, int.tryParse(val) ?? 0);

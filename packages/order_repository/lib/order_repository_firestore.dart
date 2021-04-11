@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/image.dart';
 import 'package:order_repository/entities/article_entity.dart';
 import 'package:order_repository/entities/category_entity.dart';
 import 'package:order_repository/entities/order_entity.dart';
@@ -26,9 +23,6 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   static final Query productGroupRoot =
       FirebaseFirestore.instance.collectionGroup("products");
-
-  static final _productImageBase =
-      FirebaseStorage.instance.ref().child("products").child("images");
 
   @override
   Future<void> createOrder(Order order) async {
@@ -182,8 +176,13 @@ class OrderRepositoryFirestore extends OrderRepository {
       query = query.where("status",
           whereIn: orderStatus.map((e) => e.index).toList());
     }
-    await query.get().then(
-        (snapshot) => snapshot.docs.forEach((doc) => doc.reference.delete()));
+    await query.get().then((snapshot) => snapshot.docs.forEach((doc) async {
+          final articles = await doc.reference.collection("articles").get();
+          for (final article in articles.docs) {
+            await article.reference.delete();
+          }
+          doc.reference.delete();
+        }));
   }
 
   @override
