@@ -4,11 +4,19 @@ import * as https from "https";
 import * as sxml from "sxml";
 
 admin.initializeApp();
+const db = admin.firestore();
 
 interface Token {
     user: string;
     token: string;
 }
+
+const isAdmin = async (user: string | undefined): Promise<boolean> => {
+    if (user == undefined) return false;
+    const adminRef = db.collection("roles").doc("admins");
+    const adminVal = await adminRef.get();
+    return adminVal.get(user) != undefined;
+};
 
 const getSSOToken = async (fncUrl: string, ticket: string): Promise<Token> => {
     const encUrl = encodeURIComponent(fncUrl);
@@ -135,7 +143,7 @@ exports.onCommandStatusChange = functions.firestore
         case OrderStatus.DELIVERED:
             title = "Bon appétit";
             body = "Votre commande est arrivée et est prête à être degustée\n" +
-                "Bon appétit et merci pour votre commande";
+                    "Bon appétit et merci pour votre commande";
             break;
         case OrderStatus.PENDING:
             title = "On cuisine pour vous !";
@@ -181,9 +189,24 @@ enum OrderStatus {
 }
 
 
-
-
 exports.sendNotif = functions.https.onCall(async (requestData, context) => {
+    if (!await isAdmin(context.auth?.uid)) {
+        console.log("Demande non autorisée notif : " + context.auth?.uid);
+        return "Error";
+    }
+
+
+    await db.collection("notifLogs").add({
+        sender: context.auth?.uid,
+        recipient: requestData.recipient,
+        action: requestData.action,
+        title: requestData.title,
+        body: requestData.body,
+        link: requestData.link,
+        user: requestData.user,
+    });
+
+
     let data = {};
 
     const notification: admin.messaging.NotificationMessagePayload = {
@@ -231,6 +254,7 @@ exports.sendNotif = functions.https.onCall(async (requestData, context) => {
         payload,
         option,
     );
+
 
     return "ok";
 });

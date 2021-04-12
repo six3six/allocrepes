@@ -21,6 +21,8 @@ class LobbyCubit extends Cubit<LobbyState> {
           break;
       }
     });
+
+
     updateNews();
   }
 
