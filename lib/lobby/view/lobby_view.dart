@@ -77,12 +77,15 @@ class LobbyView extends StatelessWidget {
                 spacing: 10,
                 alignment: WrapAlignment.center,
                 children: <Widget>[
-                  MenuCard(
-                    title: "Passer commande",
-                    onTap: () {
-                      Navigator.push(context, OrderListPage.route());
+                  BlocBuilder<LobbyCubit, LobbyState>(
+                    builder: (context, state) {
+                      return MenuCard(
+                        title: "Passer commande",
+                        onTap: () =>
+                            Navigator.push(context, OrderListPage.route()),
+                        icon: Icons.shopping_cart,
+                      );
                     },
-                    icon: Icons.shopping_cart,
                   ),
                   MenuCard(
                     title: "En savoir +",

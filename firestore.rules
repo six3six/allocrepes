@@ -34,7 +34,7 @@ service cloud.firestore {
     
     match /orders/{order} {
       allow read : if isOwner(get(/databases/$(database)/documents/orders/$(order)).data.owner);
-      allow create : if isAuth();
+      allow list, create : if isAuth();
       
       match /articles/{article} {
       	allow read : if isOwner(get(/databases/$(database)/documents/orders/$(order)).data.owner);
