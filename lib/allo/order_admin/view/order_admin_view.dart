@@ -17,7 +17,6 @@ class OrderAdminView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -149,7 +148,6 @@ class _FilterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     return SliverToBoxAdapter(
       child: ExpansionTile(

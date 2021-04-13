@@ -21,7 +21,9 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
     getOrders();
     _orderRepository.products().forEach((products) {
       Map<String, Product> productsMap = {};
-      products.forEach((product) { productsMap[product.id ?? ""] = product;});
+      products.forEach((product) {
+        productsMap[product.id ?? ""] = product;
+      });
       emit(state.copyWith(products: productsMap));
     });
   }

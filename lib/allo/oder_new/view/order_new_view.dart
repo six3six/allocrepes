@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
-import 'package:order_repository/order_repository_firestore.dart';
 
 class OrderNewView extends StatelessWidget {
   const OrderNewView({Key? key}) : super(key: key);

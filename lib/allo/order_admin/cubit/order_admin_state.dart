@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';

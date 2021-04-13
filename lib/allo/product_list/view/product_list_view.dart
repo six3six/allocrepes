@@ -11,9 +11,6 @@ class ProductListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Produits"),
@@ -35,7 +32,7 @@ class ProductListView extends StatelessWidget {
           ),
           SizedBox(
             width: double.infinity,
-            child: FlatButton(
+            child: TextButton(
               onPressed: () => BlocProvider.of<ProductListCubit>(context)
                   .addCategoryDialog(context),
               child: Text("Ajouter une catégorie"),
@@ -57,7 +54,7 @@ class _ProductEntry extends StatelessWidget {
     required this.category,
   }) : super(key: key);
 
-  TextEditingController quantityController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +76,9 @@ class _ProductEntry extends StatelessWidget {
           ),
         ),
       ),
-      confirmDismiss: (direction) async => await BlocProvider.of<ProductListCubit>(context)
-          .deleteProductDialog(context, category, product),
+      confirmDismiss: (direction) async =>
+          await BlocProvider.of<ProductListCubit>(context)
+              .deleteProductDialog(context, category, product),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(

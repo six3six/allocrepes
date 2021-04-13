@@ -11,9 +11,6 @@ class StockView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Stocks"),
@@ -23,8 +20,7 @@ class StockView extends StatelessWidget {
         children: [
           BlocBuilder<StockCubit, StockState>(
             buildWhen: (prev, next) =>
-                prev.categories.keys.toList() !=
-                    next.categories.keys.toList(),
+                prev.categories.keys.toList() != next.categories.keys.toList(),
             builder: (context, state) {
               List<_ProductCategory> categories = [];
               state.categories.forEach((Category cat, List<Product> products) =>
@@ -63,7 +59,7 @@ class _StockEntry extends StatelessWidget {
     required this.category,
   }) : super(key: key);
 
-  TextEditingController quantityController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

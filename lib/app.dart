@@ -72,8 +72,6 @@ class _AppViewState extends State<AppView> {
     FirebaseMessaging.onMessageOpenedApp.listen((initialMessage) {
       getNotif(initialMessage);
     });
-
-
   }
 
   String prevUserId = "";
@@ -105,9 +103,9 @@ class _AppViewState extends State<AppView> {
                 break;
               case AuthenticationStatus.unauthenticated:
                 if (!kIsWeb) {
-                  print("unsubscribeFromTopic(user${prevUserId})");
+                  print("unsubscribeFromTopic(user$prevUserId)");
                   FirebaseMessaging.instance
-                      .unsubscribeFromTopic("user${prevUserId}");
+                      .unsubscribeFromTopic("user$prevUserId");
                 }
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),

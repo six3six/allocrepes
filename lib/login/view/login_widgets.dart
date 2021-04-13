@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:allocrepes/login/cubit/login_cubit.dart';
@@ -16,9 +15,6 @@ class AuthWebView extends StatefulWidget {
 }
 
 class AuthWebViewState extends State<AuthWebView> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
-
   @override
   void initState() {
     super.initState();
@@ -52,14 +48,15 @@ class AuthWebViewState extends State<AuthWebView> {
 }
 
 class AuthTokenView extends StatelessWidget {
-  TextEditingController tokenController = TextEditingController();
+  final TextEditingController tokenController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Pour se connecter, appuyez sur le bouton ci-dessous. Puis copier coller le code dans le champs \"Token\"'),
+        Text(
+            'Pour se connecter, appuyez sur le bouton ci-dessous. Puis copier coller le code dans le champs \"Token\"'),
         TextButton(
             child: Text('Obtenir un token'),
             onPressed: () => launch(

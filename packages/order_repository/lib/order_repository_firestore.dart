@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:order_repository/entities/article_entity.dart';
 import 'package:order_repository/entities/category_entity.dart';

@@ -6,8 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'lobby_twitch.dart';
-
 class LobbyPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
@@ -19,8 +17,6 @@ class LobbyPage extends StatelessWidget {
   const LobbyPage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("XANTHOS"),

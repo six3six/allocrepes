@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
@@ -11,9 +10,6 @@ class LobbyTwitchViewer extends StatefulWidget {
 }
 
 class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
-
   @override
   void initState() {
     super.initState();

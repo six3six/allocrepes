@@ -202,14 +202,12 @@ class AuthenticationRepository {
       for (var doc in snap.docs) {
         if (doc.reference.parent == adminCollection) {
           if (doc.reference == adminCollection.doc("admins")) {
-            isAdmin =
-                doc.data().map((key, value) => MapEntry(key, true));
+            isAdmin = doc.data().map((key, value) => MapEntry(key, true));
           }
         } else if (doc.reference.parent == userCollection) {
           users[doc.id] = User.fromDocument(doc);
         }
       }
-
 
       users = users.map((id, user) =>
           MapEntry(id, user.copyWith(admin: isAdmin.containsKey(id))));
@@ -224,15 +222,16 @@ class AuthenticationRepository {
   }
 
   void removeUser(String uid) {
-    final adminCollection = FirebaseFirestore.instance.collection("roles").doc("admins");
-    final userCollection = FirebaseFirestore.instance.collection("users").doc(uid);
+    final adminCollection =
+        FirebaseFirestore.instance.collection("roles").doc("admins");
+    final userCollection =
+        FirebaseFirestore.instance.collection("users").doc(uid);
 
     userCollection.delete();
     adminCollection.update({
       "$uid": FieldValue.delete(),
     });
   }
-
 
   void setUserInfo(
       String uid, String surname, String name, String email, int point) {

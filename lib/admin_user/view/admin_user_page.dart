@@ -10,7 +10,10 @@ import 'admin_user_view.dart';
 
 class AdminUserPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => AdminUserPage(), settings: RouteSettings(name: "AdminUser"),);
+    return MaterialPageRoute<void>(
+      builder: (_) => AdminUserPage(),
+      settings: RouteSettings(name: "AdminUser"),
+    );
   }
 
   const AdminUserPage({Key? key}) : super(key: key);
