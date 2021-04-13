@@ -79,7 +79,7 @@ class OrderNewView extends StatelessWidget {
                       signed: false, decimal: false),
                   maxLength: 4,
                   decoration: InputDecoration(
-                    labelText: 'Appart n°',
+                    labelText: 'Appart/Salle n°',
                     helperText: '',
                   ),
                 ),
@@ -115,7 +115,9 @@ class OrderNewView extends StatelessWidget {
                 ),
                 TextField(
                   maxLines: 5,
-                  onChanged: (message) => BlocProvider.of<OrderNewCubit>(context).updateMessage(message),
+                  onChanged: (message) =>
+                      BlocProvider.of<OrderNewCubit>(context)
+                          .updateMessage(message),
                 ),
               ],
             ),

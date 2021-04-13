@@ -15,6 +15,22 @@ class MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Card(
+      //                           <-- Card widget
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 400),
+        child: ListTile(
+          onTap: onTap,
+          leading: Icon(
+            icon,
+          ),
+          title: Text(
+            title,
+          ),
+        ),
+      ),
+    );
+    /*
     return SizedBox(
       width: 200,
       height: 200,
@@ -45,6 +61,6 @@ class MenuCard extends StatelessWidget {
           ),
         ),
       ),
-    );
+    );*/
   }
 }
