@@ -219,7 +219,7 @@ class _FilterView extends StatelessWidget {
 
     String ret = "";
     m.forEach((key, value) {
-      if (value == false) return;
+      if (!value) return;
       ret += key.toString() + " ";
     });
 
@@ -230,7 +230,10 @@ class _FilterView extends StatelessWidget {
 class _OrderCompleteView extends StatelessWidget {
   final Order order;
 
-  const _OrderCompleteView({Key? key, required this.order}) : super(key: key);
+  const _OrderCompleteView({
+    Key? key,
+    required this.order,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
