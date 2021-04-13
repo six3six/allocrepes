@@ -23,10 +23,14 @@ class StockView extends StatelessWidget {
                 prev.categories.keys.toList() != next.categories.keys.toList(),
             builder: (context, state) {
               List<_ProductCategory> categories = [];
-              state.categories.forEach((Category cat, List<Product> products) =>
-                  categories.add(
-                      _ProductCategory(category: cat, products: products)));
-
+              state.categories.forEach(
+                (Category cat, List<Product> products) => categories.add(
+                  _ProductCategory(
+                    category: cat,
+                    products: products,
+                  ),
+                ),
+              );
               return Column(
                 children: categories,
               );
@@ -59,13 +63,10 @@ class _StockEntry extends StatelessWidget {
     required this.category,
   }) : super(key: key);
 
-  final TextEditingController quantityController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    quantityController.text = product.initialStock.toString();
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -83,93 +84,150 @@ class _StockEntry extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                flex: 7,
-                child: Text(
-                  "Stock initial",
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: quantityController,
-                  onSubmitted: (val) {
-                    BlocProvider.of<StockCubit>(context).updateProductMaxAmount(
-                        category, product, int.tryParse(val) ?? 0);
-                  },
-                ),
-              ),
-            ],
+          _ProductInitialStock(
+            product: product,
+            category: category,
           ),
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                flex: 7,
-                child: Text(
-                  "Consommé",
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: BlocBuilder<StockCubit, StockState>(
-                  buildWhen: (prev, next) =>
-                      prev.count[product.id] != next.count[product.id],
-                  builder: (context, state) =>
-                      Text((state.count[product.id] ?? 0).toString()),
-                ),
-              ),
-            ],
+          _ProductConsumedStock(
+            product: product,
           ),
           SizedBox(
             height: 10,
           ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                flex: 7,
-                child: Text(
-                  "Restant",
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: BlocBuilder<StockCubit, StockState>(
-                  buildWhen: (prev, next) =>
-                      prev.count[product.id] != next.count[product.id],
-                  builder: (context, state) {
-                    final rest =
-                        (product.initialStock - (state.count[product.id] ?? 0));
-
-                    return Text(
-                      rest.toString(),
-                      style: TextStyle(
-                          color: rest > 0 ? Colors.green : Colors.red),
-                    );
-                  },
-                ),
-              ),
-            ],
+          _ProductRemainingStock(
+            product: product,
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ProductInitialStock extends StatelessWidget {
+  final TextEditingController quantityController = TextEditingController();
+  final Product product;
+  final Category category;
+
+  _ProductInitialStock({
+    Key? key,
+    required this.product,
+    required this.category,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    quantityController.text = product.initialStock.toString();
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          flex: 7,
+          child: Text(
+            "Stock initial",
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: TextField(
+            keyboardType: TextInputType.number,
+            controller: quantityController,
+            onSubmitted: (val) {
+              BlocProvider.of<StockCubit>(context).updateProductMaxAmount(
+                category,
+                product,
+                int.tryParse(val) ?? 0,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProductRemainingStock extends StatelessWidget {
+  final Product product;
+
+  _ProductRemainingStock({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          flex: 7,
+          child: Text(
+            "Restant",
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: BlocBuilder<StockCubit, StockState>(
+            buildWhen: (prev, next) =>
+                prev.count[product.id] != next.count[product.id],
+            builder: (context, state) {
+              final rest =
+                  (product.initialStock - (state.count[product.id] ?? 0));
+
+              return Text(
+                rest.toString(),
+                style: TextStyle(
+                  color: rest > 0 ? Colors.green : Colors.red,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProductConsumedStock extends StatelessWidget {
+  final Product product;
+
+  _ProductConsumedStock({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          flex: 7,
+          child: Text(
+            "Consommé",
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: BlocBuilder<StockCubit, StockState>(
+            buildWhen: (prev, next) =>
+                prev.count[product.id] != next.count[product.id],
+            builder: (context, state) =>
+                Text((state.count[product.id] ?? 0).toString()),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -178,9 +236,11 @@ class _ProductCategory extends StatelessWidget {
   final List<Product> products;
   final Category category;
 
-  const _ProductCategory(
-      {Key? key, required this.category, required this.products})
-      : super(key: key);
+  const _ProductCategory({
+    Key? key,
+    required this.category,
+    required this.products,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

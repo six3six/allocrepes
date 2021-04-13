@@ -21,9 +21,14 @@ class ProductListView extends StatelessWidget {
           BlocBuilder<ProductListCubit, ProductListState>(
             builder: (context, state) {
               List<_ProductCategory> categories = [];
-              state.categories.forEach((Category cat, List<Product> products) =>
-                  categories.add(
-                      _ProductCategory(category: cat, products: products)));
+              state.categories.forEach(
+                (Category cat, List<Product> products) => categories.add(
+                  _ProductCategory(
+                    category: cat,
+                    products: products,
+                  ),
+                ),
+              );
 
               return Column(
                 children: categories,
@@ -54,13 +59,10 @@ class _ProductEntry extends StatelessWidget {
     required this.category,
   }) : super(key: key);
 
-  final TextEditingController quantityController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    quantityController..text = product.maxAmount.toString();
 
     return Dismissible(
       key: Key("${category.id};${product.id}"),
@@ -83,50 +85,13 @@ class _ProductEntry extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  flex: 7,
-                  child: Text(product.name, style: textTheme.headline6),
-                ),
-                Checkbox(
-                  value: product.available,
-                  onChanged: (bool? availability) =>
-                      BlocProvider.of<ProductListCubit>(context)
-                          .updateProductAvailability(
-                              category, product, availability ?? false),
-                ),
-              ],
+            _ProductAvailability(
+              product: product,
+              category: category,
             ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  flex: 7,
-                  child: Text(
-                    "Quantité max",
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    controller: quantityController,
-                    onSubmitted: (val) {
-                      BlocProvider.of<ProductListCubit>(context)
-                          .updateProductMaxAmount(
-                              category, product, int.tryParse(val) ?? 0);
-                    },
-                  ),
-                ),
-              ],
+            _ProductMaxQuantity(
+              product: product,
+              category: category,
             ),
           ],
         ),
@@ -135,13 +100,102 @@ class _ProductEntry extends StatelessWidget {
   }
 }
 
+class _ProductMaxQuantity extends StatelessWidget {
+  final Product product;
+  final Category category;
+
+  _ProductMaxQuantity({
+    Key? key,
+    required this.product,
+    required this.category,
+  }) : super(key: key);
+
+  final TextEditingController quantityController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    quantityController..text = product.maxAmount.toString();
+
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          flex: 7,
+          child: Text(
+            "Quantité max",
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: TextField(
+            keyboardType: TextInputType.number,
+            controller: quantityController,
+            onSubmitted: (val) {
+              BlocProvider.of<ProductListCubit>(context).updateProductMaxAmount(
+                category,
+                product,
+                int.tryParse(val) ?? 0,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProductAvailability extends StatelessWidget {
+  final Product product;
+  final Category category;
+
+  const _ProductAvailability({
+    Key? key,
+    required this.product,
+    required this.category,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          flex: 7,
+          child: Text(product.name, style: textTheme.headline6),
+        ),
+        Checkbox(
+          value: product.available,
+          onChanged: (bool? availability) =>
+              BlocProvider.of<ProductListCubit>(context)
+                  .updateProductAvailability(
+            category,
+            product,
+            availability ?? false,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _ProductCategory extends StatelessWidget {
   final List<Product> products;
   final Category category;
 
-  const _ProductCategory(
-      {Key? key, required this.category, required this.products})
-      : super(key: key);
+  const _ProductCategory({
+    Key? key,
+    required this.category,
+    required this.products,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +227,7 @@ class _ProductCategory extends StatelessWidget {
                     icon: Icon(Icons.delete),
                     onPressed: () => BlocProvider.of<ProductListCubit>(context)
                         .deleteCategoryDialog(context, category),
-                  )
+                  ),
                 ],
               ),
               Column(

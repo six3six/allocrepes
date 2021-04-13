@@ -78,17 +78,19 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
 
   void updateFilterStatus(OrderStatus status, bool activate) {
     emit(state.copyWith(
-        selectedStatus: {}
-          ..addAll(state.selectedStatus)
-          ..[status] = activate));
+      selectedStatus: {}
+        ..addAll(state.selectedStatus)
+        ..[status] = activate,
+    ));
     getOrders();
   }
 
   void updateFilterRoom(Place place, bool activate) {
     emit(state.copyWith(
-        selectedPlaces: {}
-          ..addAll(state.selectedPlaces)
-          ..[place] = activate));
+      selectedPlaces: {}
+        ..addAll(state.selectedPlaces)
+        ..[place] = activate,
+    ));
     getOrders();
   }
 }

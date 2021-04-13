@@ -21,13 +21,16 @@ class StockPage extends StatelessWidget {
     return RepositoryProvider(
       create: (context) => OrderRepositoryFirestore(),
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (BuildContext context, AuthenticationState state) {
-        return BlocProvider(
+        builder: (BuildContext context, AuthenticationState state) =>
+            BlocProvider(
           create: (context) => StockCubit(
-              RepositoryProvider.of<OrderRepositoryFirestore>(context)),
+            RepositoryProvider.of<OrderRepositoryFirestore>(
+              context,
+            ),
+          ),
           child: const StockView(),
-        );
-      }),
+        ),
+      ),
     );
   }
 }

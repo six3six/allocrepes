@@ -71,6 +71,7 @@ class LobbyAboutState extends State<LobbyAbout> {
               builder: (conext, snapshot) {
                 if (snapshot.hasData) {
                   PackageInfo infos = snapshot.data! as PackageInfo;
+
                   return Text(
                     "Version : ${infos.version} build ${infos.buildNumber}",
                     style: textTheme.overline,

@@ -40,7 +40,8 @@ void main() async {
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
+    RemoteMessage message,
+  ) async {
     await Firebase.initializeApp();
 
     print("Handling a background message: ${message.messageId}");
@@ -51,11 +52,14 @@ void main() async {
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = AppObserver();
   if (!kIsWeb) {
-    runZonedGuarded(() {
-      runApp(App(authenticationRepository: AuthenticationRepository()));
-    }, (error, stackTrace) {
-      FirebaseCrashlytics.instance.recordError(error, stackTrace);
-    });
+    runZonedGuarded(
+      () {
+        runApp(App(authenticationRepository: AuthenticationRepository()));
+      },
+      (error, stackTrace) {
+        FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      },
+    );
   } else
     runApp(App(authenticationRepository: AuthenticationRepository()));
 }

@@ -79,6 +79,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     updatePlace(state.place);
     if (state.roomError != "" || state.placeError != "") {
       showError(context, "Remplissez le lieu ET la salle");
+
       return false;
     }
 
@@ -96,6 +97,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
     if (articles.length == 0) {
       showError(context, "Choisissez au moins un article");
+
       return false;
     }
 
@@ -112,23 +114,26 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         room: state.room ?? "",
         message: state.message,
       ));
+
       return true;
     } catch (e, stacktrace) {
-      showError(context,
-          "Erreur du système : ${e.toString()}\n\n${stacktrace.toString()}");
+      showError(
+        context,
+        "Erreur du système : ${e.toString()}\n\n${stacktrace.toString()}",
+      );
       print("Checkout error " + e.toString());
       print("Checkout stacktrace " + stacktrace.toString());
       emit(state.copyWith(loading: false));
+
       return false;
     }
   }
 
-  Future<void> showError(BuildContext context, String message) {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
+  Future<void> showError(BuildContext context, String message) =>
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => AlertDialog(
           title: Text('Erreur'),
           content: SingleChildScrollView(
             child: ListBody(
@@ -145,8 +150,6 @@ class OrderNewCubit extends Cubit<OrderNewState> {
               },
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+      );
 }

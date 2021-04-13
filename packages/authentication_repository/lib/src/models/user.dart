@@ -50,26 +50,26 @@ class User extends Equatable {
     photo: null,
   );
 
-  User copyWith(
-      {String? email,
-      String? id,
-      bool? admin,
-      String? name,
-      String? surname,
-      String? classe,
-      String? photo,
-      int? point}) {
-    return User(
-      email: email ?? this.email,
-      id: id ?? this.id,
-      admin: admin ?? this.admin,
-      name: name ?? this.name,
-      surname: surname ?? this.surname,
-      classe: classe ?? this.classe,
-      photo: photo ?? this.photo,
-      point: point ?? this.point,
-    );
-  }
+  User copyWith({
+    String? email,
+    String? id,
+    bool? admin,
+    String? name,
+    String? surname,
+    String? classe,
+    String? photo,
+    int? point,
+  }) =>
+      User(
+        email: email ?? this.email,
+        id: id ?? this.id,
+        admin: admin ?? this.admin,
+        name: name ?? this.name,
+        surname: surname ?? this.surname,
+        classe: classe ?? this.classe,
+        photo: photo ?? this.photo,
+        point: point ?? this.point,
+      );
 
   Map<String, Object?> toDocument() {
     return {
@@ -82,6 +82,7 @@ class User extends Equatable {
 
   static User fromDocument(QueryDocumentSnapshot document) {
     var data = document.data();
+
     return User(
       email: data.containsKey("email") ? data["email"] : "",
       id: document.id,

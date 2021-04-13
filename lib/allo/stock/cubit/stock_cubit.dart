@@ -43,7 +43,10 @@ class StockCubit extends Cubit<StockState> {
   }
 
   void updateProductMaxAmount(
-      Category category, Product product, int maxAmount) {
+    Category category,
+    Product product,
+    int maxAmount,
+  ) {
     orderRepository.updateProductInitialStock(category, product, maxAmount);
   }
 

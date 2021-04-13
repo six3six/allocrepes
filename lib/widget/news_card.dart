@@ -20,13 +20,14 @@ class NewsCard extends StatelessWidget {
     required String url,
   }) {
     return NewsCard(
-        image: image,
-        title: title,
-        onTap: () async {
-          await canLaunch(url)
-              ? await launch(url)
-              : throw 'Could not launch $url';
-        });
+      image: image,
+      title: title,
+      onTap: () async {
+        await canLaunch(url)
+            ? await launch(url)
+            : throw 'Could not launch $url';
+      },
+    );
   }
 
   @override

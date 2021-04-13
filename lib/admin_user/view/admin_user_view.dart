@@ -61,34 +61,37 @@ class _FilterView extends StatelessWidget {
           style: theme.textTheme.caption,
         ),
         BlocBuilder<AdminUserCubit, AdminUserState>(
-            buildWhen: (prev, next) => prev.sortUser != next.sortUser,
-            builder: (context, state) {
-              return ExpansionTile(
-                title: Text("Trié par : "),
-                children: [
-                  ListTile(
-                    title: Text("Par identifiant"),
-                    leading: Radio<SortUser>(
-                      value: SortUser.Name,
-                      groupValue: state.sortUser,
-                      onChanged: (value) =>
-                          BlocProvider.of<AdminUserCubit>(context)
-                              .updateUserQuery(sortUser: value),
-                    ),
+          buildWhen: (prev, next) => prev.sortUser != next.sortUser,
+          builder: (context, state) {
+            return ExpansionTile(
+              title: Text(
+                "Trié par : ",
+              ),
+              children: [
+                ListTile(
+                  title: Text("Par identifiant"),
+                  leading: Radio<SortUser>(
+                    value: SortUser.Name,
+                    groupValue: state.sortUser,
+                    onChanged: (value) =>
+                        BlocProvider.of<AdminUserCubit>(context)
+                            .updateUserQuery(sortUser: value),
                   ),
-                  ListTile(
-                    title: Text("Par points"),
-                    leading: Radio<SortUser>(
-                      value: SortUser.Point,
-                      groupValue: state.sortUser,
-                      onChanged: (value) =>
-                          BlocProvider.of<AdminUserCubit>(context)
-                              .updateUserQuery(sortUser: value),
-                    ),
+                ),
+                ListTile(
+                  title: Text("Par points"),
+                  leading: Radio<SortUser>(
+                    value: SortUser.Point,
+                    groupValue: state.sortUser,
+                    onChanged: (value) =>
+                        BlocProvider.of<AdminUserCubit>(context)
+                            .updateUserQuery(sortUser: value),
                   ),
-                ],
-              );
-            }),
+                ),
+              ],
+            );
+          },
+        ),
       ],
     );
   }
@@ -102,14 +105,15 @@ class _UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AdminUserCubit, AdminUserState>(
-        buildWhen: (prev, next) =>
-            prev.users.keys.toList() != next.users.keys.toList(),
-        builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: state.users.keys.map((e) => _UserTile(id: e)).toList(),
-          );
-        });
+      buildWhen: (prev, next) =>
+          prev.users.keys.toList() != next.users.keys.toList(),
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: state.users.keys.map((e) => _UserTile(id: e)).toList(),
+        );
+      },
+    );
   }
 }
 

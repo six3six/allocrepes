@@ -30,6 +30,7 @@ class New extends Equatable {
     for (AtomPerson person in item.authors) {
       authors.add(unescape.convert(person.name ?? ""));
     }
+
     return New(
       authors: authors,
       title: unescape.convert(item.title ?? ""),
@@ -43,6 +44,7 @@ class New extends Equatable {
 
   static New fromRss(RssItem item) {
     var unescape = new HtmlUnescape();
+
     return New(
       authors: [unescape.convert(item.author ?? "")],
       title: unescape.convert(item.title ?? ""),

@@ -35,8 +35,9 @@ class OrderListView extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyText1,
                     children: [
                       const TextSpan(
-                          text:
-                              "Commandez dès maintenant en appuyant sur l'icone "),
+                        text:
+                            "Commandez dès maintenant en appuyant sur l'icone ",
+                      ),
                       const WidgetSpan(
                         child: const Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2.0),
@@ -49,6 +50,7 @@ class OrderListView extends StatelessWidget {
                 ),
               );
             }
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: state.currentOrders
@@ -100,7 +102,8 @@ class _OrderSummary extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Text(
-                "Livraison à ${PlaceUtils.placeToString(order.place)}, salle/appartement ${order.room}"),
+              "Livraison à ${PlaceUtils.placeToString(order.place)}, salle/appartement ${order.room}",
+            ),
             _OrderSummaryStatus(order.status),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -110,7 +113,7 @@ class _OrderSummary extends StatelessWidget {
                     .map((Article a) => _ArticleToProductLabel(article: a))
                     .toList(),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -129,13 +132,17 @@ class _ArticleToProductLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Product>(
-        future: BlocProvider.of<OrderListCubit>(context).getProduct(article),
-        builder: (context, snap) {
-          if (snap.hasData)
-            return Text("${article.amount.toString()}x ${snap.data!.name}");
-          else
-            return Text("${article.amount.toString()}x ${article.productId}");
-        });
+      future: BlocProvider.of<OrderListCubit>(context).getProduct(article),
+      builder: (context, snap) {
+        return snap.hasData
+            ? Text(
+                "${article.amount.toString()}x ${snap.data!.name}",
+              )
+            : Text(
+                "${article.amount.toString()}x ${article.productId}",
+              );
+      },
+    );
   }
 }
 

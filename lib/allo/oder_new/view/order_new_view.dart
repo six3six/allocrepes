@@ -13,118 +13,15 @@ class OrderNewView extends StatelessWidget {
   const OrderNewView({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mes commandes"),
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                BlocBuilder<OrderNewCubit, OrderNewState>(
-                  buildWhen: (prev, next) => prev.placeError != next.placeError,
-                  builder: (context, state) => Text(
-                    state.placeError,
-                    style: theme.textTheme.bodyText2!
-                        .merge(TextStyle(color: Colors.red)),
-                  ),
-                ),
-                Text(
-                  "Batiment : ",
-                  style: theme.textTheme.caption,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 60,
-                  child: BlocBuilder<OrderNewCubit, OrderNewState>(
-                    buildWhen: (prev, next) => prev.place != next.place,
-                    builder: (context, state) => DropdownButton<Place>(
-                      value: state.place ?? Place.values[1],
-                      onChanged: (Place? place) =>
-                          BlocProvider.of<OrderNewCubit>(context)
-                              .updatePlace(place),
-                      items: Place.values
-                          .sublist(1)
-                          .map<DropdownMenuItem<Place>>((Place place) {
-                        return DropdownMenuItem<Place>(
-                          value: place,
-                          child: Text(PlaceUtils.placeToString(place)),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-                BlocBuilder<OrderNewCubit, OrderNewState>(
-                  buildWhen: (prev, next) => prev.roomError != next.roomError,
-                  builder: (context, state) => Text(
-                    state.roomError,
-                    style: theme.textTheme.bodyText2!
-                        .merge(TextStyle(color: Colors.red)),
-                  ),
-                ),
-                TextField(
-                  onChanged: (val) =>
-                      BlocProvider.of<OrderNewCubit>(context).updateRoom(val),
-                  autocorrect: false,
-                  keyboardType: TextInputType.numberWithOptions(
-                      signed: false, decimal: false),
-                  maxLength: 4,
-                  decoration: InputDecoration(
-                    labelText: 'Appart/Salle n°',
-                    helperText: '',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          BlocBuilder<OrderNewCubit, OrderNewState>(
-            buildWhen: (prev, next) =>
-                prev.categories.keys.toList() !=
-                    next.categories.keys.toList() ||
-                prev.categories.values.toList() !=
-                    next.categories.values.toList(),
-            builder: (context, state) {
-              List<_OrderNewCategory> categories = [];
-              state.categories.forEach(
-                (Category cat, List<Product> products) => categories.add(
-                  _OrderNewCategory(category: cat, products: products),
-                ),
-              );
-
-              return Column(
-                children: categories,
-              );
-            },
-          ),
+          _OrderNewAddressInfo(),
           SizedBox(height: 10),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Commentaire :"),
-                Text(
-                  "(un anniversaire, un message à nous passer...)",
-                  style: theme.textTheme.caption,
-                ),
-                TextField(
-                  maxLines: 5,
-                  onChanged: (message) =>
-                      BlocProvider.of<OrderNewCubit>(context)
-                          .updateMessage(message),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
+          _OrderNewProduct(),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SizedBox(
@@ -148,18 +45,70 @@ class OrderNewView extends StatelessWidget {
   }
 }
 
+class _OrderNewProduct extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      children: [
+        BlocBuilder<OrderNewCubit, OrderNewState>(
+          buildWhen: (prev, next) =>
+              prev.categories.keys.toList() != next.categories.keys.toList() ||
+              prev.categories.values.toList() !=
+                  next.categories.values.toList(),
+          builder: (context, state) {
+            List<_OrderNewCategory> categories = [];
+            state.categories.forEach(
+              (Category cat, List<Product> products) => categories.add(
+                _OrderNewCategory(category: cat, products: products),
+              ),
+            );
+
+            return Column(
+              children: categories,
+            );
+          },
+        ),
+        SizedBox(height: 10),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Commentaire :"),
+              Text(
+                "(un anniversaire, un message à nous passer...)",
+                style: theme.textTheme.caption,
+              ),
+              TextField(
+                maxLines: 5,
+                onChanged: (message) => BlocProvider.of<OrderNewCubit>(context)
+                    .updateMessage(message),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _OrderNewCategory extends StatelessWidget {
   final Category category;
   final List<Product> products;
 
-  const _OrderNewCategory(
-      {Key? key, required this.category, required this.products})
-      : super(key: key);
+  const _OrderNewCategory({
+    Key? key,
+    required this.category,
+    required this.products,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     if (products.length == 0) return SizedBox();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -182,7 +131,7 @@ class _OrderNewCategory extends StatelessWidget {
                       ),
                     )
                     .toList(),
-              )
+              ),
             ],
           ),
         ),
@@ -234,6 +183,97 @@ class _OrderNewItem extends StatelessWidget {
             }).toList(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _OrderNewAddressInfo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BlocBuilder<OrderNewCubit, OrderNewState>(
+            buildWhen: (prev, next) => prev.placeError != next.placeError,
+            builder: (context, state) => Text(
+              state.placeError,
+              style: theme.textTheme.bodyText2!
+                  .merge(TextStyle(color: Colors.red)),
+            ),
+          ),
+          BlocBuilder<OrderNewCubit, OrderNewState>(
+            buildWhen: (prev, next) => prev.roomError != next.roomError,
+            builder: (context, state) => Text(
+              state.roomError,
+              style: theme.textTheme.bodyText2!
+                  .merge(TextStyle(color: Colors.red)),
+            ),
+          ),
+          _OrderNewBatimentSelector(),
+          _OrderNewAppartSelector(),
+        ],
+      ),
+    );
+  }
+}
+
+class _OrderNewBatimentSelector extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Batiment : ",
+          style: theme.textTheme.caption,
+        ),
+        SizedBox(
+          width: double.infinity,
+          height: 60,
+          child: BlocBuilder<OrderNewCubit, OrderNewState>(
+            buildWhen: (prev, next) => prev.place != next.place,
+            builder: (context, state) => DropdownButton<Place>(
+              value: state.place ?? Place.values[1],
+              onChanged: (Place? place) =>
+                  BlocProvider.of<OrderNewCubit>(context).updatePlace(place),
+              items: Place.values
+                  .sublist(1)
+                  .map<DropdownMenuItem<Place>>((Place place) {
+                return DropdownMenuItem<Place>(
+                  value: place,
+                  child: Text(PlaceUtils.placeToString(place)),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _OrderNewAppartSelector extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onChanged: (val) =>
+          BlocProvider.of<OrderNewCubit>(context).updateRoom(val),
+      autocorrect: false,
+      keyboardType: TextInputType.numberWithOptions(
+        signed: false,
+        decimal: false,
+      ),
+      maxLength: 4,
+      decoration: InputDecoration(
+        labelText: 'Appart/Salle n°',
+        helperText: '',
       ),
     );
   }

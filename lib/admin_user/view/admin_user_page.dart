@@ -25,7 +25,8 @@ class AdminUserPage extends StatelessWidget {
       create: (context) => OrderRepositoryFirestore(),
       child: BlocProvider<AdminUserCubit>(
         create: (context) => AdminUserCubit(
-            RepositoryProvider.of<AuthenticationRepository>(context)),
+          RepositoryProvider.of<AuthenticationRepository>(context),
+        ),
         child: BlocBuilder<AdminUserCubit, AdminUserState>(
           buildWhen: (prev, next) => prev.isLoading != next.isLoading,
           builder: (context, state) => LoadingOverlay(
