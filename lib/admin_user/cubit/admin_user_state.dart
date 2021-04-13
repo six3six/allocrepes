@@ -20,13 +20,18 @@ class AdminUserState extends Equatable {
   @override
   List<Object?> get props => [
         isLoading,
-        users.values,
-        users.keys,
-        admin.values,
-        admin.keys,
+        users.keys.toList(),
+        users.values.toList(),
+        admin.values.toList(),
+        admin.keys.toList(),
         usernameQuery,
         sortUser,
       ];
+
+  @override
+  String toString() {
+    return "AdminUserState(isLoading: $isLoading, users: $users, admin: $admin, usernameQuery: $usernameQuery, sortUser: $sortUser)";
+  }
 
   AdminUserState copyWith({
     bool? isLoading,

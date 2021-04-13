@@ -113,6 +113,13 @@ class LobbyView extends StatelessWidget {
                 ),
                 BlocBuilder<LobbyCubit, LobbyState>(
                   builder: (context, state) {
+                    if (state.news.length == 0)
+                      return SizedBox(
+                        child: Center(
+                          child: Text("Il n'y a pas de news pour le moment"),
+                        ),
+                        height: 100,
+                      );
                     return SizedBox(
                         width: double.infinity,
                         child: Column(

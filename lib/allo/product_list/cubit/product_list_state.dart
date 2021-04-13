@@ -8,7 +8,8 @@ class ProductListState extends Equatable {
   const ProductListState({this.categories = const {}});
 
   @override
-  List<Object> get props => [categories.values, categories.entries.toList()];
+  List<Object> get props =>
+      [categories.values.toList(), categories.entries.toList()];
 
   ProductListState copyWith({categories}) {
     return ProductListState(

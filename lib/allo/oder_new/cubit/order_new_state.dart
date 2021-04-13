@@ -26,9 +26,11 @@ class OrderNewState extends Equatable {
 
   @override
   List<Object?> get props => [
-        categories.values,
+        categories.values.toList(),
+        categories.keys.toList(),
         categories.entries.toList(),
-        quantities.values,
+        quantities.values.toList(),
+        quantities.keys.toList(),
         quantities.entries.toList(),
         place,
         room,
