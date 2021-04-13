@@ -10,7 +10,7 @@ class OrderNewState extends Equatable {
     this.place = Place.Ampere_A,
     this.room,
     this.placeError = "",
-    this.loading = false,
+    this.loading = true,
     this.roomError = "",
     this.message = "",
   });
