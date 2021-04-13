@@ -62,7 +62,6 @@ class _ProductEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     return Dismissible(
       key: Key("${category.id};${product.id}"),
