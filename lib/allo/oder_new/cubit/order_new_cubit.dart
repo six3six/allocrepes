@@ -34,7 +34,10 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         });
       });
 
-      emit(state.copyWith(categories: categories));
+      emit(state.copyWith(
+        categories: categories,
+        loading: false,
+      ));
     });
   }
 
