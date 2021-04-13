@@ -88,14 +88,17 @@ class OrderNewView extends StatelessWidget {
           ),
           BlocBuilder<OrderNewCubit, OrderNewState>(
             buildWhen: (prev, next) =>
-                prev.categories.keys != next.categories.keys ||
+                prev.categories.keys.toList() !=
+                    next.categories.keys.toList() ||
                 prev.categories.values.toList() !=
                     next.categories.values.toList(),
             builder: (context, state) {
               List<_OrderNewCategory> categories = [];
-              state.categories.forEach((Category cat, List<Product> products) =>
-                  categories.add(
-                      _OrderNewCategory(category: cat, products: products)));
+              state.categories.forEach(
+                (Category cat, List<Product> products) => categories.add(
+                  _OrderNewCategory(category: cat, products: products),
+                ),
+              );
 
               return Column(
                 children: categories,
@@ -157,6 +160,7 @@ class _OrderNewCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    if (products.length == 0) return SizedBox();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -172,8 +176,12 @@ class _OrderNewCategory extends StatelessWidget {
               ),
               Column(
                 children: products
-                    .map<_OrderNewItem>((product) =>
-                        _OrderNewItem(category: category, product: product))
+                    .map<_OrderNewItem>(
+                      (product) => _OrderNewItem(
+                        category: category,
+                        product: product,
+                      ),
+                    )
                     .toList(),
               )
             ],

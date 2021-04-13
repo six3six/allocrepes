@@ -8,10 +8,8 @@ import 'dart:math' as math;
 import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/place.dart';
-import 'package:order_repository/models/product.dart';
 
 class OrderAdminView extends StatelessWidget {
   OrderAdminView({Key? key}) : super(key: key);
@@ -44,7 +42,7 @@ class OrderAdminView extends StatelessWidget {
           );
 
           OrderStatus.values.forEach((status) {
-            if(!state.orders.keys.contains(status)) return;
+            if (!state.orders.keys.contains(status)) return;
             slivers.add(SliverPersistentHeader(
               floating: true,
               delegate: _SliverAppBarDelegate(
@@ -271,8 +269,8 @@ class _OrderCompleteView extends StatelessWidget {
                 .map(
                   (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
                     buildWhen: (prev, next) =>
-                    prev.products.values.toList() !=
-                        next.products.values.toList() ||
+                        prev.products.values.toList() !=
+                            next.products.values.toList() ||
                         prev.products.keys.toList() !=
                             next.products.keys.toList(),
                     builder: (context, state) => Text(

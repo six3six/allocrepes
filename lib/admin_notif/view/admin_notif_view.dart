@@ -9,37 +9,48 @@ class AdminNotifView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController bodyController = TextEditingController();
+    final TextEditingController linkController = TextEditingController();
+    final TextEditingController userController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Notifications"),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 20,
           horizontal: 20,
         ),
         children: [
-          Text("Titre :"),
           TextField(
             onChanged: BlocProvider.of<AdminNotifCubit>(context).changeTitle,
+            controller: titleController,
+            decoration: const InputDecoration(
+              labelText: 'Titre',
+            ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text("Description :"),
           TextField(
             maxLines: 5,
             onChanged: BlocProvider.of<AdminNotifCubit>(context).changeBody,
+            controller: bodyController,
+            decoration: const InputDecoration(
+              labelText: 'Description',
+            ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text("Action :"),
+          const Text("Action :"),
           BlocBuilder<AdminNotifCubit, AdminNotifState>(
             buildWhen: (prev, next) => prev.action != next.action,
             builder: (context, state) => Column(children: [
               ListTile(
-                title: Text("Envoyer sur la page principal"),
+                title: const Text("Envoyer sur la page principal"),
                 leading: Radio<AdminNotifAction>(
                   value: AdminNotifAction.MainPage,
                   groupValue: state.action,
@@ -49,7 +60,7 @@ class AdminNotifView extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: Text("Envoyer la page de commandes"),
+                title: const Text("Envoyer la page de commandes"),
                 leading: Radio<AdminNotifAction>(
                   value: AdminNotifAction.OrderPage,
                   groupValue: state.action,
@@ -59,7 +70,7 @@ class AdminNotifView extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: Text("Envoyer sur un lien"),
+                title: const Text("Envoyer sur un lien"),
                 leading: Radio<AdminNotifAction>(
                   value: AdminNotifAction.LinkPage,
                   groupValue: state.action,
@@ -73,8 +84,9 @@ class AdminNotifView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Lien : "),
+                    const Text("Lien : "),
                     TextField(
+                      controller: linkController,
                       onChanged:
                           BlocProvider.of<AdminNotifCubit>(context).changeLink,
                     ),
@@ -83,16 +95,16 @@ class AdminNotifView extends StatelessWidget {
               ),
             ]),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text("Destinataire :"),
+          const Text("Destinataire :"),
           BlocBuilder<AdminNotifCubit, AdminNotifState>(
             buildWhen: (prev, next) => prev.recipient != next.recipient,
             builder: (context, state) => Column(
               children: [
                 ListTile(
-                  title: Text("Tout le monde"),
+                  title: const Text("Tout le monde"),
                   leading: Radio<AdminNotifRecipient>(
                     value: AdminNotifRecipient.Everybody,
                     groupValue: state.recipient,
@@ -103,7 +115,7 @@ class AdminNotifView extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text("Les bougs sous Android"),
+                  title: const Text("Les bougs sous Android"),
                   leading: Radio<AdminNotifRecipient>(
                     value: AdminNotifRecipient.Android,
                     groupValue: state.recipient,
@@ -114,7 +126,7 @@ class AdminNotifView extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text("Les bougs sous iOS"),
+                  title: const Text("Les bougs sous iOS"),
                   leading: Radio<AdminNotifRecipient>(
                     value: AdminNotifRecipient.Ios,
                     groupValue: state.recipient,
@@ -125,7 +137,7 @@ class AdminNotifView extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text("Un boug en particulier"),
+                  title: const Text("Un boug en particulier"),
                   leading: Radio<AdminNotifRecipient>(
                     value: AdminNotifRecipient.User,
                     groupValue: state.recipient,
@@ -135,7 +147,7 @@ class AdminNotifView extends StatelessWidget {
                                 recipient ?? AdminNotifRecipient.Everybody),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Visibility(
@@ -143,10 +155,11 @@ class AdminNotifView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Identifiant du boug : "),
+                      const Text("Identifiant du boug : "),
                       TextField(
                         onChanged: BlocProvider.of<AdminNotifCubit>(context)
                             .changeUser,
+                        controller: userController,
                       ),
                     ],
                   ),
@@ -154,7 +167,7 @@ class AdminNotifView extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           BlocBuilder<AdminNotifCubit, AdminNotifState>(
@@ -172,7 +185,7 @@ class AdminNotifView extends StatelessWidget {
                     child: Text("Je parle en sah"),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
@@ -183,7 +196,7 @@ class AdminNotifView extends StatelessWidget {
                         ? () => BlocProvider.of<AdminNotifCubit>(context)
                             .sendNotification(context)
                         : null,
-                    child: Text("Ok j'envoie"),
+                    child: const Text("Ok j'envoie"),
                   ),
                 ),
               ],

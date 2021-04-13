@@ -15,7 +15,12 @@ class OrderListState extends Equatable {
   });
 
   @override
-  List<Object> get props => [previousOrders, currentOrders, isLoading, isConnected];
+  List<Object> get props => [
+        previousOrders,
+        currentOrders,
+        isLoading,
+        isConnected,
+      ];
 
   OrderListState copyWith({
     List<Order>? previousOrders,

@@ -10,10 +10,10 @@ enum Place {
   Ampere_B,
   Ampere_C,
   Arago,
+  Campusea,
+  ESIEE,
   Kley,
   Kley_2,
-  ESIEE,
-  Campusea,
 }
 
 class PlaceUtils {

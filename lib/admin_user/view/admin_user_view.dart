@@ -106,7 +106,8 @@ class _UserList extends StatelessWidget {
     final textTheme = theme.textTheme;
 
     return BlocBuilder<AdminUserCubit, AdminUserState>(
-        buildWhen: (prev, next) => prev.users.keys != next.users.keys,
+        buildWhen: (prev, next) =>
+            prev.users.keys.toList() != next.users.keys.toList(),
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,10 +136,10 @@ class _UserTile extends StatelessWidget {
     final textTheme = theme.textTheme;
 
     return BlocBuilder<AdminUserCubit, AdminUserState>(
-      buildWhen: (prev, next) =>
-          prev.users[id] != next.users[id] || prev.admin[id] != next.admin[id],
       builder: (context, state) {
+        if (state.users[id] == null) return SizedBox();
         User user = state.users[id] ?? User.empty;
+
         return ExpansionTile(
           title: Text("${user.id} : ${user.surname} ${user.name}"),
           childrenPadding: EdgeInsets.symmetric(horizontal: 10),
