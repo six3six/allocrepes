@@ -9,14 +9,15 @@ import 'order_admin_view.dart';
 
 class OrderAdminPage extends StatelessWidget {
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => OrderAdminPage(), settings: RouteSettings(name: "OrderAdmin"),);
+    return MaterialPageRoute<void>(
+      builder: (_) => OrderAdminPage(),
+      settings: RouteSettings(name: "OrderAdmin"),
+    );
   }
 
   const OrderAdminPage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return RepositoryProvider(
       create: (context) => OrderRepositoryFirestore(),
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(

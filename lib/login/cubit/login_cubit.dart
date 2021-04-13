@@ -23,7 +23,6 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> loginWithToken(String token) async {
-
     _authenticationRepository.logInWithToken(token: token);
   }
 }

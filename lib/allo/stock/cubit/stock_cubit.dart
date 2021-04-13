@@ -34,7 +34,7 @@ class StockCubit extends Cubit<StockState> {
 
       orders.forEach((order) {
         order.articles.forEach((article) {
-          count[article.productId] = (count[article.productId] ?? 0) + 1 ;
+          count[article.productId] = (count[article.productId] ?? 0) + 1;
         });
       });
 
@@ -47,7 +47,7 @@ class StockCubit extends Cubit<StockState> {
     orderRepository.updateProductInitialStock(category, product, maxAmount);
   }
 
-  void removeOrders(){
+  void removeOrders() {
     orderRepository.removeOrders();
   }
 }

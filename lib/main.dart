@@ -56,6 +56,6 @@ void main() async {
     }, (error, stackTrace) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
     });
-  }
-  else runApp(App(authenticationRepository: AuthenticationRepository()));
+  } else
+    runApp(App(authenticationRepository: AuthenticationRepository()));
 }

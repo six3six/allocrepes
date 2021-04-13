@@ -176,8 +176,6 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   Future<void> deleteCategoryDialog(BuildContext context, Category category) {
-    TextEditingController controller =
-        TextEditingController(text: category.name);
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -214,42 +212,42 @@ class ProductListCubit extends Cubit<ProductListState> {
     );
   }
 
-  Future<bool> deleteProductDialog(BuildContext context, Category category, Product product) async {
-    TextEditingController controller =
-    TextEditingController(text: category.name);
+  Future<bool> deleteProductDialog(
+      BuildContext context, Category category, Product product) async {
     return await showDialog<bool>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Supprimer un produit'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Voulez-vous supprimer ${product.name} ?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Annuler',
-                style: TextStyle(color: Colors.redAccent),
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Supprimer un produit'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('Voulez-vous supprimer ${product.name} ?'),
+                  ],
+                ),
               ),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            TextButton(
-              child: Text('Confirmer'),
-              onPressed: () {
-                orderRepository.removeProduct(category, product);
-                Navigator.of(context).pop(true);
-              },
-            ),
-          ],
-        );
-      },
-    ) ?? false;
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'Annuler',
+                    style: TextStyle(color: Colors.redAccent),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                TextButton(
+                  child: Text('Confirmer'),
+                  onPressed: () {
+                    orderRepository.removeProduct(category, product);
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 }

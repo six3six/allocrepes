@@ -37,7 +37,6 @@ class _FilterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     return ExpansionTile(
       title: Text("Filtres"),
@@ -102,9 +101,6 @@ class _UserList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
     return BlocBuilder<AdminUserCubit, AdminUserState>(
         buildWhen: (prev, next) =>
             prev.users.keys.toList() != next.users.keys.toList(),
@@ -125,15 +121,14 @@ class _UserTile extends StatelessWidget {
     required this.id,
   }) : super(key: key);
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController surnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController pointsController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController surnameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController pointsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     return BlocBuilder<AdminUserCubit, AdminUserState>(
       builder: (context, state) {

@@ -56,7 +56,7 @@ class AdminUserCubit extends Cubit<AdminUserState> {
     ));
   }
 
-  void removeUser(String uid){
+  void removeUser(String uid) {
     _authenticationRepository.removeUser(uid);
   }
 
@@ -65,6 +65,8 @@ class AdminUserCubit extends Cubit<AdminUserState> {
     SortUser? sortUser,
   }) {
     emit(state.copyWith(usernameQuery: username, sortUser: sortUser));
-    getUser(username: username ?? state.usernameQuery, sortUser: sortUser ?? state.sortUser);
+    getUser(
+        username: username ?? state.usernameQuery,
+        sortUser: sortUser ?? state.sortUser);
   }
 }
