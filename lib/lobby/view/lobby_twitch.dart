@@ -33,6 +33,7 @@ class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
           try {
             launch(request.url);
           } catch (e) {}
+
           return NavigationDecision.prevent;
         }
       },

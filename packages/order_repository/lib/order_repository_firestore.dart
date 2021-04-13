@@ -98,9 +98,10 @@ class OrderRepositoryFirestore extends OrderRepository {
   @override
   Stream<List<Category>> categories() {
     return productCategoryRoot.snapshots().map<List<Category>>(
-        (QuerySnapshot snapshot) => snapshot.docs
-            .map((e) => Category.fromEntity(CategoryEntity.fromSnapshot(e)))
-            .toList());
+          (QuerySnapshot snapshot) => snapshot.docs
+              .map((e) => Category.fromEntity(CategoryEntity.fromSnapshot(e)))
+              .toList(),
+        );
   }
 
   @override
@@ -128,11 +129,17 @@ class OrderRepositoryFirestore extends OrderRepository {
     Query query = orderRoot;
 
     if (orderStatus != null) {
-      query = query.where("status",
-          whereIn: orderStatus.map((e) => e.index).toList());
+      query = query.where(
+        "status",
+        whereIn: orderStatus.map((e) => e.index).toList(),
+      );
     }
 
-    if (userId != null) query = query.where("owner", isEqualTo: userId);
+    if (userId != null)
+      query = query.where(
+        "owner",
+        isEqualTo: userId,
+      );
 
     if (start != null)
       query = query.where("create_at", isGreaterThanOrEqualTo: start);
@@ -161,6 +168,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     List<Article> articles =
         querySnapshot.docs.map((QueryDocumentSnapshot doc) {
       final ArticleEntity entity = ArticleEntity.fromSnapshot(doc);
+
       return Article.fromEntity(entity);
     }).toList();
 
@@ -172,8 +180,10 @@ class OrderRepositoryFirestore extends OrderRepository {
   }) async {
     Query query = orderRoot;
     if (orderStatus != null) {
-      query = query.where("status",
-          whereIn: orderStatus.map((e) => e.index).toList());
+      query = query.where(
+        "status",
+        whereIn: orderStatus.map((e) => e.index).toList(),
+      );
     }
     await query.get().then((snapshot) => snapshot.docs.forEach((doc) async {
           final articles = await doc.reference.collection("articles").get();
@@ -199,15 +209,14 @@ class OrderRepositoryFirestore extends OrderRepository {
         .collection("products")
         .doc(productId)
         .get();
+
     return Product.fromEntity(ProductEntity.fromSnapshot(snapshot));
   }
 
   @override
-  Future<void> updateCategory(Category category) {
-    return productCategoryRoot
-        .doc(category.id)
-        .update(category.toEntity().toDocument());
-  }
+  Future<void> updateCategory(Category category) => productCategoryRoot
+      .doc(category.id)
+      .update(category.toEntity().toDocument());
 
   @override
   Future<void> deleteCategory(Category category) async {
@@ -232,7 +241,10 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   @override
   Future<void> updateProductAvailability(
-      Category category, Product product, bool available) {
+    Category category,
+    Product product,
+    bool available,
+  ) {
     return productCategoryRoot
         .doc(category.id)
         .collection("products")

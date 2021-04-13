@@ -76,7 +76,10 @@ class AuthenticationRepository {
   }
 
   Future<void> addUserInDatabase(
-      String userUid, String name, String email) async {
+    String userUid,
+    String name,
+    String email,
+  ) async {
     await _firestore.collection("users").doc(userUid).set({
       "name": name,
       "email": email,
@@ -86,6 +89,7 @@ class AuthenticationRepository {
   Future<bool> userExistInDatabase(String userUid) async {
     DocumentSnapshot doc =
         await _firestore.collection("users").doc(userUid).get();
+
     return doc.exists;
   }
 
@@ -146,6 +150,7 @@ class AuthenticationRepository {
     } on StateError {
       admin = false;
     }
+
     return admin;
   }
 
@@ -156,6 +161,7 @@ class AuthenticationRepository {
     if (!snapshot.exists) return User.empty.copyWith(id: uid, name: uid);
     final data = snapshot.data()!;
     final name = data["name"] ?? uid;
+
     return User(
       email: (data["email"]) as String,
       id: uid,
@@ -234,7 +240,12 @@ class AuthenticationRepository {
   }
 
   void setUserInfo(
-      String uid, String surname, String name, String email, int point) {
+    String uid,
+    String surname,
+    String name,
+    String email,
+    int point,
+  ) {
     final userCollection =
         FirebaseFirestore.instance.collection("users").doc(uid);
 

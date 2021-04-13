@@ -40,6 +40,7 @@ class LoginPage extends StatelessWidget {
               child: BlocBuilder<LoginCubit, LoginState>(
                 builder: (context, state) {
                   if (state.showLoginForm) return LoginForm();
+
                   return LoginWelcome();
                 },
               ),

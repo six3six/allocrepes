@@ -27,8 +27,10 @@ class AuthWebViewState extends State<AuthWebView> {
   Widget build(BuildContext context) {
     if (kIsWeb) {
       return Text(
-          "Impossible de se connecter pour l'instant sur la plateforme web");
+        "Impossible de se connecter pour l'instant sur la plateforme web",
+      );
     }
+
     return WebView(
       debuggingEnabled: true,
       javascriptMode: JavascriptMode.unrestricted,
@@ -37,10 +39,13 @@ class AuthWebViewState extends State<AuthWebView> {
       gestureNavigationEnabled: true,
       navigationDelegate: (NavigationRequest request) {
         if (request.url.startsWith(
-            'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin/')) {
+          'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin/',
+        )) {
           BlocProvider.of<LoginCubit>(context).login(request.url);
+
           return NavigationDecision.prevent;
         }
+
         return NavigationDecision.navigate;
       },
     );
@@ -56,11 +61,14 @@ class AuthTokenView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            'Pour se connecter, appuyez sur le bouton ci-dessous. Puis copier coller le code dans le champs \"Token\"'),
+          'Pour se connecter, appuyez sur le bouton ci-dessous. Puis copier coller le code dans le champs \"Token\"',
+        ),
         TextButton(
-            child: Text('Obtenir un token'),
-            onPressed: () => launch(
-                'https://sso.esiee.fr/cas/login?service=https%3A%2F%2Fus-central1-allocrepes-4f992.cloudfunctions.net%2FssoLoginToken/')),
+          child: Text('Obtenir un token'),
+          onPressed: () => launch(
+            'https://sso.esiee.fr/cas/login?service=https%3A%2F%2Fus-central1-allocrepes-4f992.cloudfunctions.net%2FssoLoginToken/',
+          ),
+        ),
         SizedBox(
           height: 15,
         ),

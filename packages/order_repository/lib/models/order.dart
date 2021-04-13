@@ -80,7 +80,15 @@ class Order extends Equatable {
 
   OrderEntity toEntity() {
     return OrderEntity(
-        id, status, owner, createdAt, deliveredAt, place, room, message);
+      id,
+      status,
+      owner,
+      createdAt,
+      deliveredAt,
+      place,
+      room,
+      message,
+    );
   }
 
   static Order fromEntity(OrderEntity entity, List<Article> articles) {

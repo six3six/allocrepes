@@ -30,12 +30,18 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   void updateProductAvailability(
-      Category category, Product product, bool availability) {
+    Category category,
+    Product product,
+    bool availability,
+  ) {
     orderRepository.updateProductAvailability(category, product, availability);
   }
 
   void updateProductMaxAmount(
-      Category category, Product product, int maxAmount) {
+    Category category,
+    Product product,
+    int maxAmount,
+  ) {
     orderRepository.updateProductMaxAmount(category, product, maxAmount);
   }
 
@@ -45,6 +51,7 @@ class ProductListCubit extends Cubit<ProductListState> {
 
   Future<void> addCategoryDialog(BuildContext context) {
     TextEditingController controller = TextEditingController();
+
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -84,6 +91,7 @@ class ProductListCubit extends Cubit<ProductListState> {
 
   Future<void> addProductDialog(BuildContext context, Category category) {
     TextEditingController controller = TextEditingController();
+
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -94,7 +102,8 @@ class ProductListCubit extends Cubit<ProductListState> {
             child: ListBody(
               children: <Widget>[
                 Text(
-                    'Vous vous apprêtez à ajouter un produit dans la catégorie ${category.name}'),
+                  'Vous vous apprêtez à ajouter un produit dans la catégorie ${category.name}',
+                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -117,13 +126,14 @@ class ProductListCubit extends Cubit<ProductListState> {
               child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.addProduct(
-                    category,
-                    Product(
-                      name: controller.text,
-                      available: false,
-                      maxAmount: 0,
-                      initialStock: 0,
-                    ));
+                  category,
+                  Product(
+                    name: controller.text,
+                    available: false,
+                    maxAmount: 0,
+                    initialStock: 0,
+                  ),
+                );
                 Navigator.of(context).pop();
               },
             ),
@@ -136,6 +146,7 @@ class ProductListCubit extends Cubit<ProductListState> {
   Future<void> editCategoryDialog(BuildContext context, Category category) {
     TextEditingController controller =
         TextEditingController(text: category.name);
+
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -213,7 +224,10 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   Future<bool> deleteProductDialog(
-      BuildContext context, Category category, Product product) async {
+    BuildContext context,
+    Category category,
+    Product product,
+  ) async {
     return await showDialog<bool>(
           context: context,
           barrierDismissible: true,

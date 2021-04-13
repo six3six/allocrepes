@@ -21,14 +21,16 @@ class OrderAdminPage extends StatelessWidget {
     return RepositoryProvider(
       create: (context) => OrderRepositoryFirestore(),
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (BuildContext context, AuthenticationState state) {
-        return BlocProvider<OrderAdminCubit>(
-          create: (context) => OrderAdminCubit(
+        builder: (BuildContext context, AuthenticationState state) {
+          return BlocProvider<OrderAdminCubit>(
+            create: (context) => OrderAdminCubit(
               RepositoryProvider.of<AuthenticationRepository>(context),
-              RepositoryProvider.of<OrderRepositoryFirestore>(context)),
-          child: OrderAdminView(),
-        );
-      }),
+              RepositoryProvider.of<OrderRepositoryFirestore>(context),
+            ),
+            child: OrderAdminView(),
+          );
+        },
+      ),
     );
   }
 }

@@ -24,7 +24,7 @@ class AdminNotifPage extends StatelessWidget {
         buildWhen: (prev, next) => prev.isSending != next.isSending,
         builder: (context, state) => LoadingOverlay(
           isLoading: state.isSending,
-          child: const AdminNotifView(),
+          child: AdminNotifView(),
         ),
       ),
     );

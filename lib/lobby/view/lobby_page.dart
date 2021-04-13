@@ -33,9 +33,10 @@ class LobbyPage extends StatelessWidget {
             tooltip: 'A propos',
             onPressed: () {
               showDialog<void>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) => LobbyAbout());
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) => LobbyAbout(),
+              );
             },
           ),
         ],

@@ -19,6 +19,7 @@ class LobbyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -27,118 +28,144 @@ class LobbyView extends StatelessWidget {
             child: LobbyTop(),
           ),
         ),
-        SliverToBoxAdapter(
-          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, state) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Wrap(
-                spacing: 10,
-                alignment: WrapAlignment.center,
-                children: <Widget>[
-                  BlocBuilder<LobbyCubit, LobbyState>(
-                    builder: (context, state) {
-                      return MenuCard(
-                        title: "Passer commande",
-                        onTap: () =>
-                            Navigator.push(context, OrderNewPage.route()),
-                        icon: Icons.shopping_cart_outlined,
-                      );
-                    },
-                  ),
-                  BlocBuilder<LobbyCubit, LobbyState>(
-                    builder: (context, state) {
-                      return MenuCard(
-                        title: "Mes commandes",
-                        onTap: () =>
-                            Navigator.push(context, OrderListPage.route()),
-                        icon: Icons.shopping_basket_outlined,
-                      );
-                    },
-                  ),
-                  MenuCard(
-                    title: "En savoir +",
-                    onTap: () {
-                      try {
-                        launch("https://xanthos.fr/a-propos");
-                      } catch (e) {}
-                    },
-                    icon: Icons.mood_rounded,
-                  ),
-                  if (state.user.admin)
-                    MenuCard(
-                      title: "Admin",
-                      onTap: () {
-                        Navigator.push(context, AdminMainPage.route());
-                      },
-                      icon: Icons.settings,
-                    ),
-                ],
-              ),
-            );
-          }),
-        ),
-        if (!kIsWeb)
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
-                  child: Text(
-                    "Suivre Xanthos sur Twitch",
-                    style: textTheme.headline5,
-                  ),
-                ),
-                SizedBox(
-                  height: 300,
-                  width: double.infinity,
-                  child: LobbyTwitchViewer(),
-                ),
-              ],
-            ),
-          ),
-        SliverPadding(
-          padding: const EdgeInsets.all(13),
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Suivre les actus Xanthos",
-                  style: textTheme.headline5,
-                ),
-                SizedBox(
-                  height: 10,
+        _LobbyMenu(),
+        if (!kIsWeb) _LobbyTwitchMenu(),
+        _LobbyActuMenu(),
+      ],
+    );
+  }
+}
+
+class _LobbyMenu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Wrap(
+              spacing: 10,
+              alignment: WrapAlignment.center,
+              children: <Widget>[
+                BlocBuilder<LobbyCubit, LobbyState>(
+                  builder: (context, state) {
+                    return MenuCard(
+                      title: "Passer commande",
+                      onTap: () =>
+                          Navigator.push(context, OrderNewPage.route()),
+                      icon: Icons.shopping_cart_outlined,
+                    );
+                  },
                 ),
                 BlocBuilder<LobbyCubit, LobbyState>(
                   builder: (context, state) {
-                    if (state.news.length == 0)
-                      return SizedBox(
-                        child: Center(
-                          child: Text("Il n'y a pas de news pour le moment"),
-                        ),
-                        height: 100,
-                      );
-                    return SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: state.news
-                              .map((_new) => NewsCard.tapUrl(
-                                    title: _new.title,
-                                    image: _new.media,
-                                    url: _new.url,
-                                  ))
-                              .toList(),
-                        ));
+                    return MenuCard(
+                      title: "Mes commandes",
+                      onTap: () =>
+                          Navigator.push(context, OrderListPage.route()),
+                      icon: Icons.shopping_basket_outlined,
+                    );
                   },
                 ),
+                MenuCard(
+                  title: "En savoir +",
+                  onTap: () {
+                    try {
+                      launch("https://xanthos.fr/a-propos");
+                    } catch (e) {}
+                  },
+                  icon: Icons.mood_rounded,
+                ),
+                if (state.user.admin)
+                  MenuCard(
+                    title: "Admin",
+                    onTap: () {
+                      Navigator.push(context, AdminMainPage.route());
+                    },
+                    icon: Icons.settings,
+                  ),
               ],
             ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _LobbyTwitchMenu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+            child: Text(
+              "Suivre Xanthos sur Twitch",
+              style: textTheme.headline5,
+            ),
           ),
+          SizedBox(
+            height: 300,
+            width: double.infinity,
+            child: LobbyTwitchViewer(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LobbyActuMenu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(13),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Suivre les actus Xanthos",
+              style: textTheme.headline5,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            BlocBuilder<LobbyCubit, LobbyState>(
+              builder: (context, state) {
+                if (state.news.length == 0)
+                  return SizedBox(
+                    child: Center(
+                      child: Text("Il n'y a pas de news pour le moment"),
+                    ),
+                    height: 100,
+                  );
+
+                return SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: state.news
+                        .map((_new) => NewsCard.tapUrl(
+                              title: _new.title,
+                              image: _new.media,
+                              url: _new.url,
+                            ))
+                        .toList(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

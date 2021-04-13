@@ -73,8 +73,10 @@ class OrderAdminView extends StatelessWidget {
                         !isExpanded,
                       ),
                       children: state.orders[status]
-                              ?.map((order) => orderToPanel(order,
-                                  state.expandedOrders[order.id] ?? false))
+                              ?.map((order) => orderToPanel(
+                                    order,
+                                    state.expandedOrders[order.id] ?? false,
+                                  ))
                               .toList() ??
                           [],
                     );
@@ -96,37 +98,38 @@ class OrderAdminView extends StatelessWidget {
     return ExpansionPanel(
       isExpanded: expanded,
       headerBuilder: (BuildContext context, bool isExpanded) {
-        if (isExpanded)
-          return ListTile(
-            title: Text(
-              "${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
-            ),
-            tileColor: PlaceUtils.placeToColor(order.place),
-          );
-        else
-          return ListTile(
-            title: Text(
-              "${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
-            ),
-            tileColor: PlaceUtils.placeToColor(order.place),
-            selectedTileColor: PlaceUtils.placeToColor(order.place),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: order.articles
-                  .map<Widget>(
-                    (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
-                      buildWhen: (prev, next) =>
-                          prev.products.values.toList() !=
-                              next.products.values.toList() ||
-                          prev.products.keys.toList() !=
-                              next.products.keys.toList(),
-                      builder: (context, state) => Text(
-                          "${article.amount.toString()}x ${state.products[article.productId]?.name}"),
-                    ),
-                  )
-                  .toList(),
-            ),
-          );
+        return isExpanded
+            ? ListTile(
+                title: Text(
+                  "${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
+                ),
+                tileColor: PlaceUtils.placeToColor(order.place),
+              )
+            : ListTile(
+                title: Text(
+                  "${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
+                ),
+                tileColor: PlaceUtils.placeToColor(order.place),
+                selectedTileColor: PlaceUtils.placeToColor(order.place),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: order.articles
+                      .map<Widget>(
+                        (article) =>
+                            BlocBuilder<OrderAdminCubit, OrderAdminState>(
+                          buildWhen: (prev, next) =>
+                              prev.products.values.toList() !=
+                                  next.products.values.toList() ||
+                              prev.products.keys.toList() !=
+                                  next.products.keys.toList(),
+                          builder: (context, state) => Text(
+                            "${article.amount.toString()}x ${state.products[article.productId]?.name}",
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              );
       },
       body: _OrderCompleteView(
         order: order,
@@ -235,65 +238,67 @@ class _OrderCompleteView extends StatelessWidget {
 
     return ListTile(
       title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Nom :",
-              style: theme.textTheme.caption,
-            ),
-            _UserLabel(
-              userId: order.owner,
-              classe: true,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Adresse :",
-              style: theme.textTheme.caption,
-            ),
-            Text(
-              "${PlaceUtils.placeToString(order.place)}  -  ${order.room}",
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Commande :",
-              style: theme.textTheme.caption,
-            ),
-          ]
-            ..addAll(order.articles
-                .map(
-                  (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
-                    buildWhen: (prev, next) =>
-                        prev.products.values.toList() !=
-                            next.products.values.toList() ||
-                        prev.products.keys.toList() !=
-                            next.products.keys.toList(),
-                    builder: (context, state) => Text(
-                        "${article.amount.toString()}x ${state.products[article.productId]?.name}"),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Nom :",
+            style: theme.textTheme.caption,
+          ),
+          _UserLabel(
+            userId: order.owner,
+            classe: true,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Adresse :",
+            style: theme.textTheme.caption,
+          ),
+          Text(
+            "${PlaceUtils.placeToString(order.place)}  -  ${order.room}",
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Commande :",
+            style: theme.textTheme.caption,
+          ),
+        ]
+          ..addAll(order.articles
+              .map(
+                (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
+                  buildWhen: (prev, next) =>
+                      prev.products.values.toList() !=
+                          next.products.values.toList() ||
+                      prev.products.keys.toList() !=
+                          next.products.keys.toList(),
+                  builder: (context, state) => Text(
+                    "${article.amount.toString()}x ${state.products[article.productId]?.name}",
                   ),
-                )
-                .toList())
-            ..add(
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 10),
-                  Text(
-                    "Commentaire :",
-                    style: theme.textTheme.caption,
-                  ),
-                  Text(order.message),
-                ],
-              ),
-            )
-            ..add(
-              _StateSelector(
-                order: order,
-              ),
-            )),
+                ),
+              )
+              .toList())
+          ..add(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 10),
+                Text(
+                  "Commentaire :",
+                  style: theme.textTheme.caption,
+                ),
+                Text(order.message),
+              ],
+            ),
+          )
+          ..add(
+            _StateSelector(
+              order: order,
+            ),
+          ),
+      ),
     );
   }
 }
@@ -373,18 +378,20 @@ class _UserLabel extends Text {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User>(
-        future: BlocProvider.of<OrderAdminCubit>(context).getUser(userId),
-        builder: (context, snap) {
-          if (snap.hasData) {
-            String res = "";
-            if (id) res += (snap.data?.id ?? "") + " ";
-            if (surname) res += (snap.data?.surname ?? "") + " ";
-            if (name) res += (snap.data?.name ?? "") + " ";
-            if (classe) res += (snap.data?.classe ?? "") + " ";
-            return Text(res);
-          } else
-            return Text("$userId");
-        });
+      future: BlocProvider.of<OrderAdminCubit>(context).getUser(userId),
+      builder: (context, snap) {
+        if (snap.hasData) {
+          String res = "";
+          if (id) res += (snap.data?.id ?? "") + " ";
+          if (surname) res += (snap.data?.surname ?? "") + " ";
+          if (name) res += (snap.data?.name ?? "") + " ";
+          if (classe) res += (snap.data?.classe ?? "") + " ";
+
+          return Text(res);
+        } else
+          return Text("$userId");
+      },
+    );
   }
 }
 

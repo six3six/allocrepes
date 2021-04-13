@@ -49,6 +49,7 @@ class _AppViewState extends State<AppView> {
       await canLaunch(initialMessage.data["link"])
           ? await launch(initialMessage.data["link"])
           : throw 'Could not launch ${initialMessage.data["link"]}';
+
       return;
     }
 
