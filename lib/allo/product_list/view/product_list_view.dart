@@ -43,6 +43,7 @@ class ProductListView extends StatelessWidget {
               child: Text("Ajouter une catégorie"),
             ),
           ),
+          _ProductOrderPagesViewCheckbox(),
         ],
       ),
     );
@@ -248,6 +249,52 @@ class _ProductCategory extends StatelessWidget {
         ),
         Divider(),
       ],
+    );
+  }
+}
+
+class _ProductOrderPagesViewCheckbox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 50,
+          ),
+          Text(
+            "Page de commandes",
+            style: textTheme.headline5,
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                flex: 7,
+                child: Text("Activer les pages de commandes"),
+              ),
+              Expanded(
+                flex: 2,
+                child: BlocBuilder<ProductListCubit, ProductListState>(
+                  buildWhen: (prev, next) =>
+                      prev.showOrderPages != next.showOrderPages,
+                  builder: (context, state) => Checkbox(
+                    value: state.showOrderPages,
+                    onChanged: (bool? enable) =>
+                        BlocProvider.of<ProductListCubit>(context)
+                            .changeOrderPagesView(enable ?? false),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
