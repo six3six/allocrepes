@@ -15,7 +15,7 @@ class OrderNewView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mes commandes"),
+        title: const Text("Nouvelle commandes"),
       ),
       body: ListView(
         children: [

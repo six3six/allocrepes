@@ -24,6 +24,13 @@ class OrderRepositoryFirestore extends OrderRepository {
       FirebaseFirestore.instance.collectionGroup("products");
 
   @override
+  Stream<bool> showOrderPages() {
+    final showOrder =
+        FirebaseFirestore.instance.collection("rules").doc("show_order");
+    return showOrder.snapshots().map((snap) => snap.data()?["enable"] ?? false);
+  }
+
+  @override
   Future<void> createOrder(Order order) async {
     final orderRef = await orderRoot.add(order.toEntity().toDocument());
     final articlesRef = orderRef.collection("articles");
