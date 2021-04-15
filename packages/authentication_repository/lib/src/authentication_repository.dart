@@ -159,19 +159,8 @@ class AuthenticationRepository {
         await _firestore.collection("users").doc(uid).get();
 
     if (!snapshot.exists) return User.empty.copyWith(id: uid, name: uid);
-    final data = snapshot.data()!;
-    final name = data["name"] ?? uid;
 
-    return User(
-      email: (data["email"]) as String,
-      id: uid,
-      admin: await getUserRole(uid),
-      name: name,
-      surname: data["surname"] ?? "",
-      classe: data["classe"] ?? "",
-      point: data["point"] ?? 0,
-      photo: null,
-    );
+    return User.fromDocument(snapshot);
   }
 
   Stream<Map<String, User>> getUsers({
@@ -259,6 +248,7 @@ class AuthenticationRepository {
         classe: "",
         photo: "",
         admin: false,
+        student: false,
       ).toDocument(),
     );
   }
@@ -326,6 +316,7 @@ extension on firebase_auth.User {
           surname: surname,
           photo: photoURL,
           point: point,
+          student: name != null ? true : false,
         );
       }
       yield user;
