@@ -8,6 +8,9 @@ import 'package:order_repository/order_repository.dart';
 import 'lobby_state.dart';
 
 class LobbyCubit extends Cubit<LobbyState> {
+  final NewsRepository newsRepository;
+  final OrderRepository orderRepository;
+
   LobbyCubit({
     this.newsRepository =
         const RssNewsRepository(targetUrl: "https://xanthos.fr/feed/"),
@@ -29,9 +32,6 @@ class LobbyCubit extends Cubit<LobbyState> {
       emit(state.copyWith(showOrder: enable));
     });
   }
-
-  final NewsRepository newsRepository;
-  final OrderRepository orderRepository;
 
   void updateNews() {
     emit(state.copyWith(isLoading: true));

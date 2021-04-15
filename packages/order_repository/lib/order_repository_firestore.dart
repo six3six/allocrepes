@@ -23,11 +23,18 @@ class OrderRepositoryFirestore extends OrderRepository {
   static final Query productGroupRoot =
       FirebaseFirestore.instance.collectionGroup("products");
 
+  static final ruleRoot = FirebaseFirestore.instance.collection("rules");
+
   @override
   Stream<bool> showOrderPages() {
-    final showOrder =
-        FirebaseFirestore.instance.collection("rules").doc("show_order");
+    final showOrder = ruleRoot.doc("show_order");
     return showOrder.snapshots().map((snap) => snap.data()?["enable"] ?? false);
+  }
+
+  Future<void> changeOrderPagesView(bool shown) {
+    return ruleRoot.doc("show_order").update({
+      "enable": shown,
+    });
   }
 
   @override

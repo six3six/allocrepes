@@ -16,6 +16,8 @@ abstract class OrderRepository {
 
   Stream<bool> showOrderPages();
 
+  Future<void> changeOrderPagesView(bool shown);
+
   Future<void> removeOrders({
     List<OrderStatus>? orderStatus,
   });
