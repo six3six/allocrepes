@@ -69,6 +69,7 @@ class _LobbyMenu extends StatelessWidget {
                       onTap: () =>
                           Navigator.push(context, OrderNewPage.route()),
                       icon: Icons.shopping_cart_outlined,
+                      enable: state.showOrder,
                     );
                   },
                 ),
@@ -79,6 +80,7 @@ class _LobbyMenu extends StatelessWidget {
                       onTap: () =>
                           Navigator.push(context, OrderListPage.route()),
                       icon: Icons.shopping_basket_outlined,
+                      enable: state.showOrder,
                     );
                   },
                 ),

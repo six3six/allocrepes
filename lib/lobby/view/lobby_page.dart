@@ -5,6 +5,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:order_repository/order_repository_firestore.dart';
 
 class LobbyPage extends StatelessWidget {
   static Route route() {
@@ -41,9 +42,14 @@ class LobbyPage extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocProvider<LobbyCubit>(
-        create: (context) => LobbyCubit(),
-        child: LobbyView(),
+      body: RepositoryProvider(
+        create: (context) => OrderRepositoryFirestore(),
+        child: BlocProvider<LobbyCubit>(
+          create: (context) => LobbyCubit(
+              orderRepository:
+                  RepositoryProvider.of<OrderRepositoryFirestore>(context)),
+          child: LobbyView(),
+        ),
       ),
     );
   }
