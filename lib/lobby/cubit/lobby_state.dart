@@ -25,5 +25,9 @@ class LobbyState extends Equatable {
   }
 
   @override
-  List<Object> get props => [news, isLoading, showOrder];
+  List<Object> get props => [
+        news,
+        isLoading,
+        showOrder,
+      ]..addAll(news);
 }

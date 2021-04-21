@@ -31,11 +31,11 @@ class OrderRepositoryFirestore extends OrderRepository {
   Map<Category, List<Product>> _productFromCategory = {};
 
   OrderRepositoryFirestore() {
-    products().listen((products) {
+    products().forEach((products) {
       _products = products;
     });
 
-    categories().listen((categories) {
+    categories().forEach((categories) {
       _categories = categories;
     });
   }
@@ -49,7 +49,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     _streamUserOrder = null;
     _streamUserOrder = orders(userId: userId);
 
-    _streamUserOrder?.listen((orders) {
+    _streamUserOrder?.forEach((orders) {
       _userOrders = orders;
     });
   }
@@ -68,20 +68,6 @@ class OrderRepositoryFirestore extends OrderRepository {
         in orders(userId: userId, orderStatus: orderStatus)) {
       yield orders;
     }
-  }
-
-  static final ruleRoot = FirebaseFirestore.instance.collection("rules");
-
-  @override
-  Stream<bool> showOrderPages() {
-    final showOrder = ruleRoot.doc("show_order");
-    return showOrder.snapshots().map((snap) => snap.data()?["enable"] ?? false);
-  }
-
-  Future<void> changeOrderPagesView(bool shown) {
-    return ruleRoot.doc("show_order").update({
-      "enable": shown,
-    });
   }
 
   static final ruleRoot = FirebaseFirestore.instance.collection("rules");
@@ -148,7 +134,13 @@ class OrderRepositoryFirestore extends OrderRepository {
     Category category, {
     bool? available,
   }) async* {
-    yield _productFromCategory[category] ?? [];
+    if (available != null)
+      yield _productFromCategory[category]
+              ?.where((product) => product.available == available)
+              .toList() ??
+          [];
+    else
+      yield _productFromCategory[category] ?? [];
     Query query = productCategoryRoot.doc(category.id).collection("products");
     if (available != null) {
       query = query.where(
@@ -297,6 +289,15 @@ class OrderRepositoryFirestore extends OrderRepository {
         .doc(category.id)
         .collection("products")
         .add(product.toEntity().toDocument());
+  }
+
+  Future<void> updateProductName(
+      Category category, String productId, String name) {
+    return productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .doc(productId)
+        .update({"name": name});
   }
 
   Future<void> removeProduct(Category category, String productId) {

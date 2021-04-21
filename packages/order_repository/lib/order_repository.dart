@@ -32,6 +32,9 @@ abstract class OrderRepository {
 
   Future<void> addProduct(Category category, Product product);
 
+  Future<void> updateProductName(
+      Category category, String productId, String name);
+
   Future<void> removeProduct(Category category, String productId);
 
   Future<void> updateProductAvailability(

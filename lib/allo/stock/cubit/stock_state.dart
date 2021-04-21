@@ -9,7 +9,8 @@ class StockState extends Equatable {
   const StockState({this.categories = const {}, this.count = const {}});
 
   @override
-  List<Object> get props => [categories.values, categories.entries.toList()];
+  List<Object> get props =>
+      []..addAll(categories.keys)..addAll(categories.entries);
 
   StockState copyWith({
     Map<Category, List<Product>>? categories,

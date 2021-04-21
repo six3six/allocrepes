@@ -19,18 +19,17 @@ class OrderAdminState extends Equatable {
   final Map<String, Product> products;
 
   @override
-  List<Object> get props => [
-        orders.keys.toList(),
-        orders.values.toList(),
-        expandedOrders.keys.toList(),
-        expandedOrders.values.toList(),
-        selectedStatus.keys.toList(),
-        selectedStatus.values.toList(),
-        selectedPlaces.keys.toList(),
-        selectedPlaces.values.toList(),
-        products.keys.toList(),
-        products.values.toList(),
-      ];
+  List<Object> get props => []
+    ..addAll(selectedPlaces.keys)
+    ..addAll(selectedPlaces.values)
+    ..addAll(selectedStatus.keys)
+    ..addAll(selectedStatus.values)
+    ..addAll(orders.keys)
+    ..addAll(orders.values)
+    ..addAll(expandedOrders.keys)
+    ..addAll(expandedOrders.values)
+    ..addAll(products.keys)
+    ..addAll(products.values);
 
   OrderAdminState copyWith({
     Map<OrderStatus, List<Order>>? orders,
