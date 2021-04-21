@@ -16,6 +16,7 @@ class User extends Equatable {
     required this.surname,
     required this.classe,
     required this.point,
+    required this.student,
     this.photo,
   });
 
@@ -26,6 +27,8 @@ class User extends Equatable {
   final String id;
 
   final bool admin;
+
+  final bool student;
 
   /// The current user's name (display name).
   final String name;
@@ -48,6 +51,7 @@ class User extends Equatable {
     classe: "",
     point: 0,
     photo: null,
+    student: false,
   );
 
   User copyWith({
@@ -59,6 +63,7 @@ class User extends Equatable {
     String? classe,
     String? photo,
     int? point,
+    bool? student,
   }) =>
       User(
         email: email ?? this.email,
@@ -69,6 +74,7 @@ class User extends Equatable {
         classe: classe ?? this.classe,
         photo: photo ?? this.photo,
         point: point ?? this.point,
+        student: student ?? this.student,
       );
 
   Map<String, Object?> toDocument() {
@@ -80,20 +86,22 @@ class User extends Equatable {
     };
   }
 
-  static User fromDocument(QueryDocumentSnapshot document) {
-    var data = document.data();
+  static User fromDocument(DocumentSnapshot document) {
+    var data = document.data() ?? {};
 
     return User(
       email: data.containsKey("email") ? data["email"] : "",
       id: document.id,
       admin: false,
-      name: data.containsKey("name") ? data["name"] : "",
-      surname: data.containsKey("surname") ? data["surname"] : "",
-      classe: data.containsKey("classe") ? data["classe"] : "",
-      point: data.containsKey("point") ? data["point"] : 0,
+      name: data["name"] ?? "",
+      surname: data["surname"] ?? "",
+      classe: data["classe"] ?? "",
+      point: data["point"] ?? 0,
+      student: data.containsKey("name") ? true : false,
     );
   }
 
   @override
-  List<Object?> get props => [email, id, admin, name, photo, point, surname];
+  List<Object?> get props =>
+      [email, id, admin, name, photo, point, surname, student];
 }

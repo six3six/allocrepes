@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:order_repository/entities/article_entity.dart';
 import 'package:order_repository/entities/category_entity.dart';
@@ -67,6 +68,34 @@ class OrderRepositoryFirestore extends OrderRepository {
         in orders(userId: userId, orderStatus: orderStatus)) {
       yield orders;
     }
+  }
+
+  static final ruleRoot = FirebaseFirestore.instance.collection("rules");
+
+  @override
+  Stream<bool> showOrderPages() {
+    final showOrder = ruleRoot.doc("show_order");
+    return showOrder.snapshots().map((snap) => snap.data()?["enable"] ?? false);
+  }
+
+  Future<void> changeOrderPagesView(bool shown) {
+    return ruleRoot.doc("show_order").update({
+      "enable": shown,
+    });
+  }
+
+  static final ruleRoot = FirebaseFirestore.instance.collection("rules");
+
+  @override
+  Stream<bool> showOrderPages() {
+    final showOrder = ruleRoot.doc("show_order");
+    return showOrder.snapshots().map((snap) => snap.data()?["enable"] ?? false);
+  }
+
+  Future<void> changeOrderPagesView(bool shown) {
+    return ruleRoot.doc("show_order").update({
+      "enable": shown,
+    });
   }
 
   @override

@@ -90,11 +90,16 @@ class _AppViewState extends State<AppView> {
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listenWhen: (prev, next) =>
-              prev.status != next.status || prev.user.id != next.user.id,
+              prev.status != next.status ||
+              prev.user.id != next.user.id ||
+              prev.user.student != next.user.student,
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 print("authenticated");
+                if (!kIsWeb && !state.user.student) {
+                  print("subscribeToTopic(user${state.user.id})");
+                }
                 if (!kIsWeb) {
                   FirebaseMessaging.instance
                       .subscribeToTopic("user${state.user.id}");
@@ -102,6 +107,7 @@ class _AppViewState extends State<AppView> {
                 RepositoryProvider.of<OrderRepositoryFirestore>(context)
                     .changeUser(state.user.id);
                 prevUserId = state.user.id;
+
                 _navigator.pushAndRemoveUntil<void>(
                   LobbyPage.route(),
                   (route) => false,

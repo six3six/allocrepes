@@ -53,12 +53,9 @@ void main() async {
   Bloc.observer = AppObserver();
   if (!kIsWeb) {
     runZonedGuarded(
-      () {
-        runApp(App(authenticationRepository: AuthenticationRepository()));
-      },
-      (error, stackTrace) {
-        FirebaseCrashlytics.instance.recordError(error, stackTrace);
-      },
+      () => runApp(App(authenticationRepository: AuthenticationRepository())),
+      (error, stackTrace) =>
+          FirebaseCrashlytics.instance.recordError(error, stackTrace),
     );
   } else
     runApp(App(authenticationRepository: AuthenticationRepository()));

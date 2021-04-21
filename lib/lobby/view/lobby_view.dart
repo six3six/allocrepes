@@ -18,8 +18,6 @@ import 'lobby_twitch.dart';
 class LobbyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -28,7 +26,23 @@ class LobbyView extends StatelessWidget {
             child: LobbyTop(),
           ),
         ),
-        _LobbyMenu(),
+        BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          buildWhen: (prev, next) => prev.user.student != next.user.student,
+          builder: (context, state) {
+            return state.user.student
+                ? _LobbyMenu()
+                : SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        Text("Vous n'êtes pas étudiant..."),
+                        Text(
+                          "Si c'est une erreur envoyez nous un message sur nos réseaux sociaux...",
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
         if (!kIsWeb) _LobbyTwitchMenu(),
         _LobbyActuMenu(),
       ],
@@ -55,6 +69,7 @@ class _LobbyMenu extends StatelessWidget {
                       onTap: () =>
                           Navigator.push(context, OrderNewPage.route()),
                       icon: Icons.shopping_cart_outlined,
+                      enable: state.showOrder,
                     );
                   },
                 ),
@@ -65,6 +80,7 @@ class _LobbyMenu extends StatelessWidget {
                       onTap: () =>
                           Navigator.push(context, OrderListPage.route()),
                       icon: Icons.shopping_basket_outlined,
+                      enable: state.showOrder,
                     );
                   },
                 ),

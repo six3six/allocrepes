@@ -9,6 +9,11 @@ import 'package:order_repository/order_repository.dart';
 class ProductListCubit extends Cubit<ProductListState> {
   ProductListCubit(this.orderRepository) : super(const ProductListState()) {
     getProducts();
+    orderRepository.showOrderPages().listen(
+          (showOrderPages) => emit(
+            state.copyWith(showOrderPages: showOrderPages),
+          ),
+        );
   }
 
   final OrderRepository orderRepository;
@@ -267,5 +272,9 @@ class ProductListCubit extends Cubit<ProductListState> {
           },
         ) ??
         false;
+  }
+
+  void changeOrderPagesView(bool view) {
+    orderRepository.changeOrderPagesView(view);
   }
 }
