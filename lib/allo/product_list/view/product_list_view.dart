@@ -142,12 +142,9 @@ class _ProductEntry extends StatelessWidget {
     return BlocBuilder<ProductListCubit, ProductListState>(
       buildWhen: (prev, next) =>
           prev.getProduct(category, rank).id !=
-              next.getProduct(category, rank).id ||
-          prev.getProduct(category, rank).name !=
-              next.getProduct(category, rank).name,
+          next.getProduct(category, rank).id,
       builder: (context, state) {
         final productId = state.getProduct(category, rank).id ?? "";
-        final productName = state.getProduct(category, rank).name;
 
         return Dismissible(
           key: Key("${category.id};$productId"),
@@ -169,7 +166,6 @@ class _ProductEntry extends StatelessWidget {
             context,
             category,
             productId,
-            productName,
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -196,7 +192,9 @@ class _ProductAvailability extends StatelessWidget {
   final int rank;
   final Category category;
 
-  const _ProductAvailability({
+  TextEditingController textEditingController = TextEditingController();
+
+  _ProductAvailability({
     Key? key,
     required this.rank,
     required this.category,
@@ -215,14 +213,26 @@ class _ProductAvailability extends StatelessWidget {
         ),
         Expanded(
           flex: 7,
-          child: BlocBuilder<ProductListCubit, ProductListState>(
-            buildWhen: (prev, next) =>
-                prev.getProduct(category, rank).name !=
-                next.getProduct(category, rank).name,
-            builder: (context, state) => Text(
-              state.getProduct(category, rank).name,
-              style: textTheme.headline6,
-            ),
+          child: TextField(
+            controller: textEditingController
+              ..text = BlocProvider.of<ProductListCubit>(context)
+                      .state
+                      .categories[category]
+                      ?.elementAt(rank)
+                      .name ??
+                  "",
+            onChanged: (val) {
+              BlocProvider.of<ProductListCubit>(context).updateProductName(
+                category,
+                BlocProvider.of<ProductListCubit>(context)
+                        .state
+                        .categories[category]
+                        ?.elementAt(rank)
+                        .id ??
+                    "",
+                val,
+              );
+            },
           ),
         ),
         BlocBuilder<ProductListCubit, ProductListState>(

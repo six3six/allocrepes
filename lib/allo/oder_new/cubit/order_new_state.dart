@@ -26,19 +26,17 @@ class OrderNewState extends Equatable {
 
   @override
   List<Object?> get props => [
-        categories.values.toList(),
-        categories.keys.toList(),
-        categories.entries.toList(),
-        quantities.values.toList(),
-        quantities.keys.toList(),
-        quantities.entries.toList(),
         place,
         room,
         placeError,
         roomError,
         loading,
         message,
-      ];
+      ]
+        ..addAll(categories.keys)
+        ..addAll(categories.values)
+        ..addAll(quantities.keys)
+        ..addAll(quantities.values);
 
   OrderNewState copyWith({
     Map<Category, List<Product>>? categories,

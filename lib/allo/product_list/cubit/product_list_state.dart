@@ -13,10 +13,10 @@ class ProductListState extends Equatable {
 
   @override
   List<Object> get props => [
-        categories.values.toList(),
-        categories.entries.toList(),
         showOrderPages,
-      ];
+      ]
+        ..addAll(categories.values)
+        ..addAll(categories.keys);
 
   ProductListState copyWith({
     Map<Category, List<Product>>? categories,

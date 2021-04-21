@@ -9,7 +9,7 @@ import 'package:order_repository/order_repository.dart';
 class ProductListCubit extends Cubit<ProductListState> {
   ProductListCubit(this.orderRepository) : super(const ProductListState()) {
     getProducts();
-    orderRepository.showOrderPages().listen(
+    orderRepository.showOrderPages().forEach(
           (showOrderPages) => emit(
             state.copyWith(showOrderPages: showOrderPages),
           ),
@@ -19,15 +19,16 @@ class ProductListCubit extends Cubit<ProductListState> {
   final OrderRepository orderRepository;
 
   void getProducts() {
-    orderRepository.categories().listen((cats) {
+    orderRepository.categories().forEach((cats) {
       Map<Category, List<Product>> categories = {};
 
       cats.forEach((cat) {
         categories[cat] = [];
         emit(state.copyWith(categories: categories));
 
-        orderRepository.productsFromCategory(cat).listen((prods) {
-          var categories = state.categories;
+        orderRepository.productsFromCategory(cat).forEach((prods) {
+          Map<Category, List<Product>> categories = {}
+            ..addAll(state.categories);
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });
@@ -55,6 +56,10 @@ class ProductListCubit extends Cubit<ProductListState> {
 
   void removeProduct(Category category, String productId) {
     orderRepository.removeProduct(category, productId);
+  }
+
+  void updateProductName(Category category, String productId, String name) {
+    orderRepository.updateProductName(category, productId, name);
   }
 
   Future<void> addCategoryDialog(BuildContext context) {
@@ -235,7 +240,6 @@ class ProductListCubit extends Cubit<ProductListState> {
     BuildContext context,
     Category category,
     String productId,
-    String productName,
   ) async {
     return await showDialog<bool>(
           context: context,
@@ -246,7 +250,7 @@ class ProductListCubit extends Cubit<ProductListState> {
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
-                    Text('Voulez-vous supprimer ${productName} ?'),
+                    Text('Voulez-vous supprimer cet article ?'),
                   ],
                 ),
               ),

@@ -6,7 +6,7 @@ class LoginState extends Equatable {
   final bool showLoginForm;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [showLoginForm];
 
   LoginState copyWith({
     bool? showLoginForm,

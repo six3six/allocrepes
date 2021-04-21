@@ -20,13 +20,13 @@ class AdminUserState extends Equatable {
   @override
   List<Object?> get props => [
         isLoading,
-        users.keys.toList(),
-        users.values.toList(),
-        admin.values.toList(),
-        admin.keys.toList(),
         usernameQuery,
         sortUser,
-      ];
+      ]
+        ..addAll(users.keys)
+        ..addAll(users.values)
+        ..addAll(admin.keys)
+        ..addAll(admin.values);
 
   @override
   String toString() {
