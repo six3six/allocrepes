@@ -1,6 +1,7 @@
 import 'package:allocrepes/allo/oder_new/cubit/order_new_cubit.dart';
 import 'package:allocrepes/allo/oder_new/cubit/order_new_state.dart';
 import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -54,9 +55,14 @@ class _OrderNewProduct extends StatelessWidget {
       children: [
         BlocBuilder<OrderNewCubit, OrderNewState>(
           buildWhen: (prev, next) =>
-              prev.categories.keys.toList() != next.categories.keys.toList() ||
-              prev.categories.values.toList() !=
-                  next.categories.values.toList(),
+              !IterableEquality().equals(
+                prev.categories.keys,
+                next.categories.keys,
+              ) ||
+              !IterableEquality().equals(
+                prev.categories.values,
+                next.categories.values,
+              ),
           builder: (context, state) {
             List<_OrderNewCategory> categories = [];
             state.categories.forEach(

@@ -18,18 +18,15 @@ class StockPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => OrderRepositoryFirestore(),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (BuildContext context, AuthenticationState state) =>
-            BlocProvider(
-          create: (context) => StockCubit(
-            RepositoryProvider.of<OrderRepositoryFirestore>(
-              context,
-            ),
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (BuildContext context, AuthenticationState state) =>
+          BlocProvider(
+        create: (context) => StockCubit(
+          RepositoryProvider.of<OrderRepositoryFirestore>(
+            context,
           ),
-          child: const StockView(),
         ),
+        child: const StockView(),
       ),
     );
   }

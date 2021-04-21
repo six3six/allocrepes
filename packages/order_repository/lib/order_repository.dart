@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:order_repository/models/category.dart';
 
 import 'models/order.dart';
@@ -6,13 +7,7 @@ import 'models/place.dart';
 import 'models/product.dart';
 
 abstract class OrderRepository {
-  Stream<List<Order>> orders({
-    List<OrderStatus>? orderStatus,
-    List<Place>? places,
-    DateTime? start,
-    DateTime? stop,
-    String? userId,
-  });
+  void changeUser(String userId);
 
   Future<void> removeOrders({
     List<OrderStatus>? orderStatus,
@@ -33,7 +28,7 @@ abstract class OrderRepository {
 
   Future<void> addProduct(Category category, Product product);
 
-  Future<void> removeProduct(Category category, Product product);
+  Future<void> removeProduct(Category category, String productId);
 
   Future<void> updateProductAvailability(
     Category category,
@@ -43,13 +38,13 @@ abstract class OrderRepository {
 
   Future<void> updateProductMaxAmount(
     Category category,
-    Product product,
+    String productId,
     int maxAmount,
   );
 
   Future<void> updateProductInitialStock(
     Category category,
-    Product product,
+    String productId,
     int initialStock,
   );
 
@@ -60,7 +55,17 @@ abstract class OrderRepository {
 
   Stream<List<Category>> categories();
 
-  Stream<Map<Category, Stream<List<Product>>>> productByCategory();
+  Stream<List<Order>> orders({
+    List<OrderStatus>? orderStatus,
+    List<Place>? places,
+    DateTime? start,
+    DateTime? stop,
+    String? userId,
+  });
+
+  Stream<List<Order>> userOrders({
+    List<OrderStatus>? orderStatus,
+  });
 
   Stream<Order> order(String id);
 

@@ -20,13 +20,15 @@ class OrderListCubit extends Cubit<OrderListState> {
   final User _user;
 
   void getOrders() {
-    _orderRepository.orders(userId: _user.id, orderStatus: [
+    _orderRepository.userOrders(orderStatus: [
       OrderStatus.DELIVERED,
       OrderStatus.CANCELED,
-    ]).forEach((orders) =>
-        emit(state.copyWith(previousOrders: orders, isLoading: false)));
+    ]).forEach((orders) => emit(state.copyWith(
+          previousOrders: orders,
+          isLoading: false,
+        )));
 
-    _orderRepository.orders(userId: _user.id, orderStatus: [
+    _orderRepository.userOrders(orderStatus: [
       OrderStatus.UNKNOWN,
       OrderStatus.VALIDATING,
       OrderStatus.PENDING,

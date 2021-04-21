@@ -1,10 +1,10 @@
 import 'package:allocrepes/allo/product_list/cubit/product_list_cubit.dart';
 import 'package:allocrepes/allo/product_list/cubit/product_list_state.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/category.dart';
-import 'package:order_repository/models/product.dart';
 
 class ProductListView extends StatelessWidget {
   const ProductListView() : super();
@@ -16,16 +16,18 @@ class ProductListView extends StatelessWidget {
         title: const Text("Produits"),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(vertical: 10),
         children: [
           BlocBuilder<ProductListCubit, ProductListState>(
+            buildWhen: (prev, next) => !IterableEquality().equals(
+              prev.categories.keys,
+              next.categories.keys,
+            ),
             builder: (context, state) {
               List<_ProductCategory> categories = [];
-              state.categories.forEach(
-                (Category cat, List<Product> products) => categories.add(
+              state.categories.keys.forEach(
+                (Category cat) => categories.add(
                   _ProductCategory(
                     category: cat,
-                    products: products,
                   ),
                 ),
               );
@@ -49,158 +51,18 @@ class ProductListView extends StatelessWidget {
   }
 }
 
-class _ProductEntry extends StatelessWidget {
-  final Product product;
-  final Category category;
-
-  _ProductEntry({
-    Key? key,
-    required this.product,
-    required this.category,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Dismissible(
-      key: Key("${category.id};${product.id}"),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        color: Colors.red,
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      confirmDismiss: (direction) async =>
-          await BlocProvider.of<ProductListCubit>(context)
-              .deleteProductDialog(context, category, product),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: Column(
-          children: [
-            _ProductAvailability(
-              product: product,
-              category: category,
-            ),
-            _ProductMaxQuantity(
-              product: product,
-              category: category,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ProductMaxQuantity extends StatelessWidget {
-  final Product product;
-  final Category category;
-
-  _ProductMaxQuantity({
-    Key? key,
-    required this.product,
-    required this.category,
-  }) : super(key: key);
-
-  final TextEditingController quantityController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    quantityController..text = product.maxAmount.toString();
-
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          flex: 7,
-          child: Text(
-            "Quantité max",
-          ),
-        ),
-        Expanded(
-          flex: 3,
-          child: TextField(
-            keyboardType: TextInputType.number,
-            controller: quantityController,
-            onSubmitted: (val) {
-              BlocProvider.of<ProductListCubit>(context).updateProductMaxAmount(
-                category,
-                product,
-                int.tryParse(val) ?? 0,
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ProductAvailability extends StatelessWidget {
-  final Product product;
-  final Category category;
-
-  const _ProductAvailability({
-    Key? key,
-    required this.product,
-    required this.category,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          flex: 7,
-          child: Text(product.name, style: textTheme.headline6),
-        ),
-        Checkbox(
-          value: product.available,
-          onChanged: (bool? availability) =>
-              BlocProvider.of<ProductListCubit>(context)
-                  .updateProductAvailability(
-            category,
-            product,
-            availability ?? false,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _ProductCategory extends StatelessWidget {
-  final List<Product> products;
   final Category category;
 
   const _ProductCategory({
     Key? key,
     required this.category,
-    required this.products,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-
     return Column(
       children: [
         Padding(
@@ -229,13 +91,21 @@ class _ProductCategory extends StatelessWidget {
                   ),
                 ],
               ),
-              Column(
-                children: products
-                    .map<_ProductEntry>((product) => _ProductEntry(
-                          product: product,
-                          category: category,
-                        ))
-                    .toList(),
+              BlocBuilder<ProductListCubit, ProductListState>(
+                buildWhen: (prev, next) =>
+                    (prev.categories[category]?.length ?? 0) !=
+                    (next.categories[category]?.length ?? 0),
+                builder: (context, state) => Column(
+                  children: state.categories[category]
+                          ?.map<_ProductEntry>((product) => _ProductEntry(
+                                rank: state.categories[category]
+                                        ?.indexOf(product) ??
+                                    0,
+                                category: category,
+                              ))
+                          .toList() ??
+                      [],
+                ),
               ),
               SizedBox(
                 width: double.infinity,
@@ -249,6 +119,183 @@ class _ProductCategory extends StatelessWidget {
           ),
         ),
         Divider(),
+      ],
+    );
+  }
+}
+
+class _ProductEntry extends StatelessWidget {
+  final int rank;
+  final Category category;
+
+  _ProductEntry({
+    Key? key,
+    required this.rank,
+    required this.category,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return BlocBuilder<ProductListCubit, ProductListState>(
+      buildWhen: (prev, next) =>
+          prev.getProduct(category, rank).id !=
+              next.getProduct(category, rank).id ||
+          prev.getProduct(category, rank).name !=
+              next.getProduct(category, rank).name,
+      builder: (context, state) {
+        final productId = state.getProduct(category, rank).id ?? "";
+        final productName = state.getProduct(category, rank).name;
+
+        return Dismissible(
+          key: Key("${category.id};$productId"),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            color: Colors.red,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          confirmDismiss: (direction) async =>
+              await BlocProvider.of<ProductListCubit>(context)
+                  .deleteProductDialog(
+            context,
+            category,
+            productId,
+            productName,
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: Column(
+              children: [
+                _ProductAvailability(
+                  rank: rank,
+                  category: category,
+                ),
+                _ProductMaxQuantity(
+                  rank: rank,
+                  category: category,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ProductAvailability extends StatelessWidget {
+  final int rank;
+  final Category category;
+
+  const _ProductAvailability({
+    Key? key,
+    required this.rank,
+    required this.category,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          flex: 7,
+          child: BlocBuilder<ProductListCubit, ProductListState>(
+            buildWhen: (prev, next) =>
+                prev.getProduct(category, rank).name !=
+                next.getProduct(category, rank).name,
+            builder: (context, state) => Text(
+              state.getProduct(category, rank).name,
+              style: textTheme.headline6,
+            ),
+          ),
+        ),
+        BlocBuilder<ProductListCubit, ProductListState>(
+          buildWhen: (prev, next) =>
+              prev.getProduct(category, rank) !=
+              next.getProduct(category, rank),
+          builder: (context, state) => Checkbox(
+            value: state.getProduct(category, rank).available,
+            onChanged: (bool? availability) =>
+                BlocProvider.of<ProductListCubit>(context)
+                    .updateProductAvailability(
+              category,
+              state.getProduct(category, rank),
+              availability ?? false,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProductMaxQuantity extends StatelessWidget {
+  final int rank;
+  final Category category;
+
+  _ProductMaxQuantity({
+    Key? key,
+    required this.rank,
+    required this.category,
+  }) : super(key: key);
+
+  final TextEditingController quantityController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          flex: 7,
+          child: Text(
+            "Quantité max",
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: TextField(
+            keyboardType: TextInputType.number,
+            controller: quantityController
+              ..text = (BlocProvider.of<ProductListCubit>(context)
+                          .state
+                          .categories[category]
+                          ?.elementAt(rank)
+                          .maxAmount ??
+                      0)
+                  .toString(),
+            onChanged: (val) {
+              BlocProvider.of<ProductListCubit>(context).updateProductMaxAmount(
+                category,
+                BlocProvider.of<ProductListCubit>(context)
+                        .state
+                        .categories[category]
+                        ?.elementAt(rank)
+                        .id ??
+                    "",
+                int.tryParse(val) ?? 0,
+              );
+            },
+          ),
+        ),
       ],
     );
   }

@@ -18,18 +18,15 @@ class ProductListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => OrderRepositoryFirestore(),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (BuildContext context, AuthenticationState state) {
-          return BlocProvider(
-            create: (context) => ProductListCubit(
-              RepositoryProvider.of<OrderRepositoryFirestore>(context),
-            ),
-            child: const ProductListView(),
-          );
-        },
-      ),
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (BuildContext context, AuthenticationState state) {
+        return BlocProvider(
+          create: (context) => ProductListCubit(
+            RepositoryProvider.of<OrderRepositoryFirestore>(context),
+          ),
+          child: const ProductListView(),
+        );
+      },
     );
   }
 }
