@@ -1,5 +1,6 @@
 import 'package:allocrepes/allo/order_list/cubit/order_list_cubit.dart';
 import 'package:allocrepes/allo/order_list/cubit/order_list_state.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,8 @@ class OrderListView extends StatelessWidget {
           ),
         ),
         BlocBuilder<OrderListCubit, OrderListState>(
-          buildWhen: (prev, next) => prev.currentOrders != next.currentOrders,
+          buildWhen: (prev, next) => !IterableEquality()
+              .equals(prev.currentOrders, next.currentOrders),
           builder: (BuildContext context, OrderListState state) {
             if (state.currentOrders.isEmpty) {
               return Padding(
@@ -67,7 +69,8 @@ class OrderListView extends StatelessWidget {
           ),
         ),
         BlocBuilder<OrderListCubit, OrderListState>(
-          buildWhen: (prev, next) => prev.previousOrders != next.previousOrders,
+          buildWhen: (prev, next) => !IterableEquality()
+              .equals(prev.previousOrders, next.previousOrders),
           builder: (BuildContext context, OrderListState state) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

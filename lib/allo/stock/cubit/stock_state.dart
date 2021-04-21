@@ -20,4 +20,15 @@ class StockState extends Equatable {
       count: count ?? this.count,
     );
   }
+
+  Product getProduct(
+    Category category,
+    int rank,
+  ) {
+    try {
+      return categories[category]?.elementAt(rank) ?? Product.empty;
+    } catch (e) {
+      return Product.empty;
+    }
+  }
 }

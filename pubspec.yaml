@@ -15,6 +15,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+
   authentication_repository:
     path: packages/authentication_repository
 
@@ -25,15 +26,15 @@ dependencies:
     path: packages/news_repository
 
 
-  firebase_core: ^1.0.3
-  firebase_analytics: ^7.1.1
-  firebase_crashlytics: ^2.0.0
-  firebase_messaging: ^9.1.1
-  cloud_functions: ^1.0.3
-  firebase_remote_config: ^0.9.0-dev.2
+  firebase_core: ^1.0.4
+  firebase_analytics: ^8.0.1
+  firebase_crashlytics: ^2.0.1
+  firebase_messaging: ^9.1.2
+  cloud_functions: ^1.0.4
+  intl: ^0.17.0
 
   connectivity: ^3.0.3
-
+  collection: ^1.15.0
   package_info_plus: ^1.0.0
 
   font_awesome_flutter: ^9.0.0

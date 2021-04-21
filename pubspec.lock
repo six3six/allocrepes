@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "20.0.0"
+    version: "21.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "1.5.0"
   analyzer_plugin:
     dependency: transitive
     description:
@@ -105,44 +105,44 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.6"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.2"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.6"
   cloud_functions:
     dependency: "direct main"
     description:
       name: cloud_functions
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   cloud_functions_platform_interface:
     dependency: transitive
     description:
       name: cloud_functions_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.1"
+    version: "5.0.2"
   cloud_functions_web:
     dependency: transitive
     description:
       name: cloud_functions_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.3"
+    version: "4.0.4"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -266,49 +266,49 @@ packages:
       name: firebase_analytics
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.1"
+    version: "8.0.1"
   firebase_analytics_platform_interface:
     dependency: transitive
     description:
       name: firebase_analytics_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.0"
   firebase_analytics_web:
     dependency: transitive
     description:
       name: firebase_analytics_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0+1"
+    version: "0.3.0"
   firebase_auth:
     dependency: transitive
     description:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.1.1"
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -329,49 +329,35 @@ packages:
       name: firebase_crashlytics
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   firebase_crashlytics_platform_interface:
     dependency: transitive
     description:
       name: firebase_crashlytics_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   firebase_messaging:
     dependency: "direct main"
     description:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.1.1"
+    version: "9.1.2"
   firebase_messaging_platform_interface:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
-  firebase_remote_config:
-    dependency: "direct main"
-    description:
-      name: firebase_remote_config
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.0-dev.2"
-  firebase_remote_config_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_remote_config_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0-dev.1"
+    version: "1.0.5"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -451,7 +437,7 @@ packages:
     source: hosted
     version: "3.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       url: "https://pub.dartlang.org"
@@ -533,7 +519,7 @@ packages:
       name: package_info_plus_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   package_info_plus_platform_interface:
     dependency: transitive
     description:

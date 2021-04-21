@@ -14,12 +14,15 @@ class ProductListCubit extends Cubit<ProductListState> {
   final OrderRepository orderRepository;
 
   void getProducts() {
-    orderRepository.categories().forEach((cats) {
+    orderRepository.categories().listen((cats) {
       Map<Category, List<Product>> categories = {};
 
       cats.forEach((cat) {
         categories[cat] = [];
-        orderRepository.productsFromCategory(cat).forEach((prods) {
+        emit(state.copyWith(categories: categories));
+
+        orderRepository.productsFromCategory(cat).listen((prods) {
+          var categories = state.categories;
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });
@@ -39,14 +42,14 @@ class ProductListCubit extends Cubit<ProductListState> {
 
   void updateProductMaxAmount(
     Category category,
-    Product product,
+    String productId,
     int maxAmount,
   ) {
-    orderRepository.updateProductMaxAmount(category, product, maxAmount);
+    orderRepository.updateProductMaxAmount(category, productId, maxAmount);
   }
 
-  void removeProduct(Category category, Product product) {
-    orderRepository.removeProduct(category, product);
+  void removeProduct(Category category, String productId) {
+    orderRepository.removeProduct(category, productId);
   }
 
   Future<void> addCategoryDialog(BuildContext context) {
@@ -226,7 +229,8 @@ class ProductListCubit extends Cubit<ProductListState> {
   Future<bool> deleteProductDialog(
     BuildContext context,
     Category category,
-    Product product,
+    String productId,
+    String productName,
   ) async {
     return await showDialog<bool>(
           context: context,
@@ -237,7 +241,7 @@ class ProductListCubit extends Cubit<ProductListState> {
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
-                    Text('Voulez-vous supprimer ${product.name} ?'),
+                    Text('Voulez-vous supprimer ${productName} ?'),
                   ],
                 ),
               ),
@@ -254,7 +258,7 @@ class ProductListCubit extends Cubit<ProductListState> {
                 TextButton(
                   child: Text('Confirmer'),
                   onPressed: () {
-                    orderRepository.removeProduct(category, product);
+                    orderRepository.removeProduct(category, productId);
                     Navigator.of(context).pop(true);
                   },
                 ),

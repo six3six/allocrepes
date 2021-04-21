@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:order_repository/order_repository_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'authentication/bloc/authentication_bloc.dart';
@@ -27,7 +28,10 @@ class App extends StatelessWidget {
         create: (_) => AuthenticationBloc(
           authenticationRepository: authenticationRepository,
         ),
-        child: AppView(),
+        child: RepositoryProvider(
+          create: (BuildContext context) => OrderRepositoryFirestore(),
+          child: AppView(),
+        ),
       ),
     );
   }
@@ -92,10 +96,11 @@ class _AppViewState extends State<AppView> {
               case AuthenticationStatus.authenticated:
                 print("authenticated");
                 if (!kIsWeb) {
-                  print("subscribeToTopic(user${state.user.id})");
                   FirebaseMessaging.instance
                       .subscribeToTopic("user${state.user.id}");
                 }
+                RepositoryProvider.of<OrderRepositoryFirestore>(context)
+                    .changeUser(state.user.id);
                 prevUserId = state.user.id;
                 _navigator.pushAndRemoveUntil<void>(
                   LobbyPage.route(),
@@ -104,7 +109,6 @@ class _AppViewState extends State<AppView> {
                 break;
               case AuthenticationStatus.unauthenticated:
                 if (!kIsWeb) {
-                  print("unsubscribeFromTopic(user$prevUserId)");
                   FirebaseMessaging.instance
                       .unsubscribeFromTopic("user$prevUserId");
                 }

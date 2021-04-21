@@ -1,12 +1,12 @@
-import 'package:allocrepes/allo/order_admin/cubit/order_admin_cubit.dart';
-import 'package:allocrepes/allo/order_admin/cubit/order_admin_state.dart';
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-
 import 'dart:math' as math;
 import 'dart:ui' as ui show TextHeightBehavior;
 
+import 'package:allocrepes/allo/order_admin/cubit/order_admin_cubit.dart';
+import 'package:allocrepes/allo/order_admin/cubit/order_admin_state.dart';
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/place.dart';
@@ -118,10 +118,14 @@ class OrderAdminView extends StatelessWidget {
                         (article) =>
                             BlocBuilder<OrderAdminCubit, OrderAdminState>(
                           buildWhen: (prev, next) =>
-                              prev.products.values.toList() !=
-                                  next.products.values.toList() ||
-                              prev.products.keys.toList() !=
-                                  next.products.keys.toList(),
+                              !IterableEquality().equals(
+                                prev.products.values,
+                                next.products.values,
+                              ) ||
+                              !IterableEquality().equals(
+                                prev.products.keys,
+                                next.products.keys,
+                              ),
                           builder: (context, state) => Text(
                             "${article.amount.toString()}x ${state.products[article.productId]?.name}",
                           ),
@@ -163,8 +167,10 @@ class _FilterView extends StatelessWidget {
             style: theme.textTheme.caption,
           ),
           BlocBuilder<OrderAdminCubit, OrderAdminState>(
-            buildWhen: (prev, next) =>
-                prev.selectedPlaces != next.selectedPlaces,
+            buildWhen: (prev, next) => !IterableEquality().equals(
+              prev.selectedPlaces.entries,
+              next.selectedPlaces.entries,
+            ),
             builder: (context, state) {
               return ExpansionTile(
                 title: Text(
@@ -273,10 +279,14 @@ class _OrderCompleteView extends StatelessWidget {
               .map(
                 (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
                   buildWhen: (prev, next) =>
-                      prev.products.values.toList() !=
-                          next.products.values.toList() ||
-                      prev.products.keys.toList() !=
-                          next.products.keys.toList(),
+                      !IterableEquality().equals(
+                        prev.products.values,
+                        next.products.values,
+                      ) ||
+                      !IterableEquality().equals(
+                        prev.products.keys,
+                        next.products.keys,
+                      ),
                   builder: (context, state) => Text(
                     "${article.amount.toString()}x ${state.products[article.productId]?.name}",
                   ),

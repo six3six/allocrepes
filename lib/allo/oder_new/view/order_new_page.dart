@@ -21,39 +21,36 @@ class OrderNewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return RepositoryProvider(
-      create: (context) => OrderRepositoryFirestore(),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (BuildContext context, AuthenticationState state) {
-          return BlocProvider<OrderNewCubit>(
-            create: (context) => OrderNewCubit(
-              RepositoryProvider.of<OrderRepositoryFirestore>(context),
-              state.user,
-            ),
-            child: BlocBuilder<OrderNewCubit, OrderNewState>(
-              buildWhen: (prev, next) => prev.loading != next.loading,
-              builder: (context, state) => LoadingOverlay(
-                isLoading: state.loading,
-                color: theme.primaryColor,
-                progressIndicator: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Chargement...",
-                      style: theme.textTheme.headline6,
-                    ),
-                  ],
-                ),
-                child: const OrderNewView(),
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (BuildContext context, AuthenticationState state) {
+        return BlocProvider<OrderNewCubit>(
+          create: (context) => OrderNewCubit(
+            RepositoryProvider.of<OrderRepositoryFirestore>(context),
+            state.user,
+          ),
+          child: BlocBuilder<OrderNewCubit, OrderNewState>(
+            buildWhen: (prev, next) => prev.loading != next.loading,
+            builder: (context, state) => LoadingOverlay(
+              isLoading: state.loading,
+              color: theme.primaryColor,
+              progressIndicator: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Chargement...",
+                    style: theme.textTheme.headline6,
+                  ),
+                ],
               ),
+              child: const OrderNewView(),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

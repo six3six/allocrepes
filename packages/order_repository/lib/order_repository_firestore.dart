@@ -23,6 +23,52 @@ class OrderRepositoryFirestore extends OrderRepository {
   static final Query productGroupRoot =
       FirebaseFirestore.instance.collectionGroup("products");
 
+  String userId = "";
+
+  List<Product> _products = [];
+  List<Category> _categories = [];
+  Map<Category, List<Product>> _productFromCategory = {};
+
+  OrderRepositoryFirestore() {
+    products().listen((products) {
+      _products = products;
+    });
+
+    categories().listen((categories) {
+      _categories = categories;
+    });
+  }
+
+  Stream<List<Order>>? _streamUserOrder;
+  List<Order> _userOrders = [];
+
+  void changeUser(String userId) {
+    this.userId = userId;
+
+    _streamUserOrder = null;
+    _streamUserOrder = orders(userId: userId);
+
+    _streamUserOrder?.listen((orders) {
+      _userOrders = orders;
+    });
+  }
+
+  Stream<List<Order>> userOrders({
+    List<OrderStatus>? orderStatus,
+  }) async* {
+    if (orderStatus != null)
+      yield _userOrders
+          .where((order) => orderStatus.contains(order.status))
+          .toList();
+    else
+      yield _userOrders;
+
+    await for (List<Order> orders
+        in orders(userId: userId, orderStatus: orderStatus)) {
+      yield orders;
+    }
+  }
+
   @override
   Future<void> createOrder(Order order) async {
     final orderRef = await orderRoot.add(order.toEntity().toDocument());
@@ -62,6 +108,7 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   @override
   Stream<List<Product>> products() async* {
+    yield _products;
     await for (final snapshot in productGroupRoot.snapshots()) {
       yield await productsFromSnapshot(snapshot);
     }
@@ -72,6 +119,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     Category category, {
     bool? available,
   }) async* {
+    yield _productFromCategory[category] ?? [];
     Query query = productCategoryRoot.doc(category.id).collection("products");
     if (available != null) {
       query = query.where(
@@ -80,7 +128,9 @@ class OrderRepositoryFirestore extends OrderRepository {
       );
     }
     await for (final snapshot in query.snapshots()) {
-      yield await productsFromSnapshot(snapshot);
+      final products = await productsFromSnapshot(snapshot);
+      _productFromCategory[category] = products;
+      yield products;
     }
   }
 
@@ -96,25 +146,14 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Stream<List<Category>> categories() {
-    return productCategoryRoot.snapshots().map<List<Category>>(
-          (QuerySnapshot snapshot) => snapshot.docs
-              .map((e) => Category.fromEntity(CategoryEntity.fromSnapshot(e)))
-              .toList(),
-        );
-  }
+  Stream<List<Category>> categories() async* {
+    yield _categories;
 
-  @override
-  Stream<Map<Category, Stream<List<Product>>>> productByCategory() async* {
-    await for (List<Category> categories in categories()) {
-      Map<Category, Stream<List<Product>>> result =
-          Map<Category, Stream<List<Product>>>();
-
-      for (Category category in categories) {
-        result[category] = productsFromCategory(category);
-      }
-
-      yield result;
+    final snapshots = productCategoryRoot.snapshots();
+    await for (QuerySnapshot snapshot in snapshots) {
+      yield snapshot.docs
+          .map((e) => Category.fromEntity(CategoryEntity.fromSnapshot(e)))
+          .toList();
     }
   }
 
@@ -231,11 +270,11 @@ class OrderRepositoryFirestore extends OrderRepository {
         .add(product.toEntity().toDocument());
   }
 
-  Future<void> removeProduct(Category category, Product product) {
+  Future<void> removeProduct(Category category, String productId) {
     return productCategoryRoot
         .doc(category.id)
         .collection("products")
-        .doc(product.id)
+        .doc(productId)
         .delete();
   }
 
@@ -254,25 +293,25 @@ class OrderRepositoryFirestore extends OrderRepository {
 
   Future<void> updateProductMaxAmount(
     Category category,
-    Product product,
+    String productId,
     int maxAmount,
   ) {
     return productCategoryRoot
         .doc(category.id)
         .collection("products")
-        .doc(product.id)
+        .doc(productId)
         .update({"maxAmount": maxAmount});
   }
 
   Future<void> updateProductInitialStock(
     Category category,
-    Product product,
+    String productId,
     int initialStock,
   ) {
     return productCategoryRoot
         .doc(category.id)
         .collection("products")
-        .doc(product.id)
+        .doc(productId)
         .update({"initialStock": initialStock});
   }
 }

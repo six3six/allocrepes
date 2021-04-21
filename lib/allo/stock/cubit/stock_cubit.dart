@@ -1,10 +1,10 @@
-import 'package:order_repository/models/order.dart';
-
-import 'stock_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:order_repository/models/category.dart';
+import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/product.dart';
 import 'package:order_repository/order_repository.dart';
+
+import 'stock_state.dart';
 
 class StockCubit extends Cubit<StockState> {
   StockCubit(this.orderRepository) : super(const StockState()) {
@@ -42,12 +42,12 @@ class StockCubit extends Cubit<StockState> {
     });
   }
 
-  void updateProductMaxAmount(
+  void updateProductInitialStock(
     Category category,
-    Product product,
+    String productId,
     int maxAmount,
   ) {
-    orderRepository.updateProductInitialStock(category, product, maxAmount);
+    orderRepository.updateProductInitialStock(category, productId, maxAmount);
   }
 
   void removeOrders() {

@@ -38,46 +38,43 @@ class OrderListPage extends StatelessWidget {
           tooltip: "Commander",
         ),
       ),
-      body: RepositoryProvider(
-        create: (context) => OrderRepositoryFirestore(),
-        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (BuildContext context, AuthenticationState state) {
-            return BlocProvider<OrderListCubit>(
-              create: (context) => OrderListCubit(
-                RepositoryProvider.of<OrderRepositoryFirestore>(context),
-                state.user,
-              ),
-              child: BlocBuilder<OrderListCubit, OrderListState>(
-                buildWhen: (prev, next) =>
-                    prev.isLoading != next.isLoading ||
-                    prev.isConnected != next.isConnected,
-                builder: (context, state) => LoadingOverlay(
-                  isLoading: state.isLoading || !state.isConnected,
-                  color: theme.primaryColor,
-                  progressIndicator: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CircularProgressIndicator(),
-                      const SizedBox(
-                        height: 20,
-                      ),
+      body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (BuildContext context, AuthenticationState state) {
+          return BlocProvider<OrderListCubit>(
+            create: (context) => OrderListCubit(
+              RepositoryProvider.of<OrderRepositoryFirestore>(context),
+              state.user,
+            ),
+            child: BlocBuilder<OrderListCubit, OrderListState>(
+              buildWhen: (prev, next) =>
+                  prev.isLoading != next.isLoading ||
+                  prev.isConnected != next.isConnected,
+              builder: (context, state) => LoadingOverlay(
+                isLoading: state.isLoading || !state.isConnected,
+                color: theme.primaryColor,
+                progressIndicator: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Chargement...",
+                      style: theme.textTheme.headline6,
+                    ),
+                    if (!state.isConnected)
                       Text(
-                        "Chargement...",
+                        "En attente de connexion...",
                         style: theme.textTheme.headline6,
                       ),
-                      if (!state.isConnected)
-                        Text(
-                          "En attente de connexion...",
-                          style: theme.textTheme.headline6,
-                        ),
-                    ],
-                  ),
-                  child: const OrderListView(),
+                  ],
                 ),
+                child: const OrderListView(),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
