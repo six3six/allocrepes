@@ -43,6 +43,12 @@ abstract class OrderRepository {
     bool available,
   );
 
+  Future<void> updateProductAvailabilityESIEE(
+    Category category,
+    Product product,
+    bool available,
+  );
+
   Future<void> updateProductMaxAmount(
     Category category,
     String productId,
@@ -58,6 +64,7 @@ abstract class OrderRepository {
   Stream<List<Product>> productsFromCategory(
     Category category, {
     bool? available,
+    bool? availableESIEE,
   });
 
   Stream<List<Category>> categories();

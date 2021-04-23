@@ -133,10 +133,17 @@ class OrderRepositoryFirestore extends OrderRepository {
   Stream<List<Product>> productsFromCategory(
     Category category, {
     bool? available,
+    bool? availableESIEE,
   }) async* {
     if (available != null)
       yield _productFromCategory[category]
               ?.where((product) => product.available == available)
+              .toList() ??
+          [];
+
+    if (availableESIEE != null)
+      yield _productFromCategory[category]
+              ?.where((product) => product.availableESIEE == availableESIEE)
               .toList() ??
           [];
     else
@@ -146,6 +153,12 @@ class OrderRepositoryFirestore extends OrderRepository {
       query = query.where(
         "available",
         isEqualTo: available,
+      );
+    }
+    if (availableESIEE != null) {
+      query = query.where(
+        "available_esiee",
+        isEqualTo: availableESIEE,
       );
     }
     await for (final snapshot in query.snapshots()) {
@@ -319,6 +332,19 @@ class OrderRepositoryFirestore extends OrderRepository {
         .collection("products")
         .doc(product.id)
         .update({"available": available});
+  }
+
+  @override
+  Future<void> updateProductAvailabilityESIEE(
+    Category category,
+    Product product,
+    bool available,
+  ) {
+    return productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .doc(product.id)
+        .update({"available_esiee": available});
   }
 
   Future<void> updateProductMaxAmount(

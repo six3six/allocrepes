@@ -7,6 +7,7 @@ class Product extends Equatable {
     this.id,
     required this.name,
     required this.available,
+    required this.availableESIEE,
     required this.maxAmount,
     required this.initialStock,
   });
@@ -14,6 +15,7 @@ class Product extends Equatable {
   final String? id;
   final String name;
   final bool available;
+  final bool availableESIEE;
   final int maxAmount;
   final int initialStock;
 
@@ -21,17 +23,26 @@ class Product extends Equatable {
     id: "",
     name: "",
     available: false,
+    availableESIEE: false,
     maxAmount: 0,
     initialStock: 0,
   );
 
   @override
-  List<Object?> get props => [id, name, available, maxAmount, initialStock];
+  List<Object?> get props => [
+        id,
+        name,
+        available,
+        maxAmount,
+        initialStock,
+        availableESIEE,
+      ];
 
   Product copyWith({
     String? id,
     String? name,
     bool? available,
+    bool? availableESIEE,
     ImageProvider? image,
     int? maxAmount,
     int? initialStock,
@@ -39,6 +50,7 @@ class Product extends Equatable {
     return Product(
       name: name ?? this.name,
       available: available ?? this.available,
+      availableESIEE: availableESIEE ?? this.availableESIEE,
       id: id ?? this.id,
       maxAmount: maxAmount ?? this.maxAmount,
       initialStock: initialStock ?? this.initialStock,
@@ -46,7 +58,14 @@ class Product extends Equatable {
   }
 
   ProductEntity toEntity() {
-    return ProductEntity(id, name, available, maxAmount, initialStock);
+    return ProductEntity(
+      id,
+      name,
+      available,
+      availableESIEE,
+      maxAmount,
+      initialStock,
+    );
   }
 
   static Product fromEntity(ProductEntity entity) {
@@ -54,6 +73,7 @@ class Product extends Equatable {
       id: entity.id,
       name: entity.name,
       available: entity.available,
+      availableESIEE: entity.availableESIEE,
       maxAmount: entity.maxAmount,
       initialStock: entity.initialStock,
     );

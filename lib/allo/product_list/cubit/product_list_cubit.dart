@@ -46,6 +46,15 @@ class ProductListCubit extends Cubit<ProductListState> {
     orderRepository.updateProductAvailability(category, product, availability);
   }
 
+  void updateProductAvailabilityESIEE(
+    Category category,
+    Product product,
+    bool availability,
+  ) {
+    orderRepository.updateProductAvailabilityESIEE(
+        category, product, availability);
+  }
+
   void updateProductMaxAmount(
     Category category,
     String productId,
@@ -140,12 +149,7 @@ class ProductListCubit extends Cubit<ProductListState> {
               onPressed: () {
                 orderRepository.addProduct(
                   category,
-                  Product(
-                    name: controller.text,
-                    available: false,
-                    maxAmount: 0,
-                    initialStock: 0,
-                  ),
+                  Product.empty.copyWith(name: controller.text),
                 );
                 Navigator.of(context).pop();
               },

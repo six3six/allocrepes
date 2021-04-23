@@ -20,7 +20,15 @@ const isAdmin = async (user: string | undefined): Promise<boolean> => {
 
 const getSSOToken = async (fncUrl: string, ticket: string): Promise<Token> => {
     const encUrl = encodeURIComponent(fncUrl);
-
+    if (ticket == "" || ticket == undefined) {
+        console.warn("VOID TICKET !!!!!");
+        console.log();
+        const token = await admin.auth().createCustomToken("invite");
+        return {
+            user: "invite",
+            token: token,
+        };
+    }
 
     const url = `https://sso.esiee.fr/cas/serviceValidate?service=${encUrl}&ticket=${ticket}`;
 
@@ -70,7 +78,15 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
     const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
     const ticket = typeof req.query.ticket === "string" ? req.query.ticket : "";
 
+
     const token = await getSSOToken(fncUrl, ticket);
+
+
+    if (ticket == "") {
+        console.log("No ticket returned. Query :");
+        console.log(req.query);
+    }
+
     res.json(token);
 });
 
@@ -143,7 +159,7 @@ exports.onCommandStatusChange = functions.firestore
         case OrderStatus.DELIVERED:
             title = "Bon appétit";
             body = "Votre commande est arrivée et est prête à être degustée\n" +
-                    "Bon appétit et merci pour votre commande";
+                "Bon appétit et merci pour votre commande";
             break;
         case OrderStatus.PENDING:
             title = "On cuisine pour vous !";

@@ -46,8 +46,9 @@ class LobbyPage extends StatelessWidget {
         create: (context) => OrderRepositoryFirestore(),
         child: BlocProvider<LobbyCubit>(
           create: (context) => LobbyCubit(
-              orderRepository:
-                  RepositoryProvider.of<OrderRepositoryFirestore>(context)),
+            orderRepository:
+                RepositoryProvider.of<OrderRepositoryFirestore>(context),
+          ),
           child: LobbyView(),
         ),
       ),

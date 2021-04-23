@@ -6,6 +6,7 @@ class ProductEntity extends Equatable {
     this.id,
     this.name,
     this.available,
+    this.availableESIEE,
     this.maxAmount,
     this.initialStock,
   );
@@ -13,6 +14,7 @@ class ProductEntity extends Equatable {
   final String? id;
   final String name;
   final bool available;
+  final bool availableESIEE;
   final int maxAmount;
   final int initialStock;
 
@@ -21,6 +23,7 @@ class ProductEntity extends Equatable {
         this.id,
         this.name,
         this.available,
+        this.availableESIEE,
         this.maxAmount,
         this.initialStock,
       ];
@@ -33,6 +36,7 @@ class ProductEntity extends Equatable {
         json["id"] as String,
         json["name"] as String,
         json["available"] as bool,
+        json["available_esiee"] as bool,
         json["maxAmount"] as int,
         json["initialStock"] as int,
       );
@@ -41,6 +45,7 @@ class ProductEntity extends Equatable {
         snapshot.id,
         snapshot.get("name") as String,
         snapshot.get("available") as bool,
+        snapshot.data()?["available_esiee"] ?? false,
         snapshot.data()?["maxAmount"] ?? 0,
         snapshot.data()?["initialStock"] ?? 0,
       );
@@ -48,6 +53,7 @@ class ProductEntity extends Equatable {
   Map<String, Object> toDocument() => {
         "name": name,
         "available": available,
+        "available_esiee": availableESIEE,
         "maxAmount": maxAmount,
         "initialStock": initialStock,
       };

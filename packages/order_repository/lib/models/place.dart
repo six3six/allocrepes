@@ -7,8 +7,8 @@ enum Place {
   Ampere_A,
   Ampere_B,
   Ampere_C,
-  Arago,
   Campusea,
+  Arago,
   ESIEE,
   Kley,
   Kley_2,
@@ -22,15 +22,15 @@ class PlaceUtils {
       case Place.Ampere_A:
       case Place.Ampere_B:
       case Place.Ampere_C:
-        return Colors.blue;
+        return Colors.orangeAccent[200]!;
       case Place.Arago:
         return Colors.red;
       case Place.Kley:
-        return Colors.orange;
+        return Colors.blue;
       case Place.Kley_2:
-        return Colors.green;
+        return Colors.blue;
       case Place.Campusea:
-        return Colors.purple;
+        return Colors.orangeAccent[100]!;
       case Place.ESIEE:
         return Colors.grey;
     }
@@ -39,17 +39,17 @@ class PlaceUtils {
   static String placeToString(Place place) {
     switch (place) {
       case Place.Ampere_A:
-        return "Ampère A";
+        return "Olympère (Ampère) A";
       case Place.Ampere_B:
-        return "Ampère B";
+        return "Olympère (Ampère) B";
       case Place.Ampere_C:
-        return "Ampère C";
+        return "Olympère (Ampère) C";
       case Place.Arago:
-        return "Arago";
+        return "Spartarago (Arago)";
       case Place.Kley:
-        return "Kley";
+        return "Akleytide (Kley)";
       case Place.Kley_2:
-        return "Kley 2";
+        return "Akleytide (Kley) 2";
       case Place.ESIEE:
         return "ESIEE";
       case Place.Campusea:
