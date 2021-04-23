@@ -43,7 +43,11 @@ class ProductListCubit extends Cubit<ProductListState> {
     Product product,
     bool availability,
   ) {
-    orderRepository.updateProductAvailability(category, product, availability);
+    orderRepository.updateProductAvailability(
+      category,
+      product,
+      availability,
+    );
   }
 
   void updateProductAvailabilityESIEE(
@@ -52,7 +56,22 @@ class ProductListCubit extends Cubit<ProductListState> {
     bool availability,
   ) {
     orderRepository.updateProductAvailabilityESIEE(
-        category, product, availability);
+      category,
+      product,
+      availability,
+    );
+  }
+
+  void updateProductOneOrder(
+    Category category,
+    Product product,
+    bool oneOrder,
+  ) {
+    orderRepository.updateProductOneOrder(
+      category,
+      product,
+      oneOrder,
+    );
   }
 
   void updateProductMaxAmount(

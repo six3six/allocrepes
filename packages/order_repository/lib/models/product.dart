@@ -10,6 +10,7 @@ class Product extends Equatable {
     required this.availableESIEE,
     required this.maxAmount,
     required this.initialStock,
+    required this.oneOrder,
   });
 
   final String? id;
@@ -18,6 +19,7 @@ class Product extends Equatable {
   final bool availableESIEE;
   final int maxAmount;
   final int initialStock;
+  final bool oneOrder;
 
   static const empty = Product(
     id: "",
@@ -26,6 +28,7 @@ class Product extends Equatable {
     availableESIEE: false,
     maxAmount: 0,
     initialStock: 0,
+    oneOrder: false,
   );
 
   @override
@@ -36,6 +39,7 @@ class Product extends Equatable {
         maxAmount,
         initialStock,
         availableESIEE,
+        oneOrder,
       ];
 
   Product copyWith({
@@ -46,6 +50,7 @@ class Product extends Equatable {
     ImageProvider? image,
     int? maxAmount,
     int? initialStock,
+    bool? oneOrder,
   }) {
     return Product(
       name: name ?? this.name,
@@ -54,6 +59,7 @@ class Product extends Equatable {
       id: id ?? this.id,
       maxAmount: maxAmount ?? this.maxAmount,
       initialStock: initialStock ?? this.initialStock,
+      oneOrder: oneOrder ?? this.oneOrder,
     );
   }
 
@@ -65,6 +71,7 @@ class Product extends Equatable {
       availableESIEE,
       maxAmount,
       initialStock,
+      oneOrder,
     );
   }
 
@@ -76,6 +83,7 @@ class Product extends Equatable {
       availableESIEE: entity.availableESIEE,
       maxAmount: entity.maxAmount,
       initialStock: entity.initialStock,
+      oneOrder: entity.oneOrder,
     );
   }
 }

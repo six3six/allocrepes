@@ -320,59 +320,90 @@ class _ProductAvailability extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 7,
-              child: Text(
-                "Disponible à l'ESIEE",
-              ),
-            ),
-            BlocBuilder<ProductListCubit, ProductListState>(
-              buildWhen: (prev, next) =>
-                  prev.getProduct(category, rank).availableESIEE !=
-                  next.getProduct(category, rank).availableESIEE,
-              builder: (context, state) => Checkbox(
-                value: state.getProduct(category, rank).availableESIEE,
-                onChanged: (bool? availability) =>
-                    BlocProvider.of<ProductListCubit>(context)
-                        .updateProductAvailabilityESIEE(
-                  category,
-                  state.getProduct(category, rank),
-                  availability ?? false,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              flex: 7,
-              child: Text(
-                "Disponible en résidence",
-              ),
-            ),
-            BlocBuilder<ProductListCubit, ProductListState>(
-              buildWhen: (prev, next) =>
-                  prev.getProduct(category, rank).available !=
-                  next.getProduct(category, rank).available,
-              builder: (context, state) => Checkbox(
-                value: state.getProduct(category, rank).available,
-                onChanged: (bool? availability) =>
-                    BlocProvider.of<ProductListCubit>(context)
-                        .updateProductAvailability(
-                  category,
-                  state.getProduct(category, rank),
-                  availability ?? false,
-                ),
-              ),
-            ),
-          ],
-        ),
+        AvailableESIEE(),
+        Available(),
+        OneOrder(),
       ],
     );
   }
+
+  Widget AvailableESIEE() => Row(
+        children: [
+          Expanded(
+            flex: 7,
+            child: Text(
+              "Disponible à l'ESIEE",
+            ),
+          ),
+          BlocBuilder<ProductListCubit, ProductListState>(
+            buildWhen: (prev, next) =>
+                prev.getProduct(category, rank).availableESIEE !=
+                next.getProduct(category, rank).availableESIEE,
+            builder: (context, state) => Checkbox(
+              value: state.getProduct(category, rank).availableESIEE,
+              onChanged: (bool? availability) =>
+                  BlocProvider.of<ProductListCubit>(context)
+                      .updateProductAvailabilityESIEE(
+                category,
+                state.getProduct(category, rank),
+                availability ?? false,
+              ),
+            ),
+          ),
+        ],
+      );
+
+  Widget Available() => Row(
+        children: [
+          Expanded(
+            flex: 7,
+            child: Text(
+              "Disponible en résidence",
+            ),
+          ),
+          BlocBuilder<ProductListCubit, ProductListState>(
+            buildWhen: (prev, next) =>
+                prev.getProduct(category, rank).available !=
+                next.getProduct(category, rank).available,
+            builder: (context, state) => Checkbox(
+              value: state.getProduct(category, rank).available,
+              onChanged: (bool? availability) =>
+                  BlocProvider.of<ProductListCubit>(context)
+                      .updateProductAvailability(
+                category,
+                state.getProduct(category, rank),
+                availability ?? false,
+              ),
+            ),
+          ),
+        ],
+      );
+
+  Widget OneOrder() => Row(
+        children: [
+          Expanded(
+            flex: 7,
+            child: Text(
+              "Commandable qu'une fois",
+            ),
+          ),
+          BlocBuilder<ProductListCubit, ProductListState>(
+            buildWhen: (prev, next) =>
+                prev.getProduct(category, rank).oneOrder !=
+                next.getProduct(category, rank).oneOrder,
+            builder: (context, state) => Checkbox(
+              value: state.getProduct(category, rank).oneOrder,
+              onChanged: (bool? availability) =>
+                  BlocProvider.of<ProductListCubit>(context)
+                      .updateProductOneOrder(
+                category,
+                state.getProduct(category, rank),
+                availability ?? false,
+              ),
+            ),
+          ),
+        ],
+      );
 }
 
 class _ProductOrderPagesViewCheckbox extends StatelessWidget {

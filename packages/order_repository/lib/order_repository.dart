@@ -49,6 +49,12 @@ abstract class OrderRepository {
     bool available,
   );
 
+  Future<void> updateProductOneOrder(
+    Category category,
+    Product product,
+    bool oneOrder,
+  );
+
   Future<void> updateProductMaxAmount(
     Category category,
     String productId,

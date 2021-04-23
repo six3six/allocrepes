@@ -41,6 +41,22 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         loading: false,
       ));
     });
+
+    orderRepository.userOrders(orderStatus: <OrderStatus>[
+      OrderStatus.DELIVERED,
+      OrderStatus.DELIVERING,
+      OrderStatus.PENDING,
+      OrderStatus.VALIDATING,
+    ]).forEach((orders) {
+      List<String> alreadyOrdered = [];
+      orders.forEach((order) {
+        order.articles.forEach((article) {
+          alreadyOrdered.add(article.categoryId + ";" + article.productId);
+        });
+      });
+
+      emit(state.copyWith(alreadyOrdered: alreadyOrdered));
+    });
   }
 
   List<Product> getAvailableProduct(Category cat) =>
