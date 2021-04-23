@@ -60,9 +60,9 @@ class LobbyTop extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: 200),
                 child: Hero(
-                  tag: "logo",
+                  tag: 'logo',
                   child: Image.asset(
-                    "assets/logo.png",
+                    'assets/logo.png',
                   ),
                 ),
               ),
@@ -79,7 +79,7 @@ class LobbyTop extends StatelessWidget {
                 children: [
                   BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (context, state) => Text(
-                      "Bonjour " + state.user.surname,
+                      'Bonjour ' + state.user.surname,
                       style:
                           textTheme.subtitle1?.merge(TextStyle(fontSize: 20)),
                     ),
@@ -89,7 +89,7 @@ class LobbyTop extends StatelessWidget {
                   ),
                   BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (context, state) => Text(
-                      "Points : " + state.user.point.toString(),
+                      'Points : ' + state.user.point.toString(),
                       style: TextStyle(fontSize: 18),
                     ),
                   ),

@@ -15,10 +15,10 @@ class AdminNotifState extends Equatable {
     this.action = AdminNotifAction.MainPage,
     this.recipient = AdminNotifRecipient.Everybody,
     this.readyToSend = false,
-    this.userId = "",
-    this.link = "",
-    this.title = "",
-    this.body = "",
+    this.userId = '',
+    this.link = '',
+    this.title = '',
+    this.body = '',
     this.isSending = false,
   });
 

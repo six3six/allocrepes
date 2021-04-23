@@ -14,7 +14,7 @@ class AdminMainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Admins"),
+        title: const Text('Admins'),
       ),
       body: CustomScrollView(
         primary: false,
@@ -30,35 +30,35 @@ class AdminMainView extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 children: <Widget>[
                   MenuCard(
-                    title: "Afficher les commandes",
+                    title: 'Afficher les commandes',
                     onTap: () {
                       Navigator.push(context, OrderAdminPage.route());
                     },
                     icon: Icons.book_outlined,
                   ),
                   MenuCard(
-                    title: "Modifier les produits",
+                    title: 'Modifier les produits',
                     onTap: () {
                       Navigator.push(context, ProductListPage.route());
                     },
                     icon: Icons.free_breakfast_outlined,
                   ),
                   MenuCard(
-                    title: "Modifier les stocks",
+                    title: 'Modifier les stocks',
                     onTap: () {
                       Navigator.push(context, StockPage.route());
                     },
                     icon: Icons.workspaces_filled,
                   ),
                   MenuCard(
-                    title: "Afficher les utilisateurs",
+                    title: 'Afficher les utilisateurs',
                     onTap: () {
                       Navigator.push(context, AdminUserPage.route());
                     },
                     icon: Icons.supervised_user_circle_outlined,
                   ),
                   MenuCard(
-                    title: "Envoyer une notification",
+                    title: 'Envoyer une notification',
                     onTap: () {
                       Navigator.push(context, AdminNotifPage.route());
                     },

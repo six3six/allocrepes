@@ -11,12 +11,13 @@ class OrderAdminPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => OrderAdminPage(),
-      settings: RouteSettings(name: "OrderAdmin"),
+      settings: RouteSettings(name: 'OrderAdmin'),
     );
   }
 
   const OrderAdminPage({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (BuildContext context, AuthenticationState state) {

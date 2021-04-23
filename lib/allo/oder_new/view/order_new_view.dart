@@ -13,12 +13,13 @@ import 'package:order_repository/models/product.dart';
 class OrderNewView extends StatelessWidget {
   const OrderNewView({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Nouvelle commandes"),
+        title: const Text('Nouvelle commandes'),
       ),
       body: ListView(
         children: [
@@ -31,9 +32,9 @@ class OrderNewView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Commentaire :"),
+                Text('Commentaire :'),
                 Text(
-                  "(un anniversaire, un message à nous passer...)",
+                  '(un anniversaire, un message à nous passer...)',
                   style: theme.textTheme.caption,
                 ),
                 TextField(
@@ -54,11 +55,12 @@ class OrderNewView extends StatelessWidget {
                   BlocProvider.of<OrderNewCubit>(context)
                       .checkout(context)
                       .then((ok) {
-                    if (ok)
+                    if (ok) {
                       Navigator.pushReplacement(context, OrderListPage.route());
+                    }
                   });
                 },
-                child: Text("Commander"),
+                child: Text('Commander'),
               ),
             ),
           ),
@@ -85,7 +87,7 @@ class _OrderNewCategories extends StatelessWidget {
               ) ||
               prev.place != next.place,
           builder: (context, state) {
-            List<_OrderNewCategory> categories = [];
+            var categories = <_OrderNewCategory>[];
             state.categories.forEach(
               (Category cat, List<Product> products) => categories.add(
                 _OrderNewCategory(
@@ -122,7 +124,7 @@ class _OrderNewCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    if (products.length == 0) return SizedBox();
+    if (products.isEmpty) return SizedBox();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,39 +186,17 @@ class _OrderNewItem extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 7,
-                  child: Text(product.name,
-                      style: state.isAlreadyOrdered(category, product)
-                          ? textTheme.headline6?.merge(TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey,
-                            ))
-                          : textTheme.headline6),
-                ),
-                if (!state.isAlreadyOrdered(category, product))
-                  BlocBuilder<OrderNewCubit, OrderNewState>(
-                    buildWhen: (prev, next) =>
-                        prev.getQuantity(category, product) !=
-                        next.getQuantity(category, product),
-                    builder: (context, state) => DropdownButton<int>(
-                      value: BlocProvider.of<OrderNewCubit>(context)
-                          .getQuantity(category, product),
-                      icon: Icon(Icons.arrow_drop_down_circle_outlined),
-                      iconSize: 24,
-                      elevation: 16,
-                      onChanged: (int? val) =>
-                          BlocProvider.of<OrderNewCubit>(context)
-                              .updateQuantity(category, product, val ?? 0),
-                      items: List<int>.generate(
-                        product.maxAmount + 1,
-                        (index) => index,
-                      ).map<DropdownMenuItem<int>>((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text(" " + value.toString() + " "),
-                        );
-                      }).toList(),
-                    ),
+                  child: Text(
+                    product.name,
+                    style: state.isAlreadyOrdered(category, product)
+                        ? textTheme.headline6?.merge(TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            color: Colors.grey,
+                          ))
+                        : textTheme.headline6,
                   ),
+                ),
+                if (!state.isAlreadyOrdered(category, product)) nbSelector(),
               ],
             ),
           ),
@@ -234,6 +214,30 @@ class _OrderNewItem extends StatelessWidget {
       ),
     );
   }
+
+  Widget nbSelector() => BlocBuilder<OrderNewCubit, OrderNewState>(
+        buildWhen: (prev, next) =>
+            prev.getQuantity(category, product) !=
+            next.getQuantity(category, product),
+        builder: (context, state) => DropdownButton<int>(
+          value: BlocProvider.of<OrderNewCubit>(context)
+              .getQuantity(category, product),
+          icon: Icon(Icons.arrow_drop_down_circle_outlined),
+          iconSize: 24,
+          elevation: 16,
+          onChanged: (int? val) => BlocProvider.of<OrderNewCubit>(context)
+              .updateQuantity(category, product, val ?? 0),
+          items: List<int>.generate(
+            product.maxAmount + 1,
+            (index) => index,
+          ).map<DropdownMenuItem<int>>((int value) {
+            return DropdownMenuItem<int>(
+              value: value,
+              child: Text(' ' + value.toString() + ' '),
+            );
+          }).toList(),
+        ),
+      );
 }
 
 class _OrderNewAddressInfo extends StatelessWidget {
@@ -279,7 +283,7 @@ class _OrderNewBatimentSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Batiment : ",
+          'Batiment : ',
           style: theme.textTheme.caption,
         ),
         SizedBox(

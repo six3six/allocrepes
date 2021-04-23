@@ -19,10 +19,10 @@ class LoginCubit extends Cubit<LoginState> {
     final response = await http.get(Uri.parse(url));
     final decodedData = jsonDecode(response.body);
 
-    _authenticationRepository.logInWithToken(token: decodedData["token"]);
+    await _authenticationRepository.logInWithToken(token: decodedData['token']);
   }
 
   Future<void> loginWithToken(String token) async {
-    _authenticationRepository.logInWithToken(token: token);
+    await _authenticationRepository.logInWithToken(token: token);
   }
 }

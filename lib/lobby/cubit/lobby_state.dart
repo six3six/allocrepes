@@ -28,6 +28,6 @@ class LobbyState extends Equatable {
   List<Object> get props => [
         news,
         isLoading,
-        showOrder,
-      ]..addAll(news);
+        showOrder, ...news,
+      ];
 }

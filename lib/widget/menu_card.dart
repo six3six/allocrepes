@@ -9,7 +9,7 @@ class MenuCard extends StatelessWidget {
 
   const MenuCard({
     Key? key,
-    this.title = "",
+    this.title = '',
     required this.icon,
     this.onTap,
     this.enable = true,

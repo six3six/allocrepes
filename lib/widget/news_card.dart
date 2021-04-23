@@ -51,14 +51,14 @@ class NewsCard extends StatelessWidget {
             children: [
               SizedBox(
                 height: 200,
-                child: image.length != 0
+                child: image.isNotEmpty
                     ? Image.network(
                         image,
                         fit: BoxFit.fill,
                         height: double.infinity,
                         width: double.infinity,
                       )
-                    : Image.asset("assets/logo.png"),
+                    : Image.asset('assets/logo.png'),
               ),
               ListTile(
                 title: Container(

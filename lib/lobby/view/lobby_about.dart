@@ -25,16 +25,16 @@ class LobbyAboutState extends State<LobbyAbout> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Fait avec le ❤"),
-                  Text("par Louis DESPLANCHE"),
+                  Text('Fait avec le ❤'),
+                  Text('par Louis DESPLANCHE'),
                 ],
               ),
             if (easter)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Fait avec le cul"),
-                  Text("par Louis DESPLANCHE"),
+                  Text('Fait avec le cul'),
+                  Text('par Louis DESPLANCHE'),
                 ],
               ),
             SizedBox(
@@ -48,7 +48,7 @@ class LobbyAboutState extends State<LobbyAbout> {
             SizedBox(
               height: 20,
             ),
-            Text("© Liste BDE ESIEE Paris 2021-2022"),
+            Text('© Liste BDE ESIEE Paris 2021-2022'),
             SizedBox(
               height: 20,
             ),
@@ -57,10 +57,10 @@ class LobbyAboutState extends State<LobbyAbout> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Nique tous ces RG",
+                    'Nique tous ces RG',
                     style: TextStyle(fontSize: 20),
                   ),
-                  Text("Théo, 2021"),
+                  Text('Théo, 2021'),
                   SizedBox(
                     height: 20,
                   ),
@@ -70,14 +70,15 @@ class LobbyAboutState extends State<LobbyAbout> {
               future: PackageInfo.fromPlatform(),
               builder: (conext, snapshot) {
                 if (snapshot.hasData) {
-                  PackageInfo infos = snapshot.data! as PackageInfo;
+                  var infos = snapshot.data! as PackageInfo;
 
                   return Text(
-                    "Version : ${infos.version} build ${infos.buildNumber}",
+                    'Version : ${infos.version} build ${infos.buildNumber}',
                     style: textTheme.overline,
                   );
-                } else
+                } else {
                   return SizedBox();
+                }
               },
             ),
           ],
@@ -85,13 +86,13 @@ class LobbyAboutState extends State<LobbyAbout> {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text("Ok, je m'en fiche"),
           onLongPress: () => setState(() {
             easter = true;
           }),
           onPressed: () {
             Navigator.of(context).pop();
           },
+          child: Text("Ok, je m'en fiche"),
         ),
       ],
     );

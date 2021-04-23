@@ -13,18 +13,19 @@ class OrderListPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => OrderListPage(),
-      settings: RouteSettings(name: "OrderList"),
+      settings: RouteSettings(name: 'OrderList'),
     );
   }
 
   const OrderListPage({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mes commandes"),
+        title: const Text('Mes commandes'),
       ),
       floatingActionButton: SizedBox(
         height: 70,
@@ -34,8 +35,8 @@ class OrderListPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(context, OrderNewPage.route());
           },
+          tooltip: 'Commander',
           child: const Icon(Icons.shopping_cart),
-          tooltip: "Commander",
         ),
       ),
       body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -43,7 +44,6 @@ class OrderListPage extends StatelessWidget {
           return BlocProvider<OrderListCubit>(
             create: (context) => OrderListCubit(
               RepositoryProvider.of<OrderRepositoryFirestore>(context),
-              state.user,
             ),
             child: BlocBuilder<OrderListCubit, OrderListState>(
               buildWhen: (prev, next) =>
@@ -60,12 +60,12 @@ class OrderListPage extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      "Chargement...",
+                      'Chargement...',
                       style: theme.textTheme.headline6,
                     ),
                     if (!state.isConnected)
                       Text(
-                        "En attente de connexion...",
+                        'En attente de connexion...',
                         style: theme.textTheme.headline6,
                       ),
                   ],

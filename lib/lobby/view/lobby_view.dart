@@ -65,7 +65,7 @@ class _LobbyMenu extends StatelessWidget {
                 BlocBuilder<LobbyCubit, LobbyState>(
                   builder: (context, state) {
                     return MenuCard(
-                      title: "Passer commande",
+                      title: 'Passer commande',
                       onTap: () =>
                           Navigator.push(context, OrderNewPage.route()),
                       icon: Icons.shopping_cart_outlined,
@@ -76,7 +76,7 @@ class _LobbyMenu extends StatelessWidget {
                 BlocBuilder<LobbyCubit, LobbyState>(
                   builder: (context, state) {
                     return MenuCard(
-                      title: "Mes commandes",
+                      title: 'Mes commandes',
                       onTap: () =>
                           Navigator.push(context, OrderListPage.route()),
                       icon: Icons.shopping_basket_outlined,
@@ -85,17 +85,17 @@ class _LobbyMenu extends StatelessWidget {
                   },
                 ),
                 MenuCard(
-                  title: "En savoir +",
+                  title: 'En savoir +',
                   onTap: () {
                     try {
-                      launch("https://xanthos.fr/a-propos");
+                      launch('https://xanthos.fr/a-propos');
                     } catch (e) {}
                   },
                   icon: Icons.mood_rounded,
                 ),
                 if (state.user.admin)
                   MenuCard(
-                    title: "Admin",
+                    title: 'Admin',
                     onTap: () {
                       Navigator.push(context, AdminMainPage.route());
                     },
@@ -121,7 +121,7 @@ class _LobbyTwitchMenu extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
             child: Text(
-              "Suivre Xanthos sur Twitch",
+              'Suivre Xanthos sur Twitch',
               style: textTheme.headline5,
             ),
           ),
@@ -148,7 +148,7 @@ class _LobbyActuMenu extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Suivre les actus Xanthos",
+              'Suivre les actus Xanthos',
               style: textTheme.headline5,
             ),
             SizedBox(
@@ -156,13 +156,14 @@ class _LobbyActuMenu extends StatelessWidget {
             ),
             BlocBuilder<LobbyCubit, LobbyState>(
               builder: (context, state) {
-                if (state.news.length == 0)
+                if (state.news.isEmpty) {
                   return SizedBox(
+                    height: 100,
                     child: Center(
                       child: Text("Il n'y a pas de news pour le moment"),
                     ),
-                    height: 100,
                   );
+                }
 
                 return SizedBox(
                   width: double.infinity,

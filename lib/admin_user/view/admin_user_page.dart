@@ -11,12 +11,13 @@ class AdminUserPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => AdminUserPage(),
-      settings: RouteSettings(name: "AdminUser"),
+      settings: RouteSettings(name: 'AdminUser'),
     );
   }
 
   const AdminUserPage({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
@@ -37,7 +38,7 @@ class AdminUserPage extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                "Chargement...",
+                'Chargement...',
                 style: theme.textTheme.headline6,
               ),
             ],

@@ -14,9 +14,9 @@ class SplashPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: Center(
             child: Hero(
-              tag: "logo",
+              tag: 'logo',
               child: Image.asset(
-                "assets/logo.png",
+                'assets/logo.png',
               ),
             ),
           ),

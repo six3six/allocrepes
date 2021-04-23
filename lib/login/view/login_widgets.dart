@@ -64,15 +64,15 @@ class AuthTokenView extends StatelessWidget {
           'Pour se connecter, appuyez sur le bouton ci-dessous. Puis copier coller le code dans le champs \"Token\"',
         ),
         TextButton(
-          child: Text('Obtenir un token'),
           onPressed: () => launch(
             'https://sso.esiee.fr/cas/login?service=https%3A%2F%2Fus-central1-allocrepes-4f992.cloudfunctions.net%2FssoLoginToken/',
           ),
+          child: Text('Obtenir un token'),
         ),
         SizedBox(
           height: 15,
         ),
-        Text("Token : "),
+        Text('Token : '),
         TextField(
           controller: tokenController,
         ),
@@ -82,7 +82,7 @@ class AuthTokenView extends StatelessWidget {
         ElevatedButton(
           onPressed: () => BlocProvider.of<LoginCubit>(context)
               .loginWithToken(tokenController.text),
-          child: Text("Valider"),
+          child: Text('Valider'),
         ),
       ],
     );

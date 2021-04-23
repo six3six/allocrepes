@@ -8,7 +8,7 @@ class AdminNotifCubit extends Cubit<AdminNotifState> {
   AdminNotifCubit() : super(AdminNotifState());
 
   final HttpsCallable funcSendNotif =
-      FirebaseFunctions.instance.httpsCallable("sendNotif");
+      FirebaseFunctions.instance.httpsCallable('sendNotif');
 
   void changeAction(AdminNotifAction action) {
     emit(state.copyWith(action: action));
@@ -42,12 +42,12 @@ class AdminNotifCubit extends Cubit<AdminNotifState> {
     emit(state.copyWith(isSending: true));
     try {
       await funcSendNotif({
-        "title": state.title,
-        "body": state.body,
-        "action": state.action.index,
-        "recipient": state.recipient.index,
-        "link": state.link,
-        "user": state.userId,
+        'title': state.title,
+        'body': state.body,
+        'action': state.action.index,
+        'recipient': state.recipient.index,
+        'link': state.link,
+        'user': state.userId,
       });
       emit(state.copyWith(isSending: false));
       Navigator.pop(context);
@@ -56,7 +56,7 @@ class AdminNotifCubit extends Cubit<AdminNotifState> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: Duration(seconds: 30),
-          content: Text(e.toString() + "\n" + stacktrace.toString()),
+          content: Text(e.toString() + '\n' + stacktrace.toString()),
         ),
       );
     }

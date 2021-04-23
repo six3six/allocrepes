@@ -13,7 +13,7 @@ class AdminUserState extends Equatable {
     this.isLoading = false,
     this.users = const {},
     this.admin = const {},
-    this.usernameQuery = "",
+    this.usernameQuery = '',
     this.sortUser = SortUser.Name,
   });
 
@@ -22,15 +22,15 @@ class AdminUserState extends Equatable {
         isLoading,
         usernameQuery,
         sortUser,
-      ]
-        ..addAll(users.keys)
-        ..addAll(users.values)
-        ..addAll(admin.keys)
-        ..addAll(admin.values);
+        ...users.keys,
+        ...users.values,
+        ...admin.keys,
+        ...admin.values,
+      ];
 
   @override
   String toString() {
-    return "AdminUserState(isLoading: $isLoading, users: $users, admin: $admin, usernameQuery: $usernameQuery, sortUser: $sortUser)";
+    return 'AdminUserState(isLoading: $isLoading, users: $users, admin: $admin, usernameQuery: $usernameQuery, sortUser: $sortUser)';
   }
 
   AdminUserState copyWith({
