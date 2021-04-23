@@ -20,9 +20,9 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
         ) {
     getOrders();
     _orderRepository.products().forEach((products) {
-      Map<String, Product> productsMap = {};
+      var productsMap = <String, Product>{};
       products.forEach((product) {
-        productsMap[product.id ?? ""] = product;
+        productsMap[product.id ?? ''] = product;
       });
       emit(state.copyWith(products: productsMap));
     });
@@ -36,12 +36,12 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
   void getOrders() {
     orderStream = null;
 
-    final List<OrderStatus> status = [];
+    final status = <OrderStatus>[];
     state.selectedStatus.forEach((sStatus, selected) {
       if (selected) status.add(sStatus);
     });
 
-    final List<Place> places = [];
+    final places = <Place>[];
     state.selectedPlaces.forEach((sPlaces, selected) {
       if (selected) places.add(sPlaces);
     });
@@ -49,7 +49,7 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
     orderStream = _orderRepository.orders(orderStatus: status, places: places);
 
     orderStream?.forEach((orders) {
-      Map<OrderStatus, List<Order>> ordersMap = {};
+      var ordersMap = <OrderStatus, List<Order>>{};
       orders.forEach((order) {
         if (!ordersMap.containsKey(order.status)) ordersMap[order.status] = [];
         ordersMap[order.status]?.add(order);
@@ -64,7 +64,7 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
   }
 
   void expandOrder(Order order, bool expand) {
-    Map<String, bool> expandedOrders = {};
+    var expandedOrders = <String, bool>{};
     expandedOrders.addAll(state.expandedOrders);
 
     expandedOrders[order.id!] = expand;

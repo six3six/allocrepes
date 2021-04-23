@@ -11,16 +11,17 @@ class LobbyPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => LobbyPage(),
-      settings: RouteSettings(name: "Main"),
+      settings: RouteSettings(name: 'Main'),
     );
   }
 
   const LobbyPage({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("XANTHOS"),
+        title: const Text('XANTHOS'),
         actions: [
           IconButton(
             icon: const Icon(Icons.run_circle_outlined),

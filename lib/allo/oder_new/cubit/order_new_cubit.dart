@@ -22,14 +22,14 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
   void getProducts() {
     orderRepository.categories().forEach((cats) {
-      Map<Category, List<Product>> categories = {};
+      var categories = <Category, List<Product>>{};
 
       cats.forEach((cat) {
         categories[cat] = [];
         emit(state.copyWith(categories: categories));
 
         orderRepository.productsFromCategory(cat).forEach((prods) {
-          Map<Category, List<Product>> categories = {}
+          var categories = <Category, List<Product>>{}
             ..addAll(state.categories);
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
@@ -48,10 +48,10 @@ class OrderNewCubit extends Cubit<OrderNewState> {
       OrderStatus.PENDING,
       OrderStatus.VALIDATING,
     ]).forEach((orders) {
-      List<String> alreadyOrdered = [];
+      var alreadyOrdered = <String>[];
       orders.forEach((order) {
         order.articles.forEach((article) {
-          alreadyOrdered.add(article.categoryId + ";" + article.productId);
+          alreadyOrdered.add(article.categoryId + ';' + article.productId);
         });
       });
 
@@ -76,9 +76,9 @@ class OrderNewCubit extends Cubit<OrderNewState> {
       .map((key, value) => MapEntry(key, getAvailableESIEEProduct(key)));
 
   void updateQuantity(Category category, Product product, int quantity) {
-    Map<String, int> q = {};
+    var q = <String, int>{};
     q.addAll(state.quantities);
-    q["${category.id};${product.id}"] = quantity;
+    q['${category.id};${product.id}'] = quantity;
     emit(state.copyWith(quantities: q));
   }
 
@@ -87,19 +87,19 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
   void updateRoom(String? room) {
     emit(state.copyWith(room: room));
-    if (room == null || room == "") {
-      emit(state.copyWith(roomError: "Salle non définie"));
+    if (room == null || room == '') {
+      emit(state.copyWith(roomError: 'Salle non définie'));
     } else {
-      emit(state.copyWith(roomError: ""));
+      emit(state.copyWith(roomError: ''));
     }
   }
 
   void updatePlace(Place? place) {
     emit(state.copyWith(place: place));
     if (place == null) {
-      emit(state.copyWith(placeError: "Lieu non défini"));
+      emit(state.copyWith(placeError: 'Lieu non défini'));
     } else {
-      emit(state.copyWith(placeError: ""));
+      emit(state.copyWith(placeError: ''));
     }
   }
 
@@ -114,52 +114,53 @@ class OrderNewCubit extends Cubit<OrderNewState> {
   Future<bool> checkout(BuildContext context) async {
     updateRoom(state.room);
     updatePlace(state.place);
-    if (state.roomError != "" || state.placeError != "") {
-      showError(context, "Remplissez le lieu ET la salle");
+    if (state.roomError != '' || state.placeError != '') {
+      await showError(context, 'Remplissez le lieu ET la salle');
 
       return false;
     }
 
-    List<Article> articles = [];
+    var articles = <Article>[];
     state.categories
         .forEach((category, products) => products.forEach((product) {
               final q = getQuantity(category, product);
-              if (q > 0 && checkAvailability(product))
+              if (q > 0 && checkAvailability(product)) {
                 articles.add(Article(
-                  productId: product.id ?? "",
-                  categoryId: category.id ?? "",
+                  productId: product.id ?? '',
+                  categoryId: category.id ?? '',
                   amount: q,
                 ));
+              }
             }));
 
-    if (articles.length == 0) {
-      showError(context, "Choisissez au moins un article");
+    if (articles.isEmpty) {
+      await showError(context, 'Choisissez au moins un article');
 
       return false;
     }
 
     try {
       emit(state.copyWith(loading: true));
-      if (state.place == null) throw Exception("Il manque le batiment");
-      if (state.room == null) throw Exception("Il manque la piece");
+      if (state.place == null) throw Exception('Il manque le batiment');
+      if (state.room == null) throw Exception('Il manque la piece');
       await orderRepository.createOrder(Order(
         status: OrderStatus.VALIDATING,
         owner: user.id,
         createdAt: DateTime.now(),
         articles: articles,
         place: state.place ?? Place.UNKNOWN,
-        room: state.room ?? "",
+        room: state.room ?? '',
         message: state.message,
       ));
 
       return true;
     } catch (e, stacktrace) {
-      showError(
+      await showError(
         context,
-        "Erreur du système : ${e.toString()}\n\n${stacktrace.toString()}",
+        'Erreur du système : ${e.toString()}\n\n${stacktrace.toString()}',
       );
-      print("Checkout error " + e.toString());
-      print("Checkout stacktrace " + stacktrace.toString());
+      print('Checkout error ' + e.toString());
+      print('Checkout stacktrace ' + stacktrace.toString());
       emit(state.copyWith(loading: false));
 
       return false;
@@ -181,10 +182,10 @@ class OrderNewCubit extends Cubit<OrderNewState> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Confirmer'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: Text('Confirmer'),
             ),
           ],
         ),

@@ -9,7 +9,7 @@ class AdminUserView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Utilisateurs"),
+        title: const Text('Utilisateurs'),
       ),
       body: ListView(
         children: [
@@ -39,12 +39,12 @@ class _FilterView extends StatelessWidget {
     final theme = Theme.of(context);
 
     return ExpansionTile(
-      title: Text("Filtres"),
+      title: Text('Filtres'),
       childrenPadding: EdgeInsets.symmetric(horizontal: 10),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Nom de famille :",
+          'Nom de famille :',
           style: theme.textTheme.caption,
         ),
         TextField(
@@ -57,7 +57,7 @@ class _FilterView extends StatelessWidget {
           height: 10,
         ),
         Text(
-          "Trié par :",
+          'Trié par :',
           style: theme.textTheme.caption,
         ),
         BlocBuilder<AdminUserCubit, AdminUserState>(
@@ -65,11 +65,11 @@ class _FilterView extends StatelessWidget {
           builder: (context, state) {
             return ExpansionTile(
               title: Text(
-                "Trié par : ",
+                'Trié par : ',
               ),
               children: [
                 ListTile(
-                  title: Text("Par identifiant"),
+                  title: Text('Par identifiant'),
                   leading: Radio<SortUser>(
                     value: SortUser.Name,
                     groupValue: state.sortUser,
@@ -79,7 +79,7 @@ class _FilterView extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text("Par points"),
+                  title: Text('Par points'),
                   leading: Radio<SortUser>(
                     value: SortUser.Point,
                     groupValue: state.sortUser,
@@ -137,15 +137,15 @@ class _UserTile extends StatelessWidget {
     return BlocBuilder<AdminUserCubit, AdminUserState>(
       builder: (context, state) {
         if (state.users[id] == null) return SizedBox();
-        User user = state.users[id] ?? User.empty;
+        var user = state.users[id] ?? User.empty;
 
         return ExpansionTile(
-          title: Text("${user.id} : ${user.surname} ${user.name}"),
+          title: Text('${user.id} : ${user.surname} ${user.name}'),
           childrenPadding: EdgeInsets.symmetric(horizontal: 10),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Prenom:",
+              'Prenom:',
               style: theme.textTheme.caption,
             ),
             TextField(
@@ -155,7 +155,7 @@ class _UserTile extends StatelessWidget {
               height: 5,
             ),
             Text(
-              "Nom:",
+              'Nom:',
               style: theme.textTheme.caption,
             ),
             TextField(
@@ -165,7 +165,7 @@ class _UserTile extends StatelessWidget {
               height: 5,
             ),
             Text(
-              "Email:",
+              'Email:',
               style: theme.textTheme.caption,
             ),
             TextField(
@@ -175,7 +175,7 @@ class _UserTile extends StatelessWidget {
               height: 5,
             ),
             Text(
-              "Points:",
+              'Points:',
               style: theme.textTheme.caption,
             ),
             TextField(
@@ -186,7 +186,7 @@ class _UserTile extends StatelessWidget {
               height: 5,
             ),
             CheckboxListTile(
-              title: Text("Admin"),
+              title: Text('Admin'),
               value: state.admin[id] ?? false,
               onChanged: (va) {
                 BlocProvider.of<AdminUserCubit>(context)
@@ -212,19 +212,19 @@ class _UserTile extends StatelessWidget {
                           state.admin[id] ?? false,
                         );
                       },
-                      child: Text("Valider"),
+                      child: Text('Valider'),
                     ),
                   ),
                   SizedBox(
                     width: 10,
                   ),
                   TextButton(
-                    child: Text("Supprimer"),
                     style: TextButton.styleFrom(
                       primary: Colors.red,
                     ),
                     onPressed: () =>
                         BlocProvider.of<AdminUserCubit>(context).removeUser(id),
+                    child: Text('Supprimer'),
                   ),
                 ],
               ),

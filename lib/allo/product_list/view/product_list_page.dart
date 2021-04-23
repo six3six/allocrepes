@@ -10,7 +10,7 @@ class ProductListPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => ProductListPage(),
-      settings: RouteSettings(name: "AdminProductList"),
+      settings: RouteSettings(name: 'AdminProductList'),
     );
   }
 

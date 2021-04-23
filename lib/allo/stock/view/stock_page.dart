@@ -10,7 +10,7 @@ class StockPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => StockPage(),
-      settings: RouteSettings(name: "AdminStock"),
+      settings: RouteSettings(name: 'AdminStock'),
     );
   }
 

@@ -13,7 +13,7 @@ class ProductListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Produits"),
+        title: const Text('Produits'),
       ),
       body: ListView(
         children: [
@@ -23,7 +23,7 @@ class ProductListView extends StatelessWidget {
               next.categories.keys,
             ),
             builder: (context, state) {
-              List<_ProductCategory> categories = [];
+              var categories = <_ProductCategory>[];
               state.categories.keys.forEach(
                 (Category cat) => categories.add(
                   _ProductCategory(
@@ -42,7 +42,7 @@ class ProductListView extends StatelessWidget {
             child: TextButton(
               onPressed: () => BlocProvider.of<ProductListCubit>(context)
                   .addCategoryDialog(context),
-              child: Text("Ajouter une catégorie"),
+              child: Text('Ajouter une catégorie'),
             ),
           ),
           _ProductOrderPagesViewCheckbox(),
@@ -113,7 +113,7 @@ class _ProductCategory extends StatelessWidget {
                 child: TextButton(
                   onPressed: () => BlocProvider.of<ProductListCubit>(context)
                       .addProductDialog(context, category),
-                  child: Text("Ajouter un produit"),
+                  child: Text('Ajouter un produit'),
                 ),
               ),
             ],
@@ -137,17 +137,15 @@ class _ProductEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return BlocBuilder<ProductListCubit, ProductListState>(
       buildWhen: (prev, next) =>
           prev.getProduct(category, rank).id !=
           next.getProduct(category, rank).id,
       builder: (context, state) {
-        final productId = state.getProduct(category, rank).id ?? "";
+        final productId = state.getProduct(category, rank).id ?? '';
 
         return Dismissible(
-          key: Key("${category.id};$productId"),
+          key: Key('${category.id};$productId'),
           direction: DismissDirection.endToStart,
           background: Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -229,7 +227,7 @@ class _ProductName extends StatelessWidget {
                       .categories[category]
                       ?.elementAt(rank)
                       .name ??
-                  "",
+                  '',
             onChanged: (val) {
               BlocProvider.of<ProductListCubit>(context).updateProductName(
                 category,
@@ -238,7 +236,7 @@ class _ProductName extends StatelessWidget {
                         .categories[category]
                         ?.elementAt(rank)
                         .id ??
-                    "",
+                    '',
                 val,
               );
             },
@@ -269,7 +267,7 @@ class _ProductMaxQuantity extends StatelessWidget {
         Expanded(
           flex: 7,
           child: Text(
-            "Quantité max",
+            'Quantité max',
           ),
         ),
         Expanded(
@@ -292,7 +290,7 @@ class _ProductMaxQuantity extends StatelessWidget {
                         .categories[category]
                         ?.elementAt(rank)
                         .id ??
-                    "",
+                    '',
                 int.tryParse(val) ?? 0,
               );
             },
@@ -358,7 +356,7 @@ class _ProductAvailability extends StatelessWidget {
           Expanded(
             flex: 7,
             child: Text(
-              "Disponible en résidence",
+              'Disponible en résidence',
             ),
           ),
           BlocBuilder<ProductListCubit, ProductListState>(
@@ -421,7 +419,7 @@ class _ProductOrderPagesViewCheckbox extends StatelessWidget {
             height: 50,
           ),
           Text(
-            "Page de commandes",
+            'Page de commandes',
             style: textTheme.headline5,
           ),
           Row(
@@ -429,7 +427,7 @@ class _ProductOrderPagesViewCheckbox extends StatelessWidget {
             children: [
               Expanded(
                 flex: 7,
-                child: Text("Activer les pages de commandes"),
+                child: Text('Activer les pages de commandes'),
               ),
               Expanded(
                 flex: 2,

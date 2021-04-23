@@ -20,14 +20,14 @@ class ProductListCubit extends Cubit<ProductListState> {
 
   void getProducts() {
     orderRepository.categories().forEach((cats) {
-      Map<Category, List<Product>> categories = {};
+      var categories = <Category, List<Product>>{};
 
       cats.forEach((cat) {
         categories[cat] = [];
         emit(state.copyWith(categories: categories));
 
         orderRepository.productsFromCategory(cat).forEach((prods) {
-          Map<Category, List<Product>> categories = {}
+          var categories = <Category, List<Product>>{}
             ..addAll(state.categories);
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
@@ -91,7 +91,7 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   Future<void> addCategoryDialog(BuildContext context) {
-    TextEditingController controller = TextEditingController();
+    var controller = TextEditingController();
 
     return showDialog<void>(
       context: context,
@@ -105,24 +105,24 @@ class ProductListCubit extends Cubit<ProductListState> {
                 Text('Quel nom voulez vous donner à votre catégorie ?'),
                 TextField(
                   controller: controller,
-                  decoration: InputDecoration(hintText: "Nom"),
+                  decoration: InputDecoration(hintText: 'Nom'),
                 ),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Annuler'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: Text('Annuler'),
             ),
             TextButton(
-              child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.addCategory(Category(name: controller.text));
                 Navigator.of(context).pop();
               },
+              child: Text('Confirmer'),
             ),
           ],
         );
@@ -131,7 +131,7 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   Future<void> addProductDialog(BuildContext context, Category category) {
-    TextEditingController controller = TextEditingController();
+    var controller = TextEditingController();
 
     return showDialog<void>(
       context: context,
@@ -151,20 +151,19 @@ class ProductListCubit extends Cubit<ProductListState> {
                 Text('Quel nom voulez-vous donner à votre produit ?'),
                 TextField(
                   controller: controller,
-                  decoration: InputDecoration(hintText: "Nom"),
+                  decoration: InputDecoration(hintText: 'Nom'),
                 ),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Annuler'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: Text('Annuler'),
             ),
             TextButton(
-              child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.addProduct(
                   category,
@@ -172,6 +171,7 @@ class ProductListCubit extends Cubit<ProductListState> {
                 );
                 Navigator.of(context).pop();
               },
+              child: Text('Confirmer'),
             ),
           ],
         );
@@ -180,7 +180,7 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   Future<void> editCategoryDialog(BuildContext context, Category category) {
-    TextEditingController controller =
+    var controller =
         TextEditingController(text: category.name);
 
     return showDialog<void>(
@@ -195,26 +195,26 @@ class ProductListCubit extends Cubit<ProductListState> {
                 Text('Quel nom voulez vous donner à votre catégorie ?'),
                 TextField(
                   controller: controller,
-                  decoration: InputDecoration(hintText: "Nom"),
+                  decoration: InputDecoration(hintText: 'Nom'),
                 ),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Annuler'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: Text('Annuler'),
             ),
             TextButton(
-              child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.updateCategory(category.copyWith(
                   name: controller.text,
                 ));
                 Navigator.of(context).pop();
               },
+              child: Text('Confirmer'),
             ),
           ],
         );
@@ -238,20 +238,20 @@ class ProductListCubit extends Cubit<ProductListState> {
           ),
           actions: <Widget>[
             TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Text(
                 'Annuler',
                 style: TextStyle(color: Colors.redAccent),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
             ),
             TextButton(
-              child: Text('Confirmer'),
               onPressed: () {
                 orderRepository.deleteCategory(category);
                 Navigator.of(context).pop();
               },
+              child: Text('Confirmer'),
             ),
           ],
         );
@@ -279,20 +279,20 @@ class ProductListCubit extends Cubit<ProductListState> {
               ),
               actions: <Widget>[
                 TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
                   child: Text(
                     'Annuler',
                     style: TextStyle(color: Colors.redAccent),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
                 ),
                 TextButton(
-                  child: Text('Confirmer'),
                   onPressed: () {
                     orderRepository.removeProduct(category, productId);
                     Navigator.of(context).pop(true);
                   },
+                  child: Text('Confirmer'),
                 ),
               ],
             );

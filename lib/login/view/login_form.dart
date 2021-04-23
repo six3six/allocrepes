@@ -15,7 +15,7 @@ class LoginForm extends StatelessWidget {
           ),
           const SizedBox(height: 5.0),
           Text(
-            "Cette page est une page officielle ESIEE, nous ne pouvons à aucun moment voir votre mot de passe",
+            'Cette page est une page officielle ESIEE, nous ne pouvons à aucun moment voir votre mot de passe',
           ),
           const SizedBox(height: 20.0),
           kIsWeb

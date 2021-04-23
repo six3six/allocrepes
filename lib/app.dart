@@ -49,18 +49,18 @@ class _AppViewState extends State<AppView> {
 
   Future<void> getNotif(RemoteMessage? initialMessage) async {
     if (initialMessage == null) return;
-    if (initialMessage.data.containsKey("link")) {
-      await canLaunch(initialMessage.data["link"])
-          ? await launch(initialMessage.data["link"])
+    if (initialMessage.data.containsKey('link')) {
+      await canLaunch(initialMessage.data['link'])
+          ? await launch(initialMessage.data['link'])
           : throw 'Could not launch ${initialMessage.data["link"]}';
 
       return;
     }
 
-    if (initialMessage.data.containsKey("type")) {
-      switch (initialMessage.data["type"] as String) {
-        case "order":
-          Navigator.of(context).push(OrderNewPage.route());
+    if (initialMessage.data.containsKey('type')) {
+      switch (initialMessage.data['type'] as String) {
+        case 'order':
+          await Navigator.of(context).push(OrderNewPage.route());
           return;
         default:
           return;
@@ -79,12 +79,12 @@ class _AppViewState extends State<AppView> {
     });
   }
 
-  String prevUserId = "";
+  String prevUserId = '';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Xanthos",
+      title: 'Xanthos',
       theme: theme,
       navigatorKey: _navigatorKey,
       builder: (context, child) {
@@ -96,13 +96,13 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                print("authenticated");
+                print('authenticated');
                 if (!kIsWeb && !state.user.student) {
-                  print("subscribeToTopic(user${state.user.id})");
+                  print('subscribeToTopic(user${state.user.id})');
                 }
                 if (!kIsWeb) {
                   FirebaseMessaging.instance
-                      .subscribeToTopic("user${state.user.id}");
+                      .subscribeToTopic('user${state.user.id}');
                 }
                 RepositoryProvider.of<OrderRepositoryFirestore>(context)
                     .changeUser(state.user.id);
@@ -116,7 +116,7 @@ class _AppViewState extends State<AppView> {
               case AuthenticationStatus.unauthenticated:
                 if (!kIsWeb) {
                   FirebaseMessaging.instance
-                      .unsubscribeFromTopic("user$prevUserId");
+                      .unsubscribeFromTopic('user$prevUserId');
                 }
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),

@@ -27,11 +27,11 @@ class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
           'https://player.twitch.tv/?channel=listexanthos&muted=true&parent=xanthos.fr',
       gestureNavigationEnabled: true,
       navigationDelegate: (NavigationRequest request) async {
-        if (request.url.startsWith("https://player.twitch.tv"))
+        if (request.url.startsWith('https://player.twitch.tv')) {
           return NavigationDecision.navigate;
-        else {
+        } else {
           try {
-            launch(request.url);
+            await launch(request.url);
           } catch (e) {}
 
           return NavigationDecision.prevent;

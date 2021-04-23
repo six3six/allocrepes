@@ -20,13 +20,13 @@ class OrderAdminView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Commandes"),
+        title: const Text('Commandes'),
       ),
       body: BlocBuilder<OrderAdminCubit, OrderAdminState>(
         buildWhen: (prev, next) =>
             prev.orders.keys.toList() != next.orders.keys.toList(),
         builder: (context, state) {
-          List<Widget> slivers = [];
+          var slivers = <Widget>[];
 
           slivers.add(
             BlocBuilder<OrderAdminCubit, OrderAdminState>(
@@ -127,7 +127,7 @@ class OrderAdminView extends StatelessWidget {
                                 next.products.keys,
                               ),
                           builder: (context, state) => Text(
-                            "${article.amount.toString()}x ${state.products[article.productId]?.name}",
+                            '${article.amount.toString()}x ${state.products[article.productId]?.name}',
                           ),
                         ),
                       )
@@ -158,12 +158,12 @@ class _FilterView extends StatelessWidget {
 
     return SliverToBoxAdapter(
       child: ExpansionTile(
-        title: Text("Filtres"),
+        title: Text('Filtres'),
         childrenPadding: EdgeInsets.symmetric(horizontal: 10),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Batiment :",
+            'Batiment :',
             style: theme.textTheme.caption,
           ),
           BlocBuilder<OrderAdminCubit, OrderAdminState>(
@@ -174,7 +174,7 @@ class _FilterView extends StatelessWidget {
             builder: (context, state) {
               return ExpansionTile(
                 title: Text(
-                  "Batiment",
+                  'Batiment',
                   overflow: TextOverflow.clip,
                 ),
                 children: Place.values
@@ -191,11 +191,11 @@ class _FilterView extends StatelessWidget {
             },
           ),
           Text(
-            "Etat :",
+            'Etat :',
             style: theme.textTheme.caption,
           ),
           ExpansionTile(
-            title: Text("Etat"),
+            title: Text('Etat'),
             children: OrderStatus.values
                 .map(
                   (status) => CheckboxListTile(
@@ -223,10 +223,10 @@ class _FilterView extends StatelessWidget {
     }
     */
 
-    String ret = "";
+    var ret = '';
     m.forEach((key, value) {
       if (!value) return;
-      ret += key.toString() + " ";
+      ret += key.toString() + ' ';
     });
 
     return ret;
@@ -250,7 +250,7 @@ class _OrderCompleteView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Nom :",
+            'Nom :',
             style: theme.textTheme.caption,
           ),
           _UserLabel(
@@ -261,21 +261,20 @@ class _OrderCompleteView extends StatelessWidget {
             height: 10,
           ),
           Text(
-            "Adresse :",
+            'Adresse :',
             style: theme.textTheme.caption,
           ),
           Text(
-            "${PlaceUtils.placeToString(order.place)}  -  ${order.room}",
+            '${PlaceUtils.placeToString(order.place)}  -  ${order.room}',
           ),
           SizedBox(
             height: 10,
           ),
           Text(
-            "Commande :",
+            'Commande :',
             style: theme.textTheme.caption,
           ),
-        ]
-          ..addAll(order.articles
+          ...order.articles
               .map(
                 (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
                   buildWhen: (prev, next) =>
@@ -288,29 +287,26 @@ class _OrderCompleteView extends StatelessWidget {
                         next.products.keys,
                       ),
                   builder: (context, state) => Text(
-                    "${article.amount.toString()}x ${state.products[article.productId]?.name}",
+                    '${article.amount.toString()}x ${state.products[article.productId]?.name}',
                   ),
                 ),
               )
-              .toList())
-          ..add(
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 10),
-                Text(
-                  "Commentaire :",
-                  style: theme.textTheme.caption,
-                ),
-                Text(order.message),
-              ],
-            ),
-          )
-          ..add(
-            _StateSelector(
-              order: order,
-            ),
+              .toList(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              Text(
+                'Commentaire :',
+                style: theme.textTheme.caption,
+              ),
+              Text(order.message),
+            ],
           ),
+          _StateSelector(
+            order: order,
+          ),
+        ],
       ),
     );
   }
@@ -394,15 +390,16 @@ class _UserLabel extends Text {
       future: BlocProvider.of<OrderAdminCubit>(context).getUser(userId),
       builder: (context, snap) {
         if (snap.hasData) {
-          String res = "";
-          if (id) res += (snap.data?.id ?? "") + " ";
-          if (surname) res += (snap.data?.surname ?? "") + " ";
-          if (name) res += (snap.data?.name ?? "") + " ";
-          if (classe) res += (snap.data?.classe ?? "") + " ";
+          var res = '';
+          if (id) res += (snap.data?.id ?? '') + ' ';
+          if (surname) res += (snap.data?.surname ?? '') + ' ';
+          if (name) res += (snap.data?.name ?? '') + ' ';
+          if (classe) res += (snap.data?.classe ?? '') + ' ';
 
           return Text(res);
-        } else
-          return Text("$userId");
+        } else {
+          return Text('$userId');
+        }
       },
     );
   }
@@ -431,7 +428,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return new SizedBox.expand(child: child);
+    return SizedBox.expand(child: child);
   }
 
   @override

@@ -1,4 +1,4 @@
-part of "login_widgets.dart";
+part of 'login_widgets.dart';
 
 TextStyle fieldTheme = TextStyle(color: Colors.white);
 

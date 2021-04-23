@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => LoginPage(),
-      settings: RouteSettings(name: "Login"),
+      settings: RouteSettings(name: 'Login'),
     );
   }
 
@@ -25,9 +25,9 @@ class LoginPage extends StatelessWidget {
           children: <Widget>[
             Center(
               child: Hero(
-                tag: "logo",
+                tag: 'logo',
                 child: Image.asset(
-                  "assets/logo.png",
+                  'assets/logo.png',
                   height: 250,
                 ),
               ),

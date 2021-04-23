@@ -50,7 +50,7 @@ class AdminUserCubit extends Cubit<AdminUserState> {
   }
 
   void changeRole(String uid, bool admin) {
-    Map<String, bool> adminL = {};
+    var adminL = <String, bool>{};
     adminL.addAll(state.admin);
     adminL[uid] = admin;
     emit(state.copyWith(

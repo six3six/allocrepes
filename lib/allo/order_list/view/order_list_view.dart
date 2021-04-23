@@ -12,6 +12,7 @@ import 'package:order_repository/models/product.dart';
 class OrderListView extends StatelessWidget {
   const OrderListView({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
@@ -21,7 +22,7 @@ class OrderListView extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           child: Text(
-            "Mes commandes en cours",
+            'Mes commandes en cours',
             style: textTheme.headline5,
           ),
         ),
@@ -41,12 +42,12 @@ class OrderListView extends StatelessWidget {
                             "Commandez dès maintenant en appuyant sur l'icone ",
                       ),
                       const WidgetSpan(
-                        child: const Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                          child: const Icon(Icons.shopping_cart),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 2.0),
+                          child: Icon(Icons.shopping_cart),
                         ),
                       ),
-                      const TextSpan(text: "en bas à droite"),
+                      const TextSpan(text: 'en bas à droite'),
                     ],
                   ),
                 ),
@@ -64,7 +65,7 @@ class OrderListView extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           child: Text(
-            "Mes commandes passées",
+            'Mes commandes passées',
             style: textTheme.headline5,
           ),
         ),
@@ -92,7 +93,7 @@ class _OrderSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return InkWell(
       child: Padding(
@@ -105,7 +106,7 @@ class _OrderSummary extends StatelessWidget {
               style: theme.textTheme.headline6,
             ),
             Text(
-              "Livraison à ${PlaceUtils.placeToString(order.place)}, salle/appartement ${order.room}",
+              'Livraison à ${PlaceUtils.placeToString(order.place)}, salle/appartement ${order.room}',
             ),
             _OrderSummaryStatus(order.status),
             Container(
@@ -139,10 +140,10 @@ class _ArticleToProductLabel extends StatelessWidget {
       builder: (context, snap) {
         return snap.hasData
             ? Text(
-                "${article.amount.toString()}x ${snap.data!.name}",
+                '${article.amount.toString()}x ${snap.data!.name}',
               )
             : Text(
-                "${article.amount.toString()}x ${article.productId}",
+                '${article.amount.toString()}x ${article.productId}',
               );
       },
     );

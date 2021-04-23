@@ -10,7 +10,7 @@ class AdminNotifView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text("Notifications"),
+          title: const Text('Notifications'),
         ),
         body: ListView(
           padding: const EdgeInsets.symmetric(
@@ -42,7 +42,7 @@ class AdminNotifView extends StatelessWidget {
                           ? null
                           : () => BlocProvider.of<AdminNotifCubit>(context)
                               .readyToSend(),
-                      child: Text("Je parle en sah"),
+                      child: Text('Je parle en sah'),
                     ),
                   ),
                   const SizedBox(
@@ -105,20 +105,20 @@ class _ActionBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text("Action :"),
+        const Text('Action :'),
         BlocBuilder<AdminNotifCubit, AdminNotifState>(
           buildWhen: (prev, next) => prev.action != next.action,
           builder: (context, state) => Column(children: [
             _ActionCheckBox(
-              text: "Envoyer sur la page principal",
+              text: 'Envoyer sur la page principal',
               action: AdminNotifAction.MainPage,
             ),
             _ActionCheckBox(
-              text: "Envoyer la page de commandes",
+              text: 'Envoyer la page de commandes',
               action: AdminNotifAction.OrderPage,
             ),
             _ActionCheckBox(
-              text: "Envoyer sur un lien",
+              text: 'Envoyer sur un lien',
               action: AdminNotifAction.LinkPage,
             ),
             const SizedBox(
@@ -131,7 +131,7 @@ class _ActionBlock extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Lien : "),
+                    const Text('Lien : '),
                     TextField(
                       controller: linkController,
                       onChanged:
@@ -186,21 +186,21 @@ class _RecipientBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text("Destinataire :"),
+        const Text('Destinataire :'),
         _RecipientCheckBox(
-          text: "Tout le monde",
+          text: 'Tout le monde',
           recipient: AdminNotifRecipient.Everybody,
         ),
         _RecipientCheckBox(
-          text: "Les bougs sous Android",
+          text: 'Les bougs sous Android',
           recipient: AdminNotifRecipient.Android,
         ),
         _RecipientCheckBox(
-          text: "Les bougs sous iOS",
+          text: 'Les bougs sous iOS',
           recipient: AdminNotifRecipient.Ios,
         ),
         _RecipientCheckBox(
-          text: "Un boug en particulier",
+          text: 'Un boug en particulier',
           recipient: AdminNotifRecipient.User,
         ),
         const SizedBox(
@@ -213,7 +213,7 @@ class _RecipientBlock extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Identifiant du boug : "),
+                const Text('Identifiant du boug : '),
                 TextField(
                   onChanged:
                       BlocProvider.of<AdminNotifCubit>(context).changeUser,

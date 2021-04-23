@@ -15,7 +15,7 @@ class StockCubit extends Cubit<StockState> {
 
   void getProducts() {
     orderRepository.categories().forEach((cats) {
-      Map<Category, List<Product>> categories = {};
+      var categories = <Category, List<Product>>{};
 
       cats.forEach((cat) {
         categories[cat] = [];
@@ -30,7 +30,7 @@ class StockCubit extends Cubit<StockState> {
 
     orderRepository
         .orders(orderStatus: [OrderStatus.DELIVERED]).forEach((orders) {
-      Map<String, int> count = {};
+      var count = <String, int>{};
 
       orders.forEach((order) {
         order.articles.forEach((article) {

@@ -6,7 +6,7 @@ class AdminMainPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => AdminMainPage(),
-      settings: RouteSettings(name: "AdminMain"),
+      settings: RouteSettings(name: 'AdminMain'),
     );
   }
 

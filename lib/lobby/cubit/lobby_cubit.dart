@@ -13,7 +13,7 @@ class LobbyCubit extends Cubit<LobbyState> {
 
   LobbyCubit({
     this.newsRepository =
-        const RssNewsRepository(targetUrl: "https://xanthos.fr/feed/"),
+        const RssNewsRepository(targetUrl: 'https://xanthos.fr/feed/'),
     required this.orderRepository,
   }) : super(LobbyState()) {
     Connectivity().onConnectivityChanged.forEach((result) {

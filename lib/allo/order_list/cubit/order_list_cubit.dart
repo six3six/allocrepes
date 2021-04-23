@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:order_repository/models/article.dart';
@@ -9,15 +8,13 @@ import 'package:order_repository/order_repository.dart';
 import 'order_list_state.dart';
 
 class OrderListCubit extends Cubit<OrderListState> {
-  OrderListCubit(this._orderRepository, this._user)
-      : super(const OrderListState()) {
+  OrderListCubit(this._orderRepository) : super(const OrderListState()) {
     getOrders();
     Connectivity().checkConnectivity().then(checkConnectivity);
     Connectivity().onConnectivityChanged.listen(checkConnectivity);
   }
 
   final OrderRepository _orderRepository;
-  final User _user;
 
   void getOrders() {
     _orderRepository.userOrders(orderStatus: [

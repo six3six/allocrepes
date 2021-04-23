@@ -14,7 +14,7 @@ class StockView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Stocks"),
+        title: const Text('Stocks'),
       ),
       body: ListView(
         padding: EdgeInsets.symmetric(vertical: 10),
@@ -25,7 +25,7 @@ class StockView extends StatelessWidget {
               next.categories.keys,
             ),
             builder: (context, state) {
-              List<_ProductCategory> categories = [];
+              var categories = <_ProductCategory>[];
               state.categories.forEach(
                 (Category cat, List<Product> products) => categories.add(
                   _ProductCategory(
@@ -46,7 +46,7 @@ class StockView extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () =>
                   BlocProvider.of<StockCubit>(context).removeOrders(),
-              child: Text("Supprimer TOUTES les commandes"),
+              child: Text('Supprimer TOUTES les commandes'),
             ),
           ),
         ],
@@ -183,7 +183,7 @@ class _ProductInitialStock extends StatelessWidget {
     Key? key,
     required this.rank,
     required this.category,
-  }) : super(key: key) {}
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +200,7 @@ class _ProductInitialStock extends StatelessWidget {
           Expanded(
             flex: 7,
             child: Text(
-              "Stock initial",
+              'Stock initial',
             ),
           ),
           Expanded(
@@ -213,7 +213,7 @@ class _ProductInitialStock extends StatelessWidget {
               onChanged: (val) {
                 BlocProvider.of<StockCubit>(context).updateProductInitialStock(
                   category,
-                  state.getProduct(category, rank).id ?? "",
+                  state.getProduct(category, rank).id ?? '',
                   int.tryParse(val) ?? 0,
                 );
               },
@@ -246,7 +246,7 @@ class _ProductRemainingStock extends StatelessWidget {
         Expanded(
           flex: 7,
           child: Text(
-            "Restant",
+            'Restant',
           ),
         ),
         Expanded(
@@ -296,7 +296,7 @@ class _ProductConsumedStock extends StatelessWidget {
         Expanded(
           flex: 7,
           child: Text(
-            "Consommé",
+            'Consommé',
           ),
         ),
         Expanded(

@@ -10,7 +10,7 @@ class AdminNotifPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
       builder: (_) => AdminNotifPage(),
-      settings: RouteSettings(name: "AdminNotif"),
+      settings: RouteSettings(name: 'AdminNotif'),
     );
   }
 

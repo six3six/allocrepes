@@ -28,11 +28,11 @@ void main() async {
       originalOnError!(errorDetails);
     };
 
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    var messaging = FirebaseMessaging.instance;
 
-    messaging.subscribeToTopic("allusers");
-    if (Platform.isAndroid) messaging.subscribeToTopic("androidusers");
-    if (Platform.isIOS) messaging.subscribeToTopic("iosusers");
+    await messaging.subscribeToTopic('allusers');
+    if (Platform.isAndroid) await messaging.subscribeToTopic('androidusers');
+    if (Platform.isIOS) await messaging.subscribeToTopic('iosusers');
 
     await messaging.requestPermission(
       provisional: true,
@@ -44,7 +44,7 @@ void main() async {
   ) async {
     await Firebase.initializeApp();
 
-    print("Handling a background message: ${message.messageId}");
+    print('Handling a background message: ${message.messageId}');
   }
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -57,6 +57,7 @@ void main() async {
       (error, stackTrace) =>
           FirebaseCrashlytics.instance.recordError(error, stackTrace),
     );
-  } else
+  } else {
     runApp(App(authenticationRepository: AuthenticationRepository()));
+  }
 }

@@ -10,10 +10,10 @@ class OrderNewState extends Equatable {
     this.alreadyOrdered = const [],
     this.place = Place.Ampere_A,
     this.room,
-    this.placeError = "",
+    this.placeError = '',
     this.loading = true,
-    this.roomError = "",
-    this.message = "",
+    this.roomError = '',
+    this.message = '',
   });
 
   final Map<Category, List<Product>> categories;
@@ -34,19 +34,19 @@ class OrderNewState extends Equatable {
         roomError,
         loading,
         message,
-      ]
-        ..addAll(categories.keys)
-        ..addAll(categories.values)
-        ..addAll(quantities.keys)
-        ..addAll(quantities.values)
-        ..addAll(alreadyOrdered);
+        ...categories.keys,
+        ...categories.values,
+        ...quantities.keys,
+        ...quantities.values,
+        ...alreadyOrdered,
+      ];
 
   int getQuantity(Category category, Product product) {
-    return quantities["${category.id};${product.id}"] ?? 0;
+    return quantities['${category.id};${product.id}'] ?? 0;
   }
 
   bool isAlreadyOrdered(Category category, Product product) {
-    return alreadyOrdered.contains("${category.id};${product.id}") &&
+    return alreadyOrdered.contains('${category.id};${product.id}') &&
         product.oneOrder;
   }
 
