@@ -142,8 +142,10 @@ class _StockEntry extends StatelessWidget {
                     next.getProduct(category, rank).name,
                 builder: (context, state) => Expanded(
                   flex: 7,
-                  child: Text(state.getProduct(category, rank).name,
-                      style: textTheme.headline6),
+                  child: Text(
+                    state.getProduct(category, rank).name,
+                    style: textTheme.headline6,
+                  ),
                 ),
               ),
             ],
@@ -304,8 +306,9 @@ class _ProductConsumedStock extends StatelessWidget {
                 prev.count[prev.getProduct(category, rank).id] !=
                 next.count[next.getProduct(category, rank).id],
             builder: (context, state) => Text(
-                (state.count[state.getProduct(category, rank).id] ?? 0)
-                    .toString()),
+              (state.count[state.getProduct(category, rank).id] ?? 0)
+                  .toString(),
+            ),
           ),
         ),
       ],

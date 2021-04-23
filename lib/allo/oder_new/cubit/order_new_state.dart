@@ -38,6 +38,10 @@ class OrderNewState extends Equatable {
         ..addAll(quantities.keys)
         ..addAll(quantities.values);
 
+  int getQuantity(Category category, Product product) {
+    return quantities["${category.id};${product.id}"] ?? 0;
+  }
+
   OrderNewState copyWith({
     Map<Category, List<Product>>? categories,
     Map<String, int>? quantities,

@@ -167,20 +167,35 @@ class _ProductEntry extends StatelessWidget {
             category,
             productId,
           ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Column(
-              children: [
-                _ProductAvailability(
-                  rank: rank,
-                  category: category,
-                ),
-                _ProductMaxQuantity(
-                  rank: rank,
-                  category: category,
-                ),
-              ],
+          child: ExpansionTile(
+            title: BlocBuilder<ProductListCubit, ProductListState>(
+              buildWhen: (prev, next) =>
+                  prev.getProduct(category, rank).name !=
+                  next.getProduct(category, rank).name,
+              builder: (context, state) =>
+                  Text(state.getProduct(category, rank).name),
             ),
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    _ProductName(
+                      rank: rank,
+                      category: category,
+                    ),
+                    _ProductMaxQuantity(
+                      rank: rank,
+                      category: category,
+                    ),
+                    _ProductAvailability(
+                      rank: rank,
+                      category: category,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -188,13 +203,13 @@ class _ProductEntry extends StatelessWidget {
   }
 }
 
-class _ProductAvailability extends StatelessWidget {
+class _ProductName extends StatelessWidget {
   final int rank;
   final Category category;
 
-  TextEditingController textEditingController = TextEditingController();
+  final TextEditingController textEditingController = TextEditingController();
 
-  _ProductAvailability({
+  _ProductName({
     Key? key,
     required this.rank,
     required this.category,
@@ -202,15 +217,9 @@ class _ProductAvailability extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        SizedBox(
-          width: 10,
-        ),
         Expanded(
           flex: 7,
           child: TextField(
@@ -235,21 +244,6 @@ class _ProductAvailability extends StatelessWidget {
             },
           ),
         ),
-        BlocBuilder<ProductListCubit, ProductListState>(
-          buildWhen: (prev, next) =>
-              prev.getProduct(category, rank) !=
-              next.getProduct(category, rank),
-          builder: (context, state) => Checkbox(
-            value: state.getProduct(category, rank).available,
-            onChanged: (bool? availability) =>
-                BlocProvider.of<ProductListCubit>(context)
-                    .updateProductAvailability(
-              category,
-              state.getProduct(category, rank),
-              availability ?? false,
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -272,9 +266,6 @@ class _ProductMaxQuantity extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        SizedBox(
-          width: 10,
-        ),
         Expanded(
           flex: 7,
           child: Text(
@@ -306,6 +297,78 @@ class _ProductMaxQuantity extends StatelessWidget {
               );
             },
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProductAvailability extends StatelessWidget {
+  final int rank;
+  final Category category;
+
+  _ProductAvailability({
+    Key? key,
+    required this.rank,
+    required this.category,
+  }) : super(key: key);
+
+  final TextEditingController quantityController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              flex: 7,
+              child: Text(
+                "Disponible à l'ESIEE",
+              ),
+            ),
+            BlocBuilder<ProductListCubit, ProductListState>(
+              buildWhen: (prev, next) =>
+                  prev.getProduct(category, rank).availableESIEE !=
+                  next.getProduct(category, rank).availableESIEE,
+              builder: (context, state) => Checkbox(
+                value: state.getProduct(category, rank).availableESIEE,
+                onChanged: (bool? availability) =>
+                    BlocProvider.of<ProductListCubit>(context)
+                        .updateProductAvailabilityESIEE(
+                  category,
+                  state.getProduct(category, rank),
+                  availability ?? false,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              flex: 7,
+              child: Text(
+                "Disponible en résidence",
+              ),
+            ),
+            BlocBuilder<ProductListCubit, ProductListState>(
+              buildWhen: (prev, next) =>
+                  prev.getProduct(category, rank).available !=
+                  next.getProduct(category, rank).available,
+              builder: (context, state) => Checkbox(
+                value: state.getProduct(category, rank).available,
+                onChanged: (bool? availability) =>
+                    BlocProvider.of<ProductListCubit>(context)
+                        .updateProductAvailability(
+                  category,
+                  state.getProduct(category, rank),
+                  availability ?? false,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

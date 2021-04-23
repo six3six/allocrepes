@@ -25,6 +25,10 @@ class LoginForm extends StatelessWidget {
                   height: 800,
                   child: AuthWebView(),
                 ),
+          const SizedBox(height: 20.0),
+          Text(
+            "Vous n'avez pas de compte ESIEE ? Envoyez un mail a louis.desplanche@xanthos.fr",
+          ),
         ],
       );
 }

@@ -28,9 +28,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         categories[cat] = [];
         emit(state.copyWith(categories: categories));
 
-        orderRepository
-            .productsFromCategory(cat, available: true)
-            .forEach((prods) {
+        orderRepository.productsFromCategory(cat).forEach((prods) {
           Map<Category, List<Product>> categories = {}
             ..addAll(state.categories);
           categories[cat] = prods;
@@ -45,6 +43,22 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     });
   }
 
+  List<Product> getAvailableProduct(Category cat) =>
+      state.categories[cat]?.where((product) => product.available).toList() ??
+      [];
+
+  List<Product> getAvailableESIEEProduct(Category cat) =>
+      state.categories[cat]
+          ?.where((product) => product.availableESIEE)
+          .toList() ??
+      [];
+
+  Map<Category, List<Product>> getAvailableCategories() => state.categories
+      .map((key, value) => MapEntry(key, getAvailableProduct(key)));
+
+  Map<Category, List<Product>> getAvailableESIEECategories() => state.categories
+      .map((key, value) => MapEntry(key, getAvailableESIEEProduct(key)));
+
   void updateQuantity(Category category, Product product, int quantity) {
     Map<String, int> q = {};
     q.addAll(state.quantities);
@@ -52,9 +66,8 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     emit(state.copyWith(quantities: q));
   }
 
-  int getQuantity(Category category, Product product) {
-    return state.quantities["${category.id};${product.id}"] ?? 0;
-  }
+  int getQuantity(Category category, Product product) =>
+      state.getQuantity(category, product);
 
   void updateRoom(String? room) {
     emit(state.copyWith(room: room));
@@ -78,6 +91,10 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     emit(state.copyWith(message: message));
   }
 
+  bool checkAvailability(Product product) =>
+      ((state.place != Place.ESIEE && product.available) ||
+          (state.place == Place.ESIEE && product.availableESIEE));
+
   Future<bool> checkout(BuildContext context) async {
     updateRoom(state.room);
     updatePlace(state.place);
@@ -91,7 +108,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     state.categories
         .forEach((category, products) => products.forEach((product) {
               final q = getQuantity(category, product);
-              if (q > 0)
+              if (q > 0 && checkAvailability(product))
                 articles.add(Article(
                   productId: product.id ?? "",
                   categoryId: category.id ?? "",
