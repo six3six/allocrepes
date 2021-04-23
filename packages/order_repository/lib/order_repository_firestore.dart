@@ -347,6 +347,19 @@ class OrderRepositoryFirestore extends OrderRepository {
         .update({"available_esiee": available});
   }
 
+  @override
+  Future<void> updateProductOneOrder(
+    Category category,
+    Product product,
+    bool oneOrder,
+  ) {
+    return productCategoryRoot
+        .doc(category.id)
+        .collection("products")
+        .doc(product.id)
+        .update({"one_order": oneOrder});
+  }
+
   Future<void> updateProductMaxAmount(
     Category category,
     String productId,

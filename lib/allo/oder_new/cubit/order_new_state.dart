@@ -7,6 +7,7 @@ class OrderNewState extends Equatable {
   const OrderNewState({
     this.categories = const {},
     this.quantities = const {},
+    this.alreadyOrdered = const [],
     this.place = Place.Ampere_A,
     this.room,
     this.placeError = "",
@@ -17,6 +18,7 @@ class OrderNewState extends Equatable {
 
   final Map<Category, List<Product>> categories;
   final Map<String, int> quantities;
+  final List<String> alreadyOrdered;
   final Place? place;
   final String? room;
   final String placeError;
@@ -36,10 +38,16 @@ class OrderNewState extends Equatable {
         ..addAll(categories.keys)
         ..addAll(categories.values)
         ..addAll(quantities.keys)
-        ..addAll(quantities.values);
+        ..addAll(quantities.values)
+        ..addAll(alreadyOrdered);
 
   int getQuantity(Category category, Product product) {
     return quantities["${category.id};${product.id}"] ?? 0;
+  }
+
+  bool isAlreadyOrdered(Category category, Product product) {
+    return alreadyOrdered.contains("${category.id};${product.id}") &&
+        product.oneOrder;
   }
 
   OrderNewState copyWith({
@@ -51,6 +59,7 @@ class OrderNewState extends Equatable {
     String? roomError,
     bool? loading,
     String? message,
+    List<String>? alreadyOrdered,
   }) {
     return OrderNewState(
       categories: categories ?? this.categories,
@@ -61,6 +70,7 @@ class OrderNewState extends Equatable {
       roomError: roomError ?? this.roomError,
       loading: loading ?? this.loading,
       message: message ?? this.message,
+      alreadyOrdered: alreadyOrdered ?? this.alreadyOrdered,
     );
   }
 }

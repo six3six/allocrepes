@@ -14,14 +14,28 @@ class Article extends Equatable {
   final String categoryId;
   final int amount;
 
-  static const empty =
-      Article(id: "", productId: "", categoryId: "", amount: 0);
+  static const empty = Article(
+    id: "",
+    productId: "",
+    categoryId: "",
+    amount: 0,
+  );
 
   @override
-  List<Object?> get props => [id, productId, categoryId, amount];
+  List<Object?> get props => [
+        id,
+        productId,
+        categoryId,
+        amount,
+      ];
 
   ArticleEntity toEntity() {
-    return ArticleEntity(id, productId, categoryId, amount);
+    return ArticleEntity(
+      id,
+      productId,
+      categoryId,
+      amount,
+    );
   }
 
   static Article fromEntity(ArticleEntity entity) {

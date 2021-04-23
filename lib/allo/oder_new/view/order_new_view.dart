@@ -170,36 +170,66 @@ class _OrderNewItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 10,
+        horizontal: 10,
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            flex: 7,
-            child: Text(product.name, style: textTheme.headline6),
-          ),
           BlocBuilder<OrderNewCubit, OrderNewState>(
-            buildWhen: (prev, next) => prev.getQuantity(category, product) != next.getQuantity(category, product),
-            builder: (context, state) => DropdownButton<int>(
-              value: BlocProvider.of<OrderNewCubit>(context)
-                  .getQuantity(category, product),
-              icon: Icon(Icons.arrow_drop_down_circle_outlined),
-              iconSize: 24,
-              elevation: 16,
-              onChanged: (int? val) => BlocProvider.of<OrderNewCubit>(context)
-                  .updateQuantity(category, product, val ?? 0),
-              items: List<int>.generate(product.maxAmount + 1, (index) => index)
-                  .map<DropdownMenuItem<int>>((int value) {
-                return DropdownMenuItem<int>(
-                  value: value,
-                  child: Text(" " + value.toString() + " "),
-                );
-              }).toList(),
+            buildWhen: (prev, next) =>
+                prev.isAlreadyOrdered(category, product) !=
+                next.isAlreadyOrdered(category, product),
+            builder: (context, state) => Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: Text(product.name,
+                      style: state.isAlreadyOrdered(category, product)
+                          ? textTheme.headline6?.merge(TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              color: Colors.grey,
+                            ))
+                          : textTheme.headline6),
+                ),
+                if (!state.isAlreadyOrdered(category, product))
+                  BlocBuilder<OrderNewCubit, OrderNewState>(
+                    buildWhen: (prev, next) =>
+                        prev.getQuantity(category, product) !=
+                        next.getQuantity(category, product),
+                    builder: (context, state) => DropdownButton<int>(
+                      value: BlocProvider.of<OrderNewCubit>(context)
+                          .getQuantity(category, product),
+                      icon: Icon(Icons.arrow_drop_down_circle_outlined),
+                      iconSize: 24,
+                      elevation: 16,
+                      onChanged: (int? val) =>
+                          BlocProvider.of<OrderNewCubit>(context)
+                              .updateQuantity(category, product, val ?? 0),
+                      items: List<int>.generate(
+                        product.maxAmount + 1,
+                        (index) => index,
+                      ).map<DropdownMenuItem<int>>((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text(" " + value.toString() + " "),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+              ],
             ),
           ),
+          if (!product.availableESIEE)
+            Text(
+              "Ce produit n'est pas disponible à l'ESIEE",
+              style: textTheme.caption,
+            ),
+          if (product.oneOrder)
+            Text(
+              "Ce produit n'est commandable qu'une fois",
+              style: textTheme.caption,
+            ),
         ],
       ),
     );
