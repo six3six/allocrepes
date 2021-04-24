@@ -89,7 +89,9 @@ class _LobbyMenu extends StatelessWidget {
                   onTap: () {
                     try {
                       launch('https://xanthos.fr/a-propos');
-                    } catch (e) {}
+                    } catch (e) {
+                      return;
+                    }
                   },
                   icon: Icons.mood_rounded,
                 ),
