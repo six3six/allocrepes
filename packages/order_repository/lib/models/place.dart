@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 enum Place {
   UNKNOWN,
+  ESIEE,
   Ampere_A,
   Ampere_B,
   Ampere_C,
   Campusea,
   Arago,
-  ESIEE,
   Kley,
   Kley_2,
 }
@@ -38,6 +38,8 @@ class PlaceUtils {
 
   static String placeToString(Place place) {
     switch (place) {
+      case Place.ESIEE:
+        return "ESIEE";
       case Place.Ampere_A:
         return "Olympère (Ampère) A";
       case Place.Ampere_B:
@@ -45,15 +47,13 @@ class PlaceUtils {
       case Place.Ampere_C:
         return "Olympère (Ampère) C";
       case Place.Arago:
-        return "Spartarago (Arago)";
+        return "Spararago (Arago)";
+      case Place.Campusea:
+        return "Campusea";
       case Place.Kley:
         return "Akleytide (Kley)";
       case Place.Kley_2:
         return "Akleytide (Kley) 2";
-      case Place.ESIEE:
-        return "ESIEE";
-      case Place.Campusea:
-        return "Campusea";
       case Place.UNKNOWN:
         return "UNKNOWN";
     }

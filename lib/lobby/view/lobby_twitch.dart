@@ -27,13 +27,16 @@ class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
           'https://player.twitch.tv/?channel=listexanthos&muted=true&parent=xanthos.fr',
       gestureNavigationEnabled: true,
       navigationDelegate: (NavigationRequest request) async {
+        print(request.url);
         if (request.url.startsWith('https://player.twitch.tv')) {
           return NavigationDecision.navigate;
         } else {
-          try {
-            await launch(request.url);
-          } catch (e) {}
-
+          if (request.url.startsWith('https://twitch.tv/listexanthos') ||
+              request.url.startsWith('https://www.twitch.tv/listexanthos')) {
+            try {
+              await launch(request.url);
+            } catch (e) {}
+          }
           return NavigationDecision.prevent;
         }
       },
