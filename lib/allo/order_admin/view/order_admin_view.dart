@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:allocrepes/allo/order_admin/cubit/order_admin_cubit.dart';
 import 'package:allocrepes/allo/order_admin/cubit/order_admin_state.dart';
@@ -23,16 +22,19 @@ class OrderAdminView extends StatelessWidget {
         title: const Text('Commandes'),
       ),
       body: BlocBuilder<OrderAdminCubit, OrderAdminState>(
-        buildWhen: (prev, next) =>
-            prev.orders.keys.toList() != next.orders.keys.toList(),
+        buildWhen: (prev, next) => !IterableEquality().equals(
+          prev.orders.keys,
+          next.orders.keys,
+        ),
         builder: (context, state) {
           var slivers = <Widget>[];
 
           slivers.add(
             BlocBuilder<OrderAdminCubit, OrderAdminState>(
-              buildWhen: (prev, next) =>
-                  prev.selectedPlaces.keys.toList() !=
-                  next.selectedPlaces.keys.toList(),
+              buildWhen: (prev, next) => !IterableEquality().equals(
+                prev.selectedPlaces.keys,
+                next.selectedPlaces.keys,
+              ),
               builder: (context, state) => _FilterView(
                 selectedPlaces: state.selectedPlaces,
                 selectedStatus: state.selectedStatus,
@@ -61,22 +63,14 @@ class OrderAdminView extends StatelessWidget {
             slivers.add(
               SliverToBoxAdapter(
                 child: BlocBuilder<OrderAdminCubit, OrderAdminState>(
-                  buildWhen: (prev, next) =>
-                      prev.orders[status]?.toList() !=
-                          next.orders[status]?.toList() ||
-                      prev.expandedOrders != next.expandedOrders,
+                  buildWhen: (prev, next) => !IterableEquality().equals(
+                    prev.orders[status],
+                    next.orders[status],
+                  ),
                   builder: (context, state) {
-                    return ExpansionPanelList(
-                      expansionCallback: (panelIndex, isExpanded) =>
-                          BlocProvider.of<OrderAdminCubit>(context).expandOrder(
-                        state.orders[status]?[panelIndex] ?? Order.empty,
-                        !isExpanded,
-                      ),
+                    return Column(
                       children: state.orders[status]
-                              ?.map((order) => orderToPanel(
-                                    order,
-                                    state.expandedOrders[order.id] ?? false,
-                                  ))
+                              ?.map((e) => _OrderTile(e))
                               .toList() ??
                           [],
                     );
@@ -93,51 +87,93 @@ class OrderAdminView extends StatelessWidget {
       ),
     );
   }
+}
 
-  ExpansionPanel orderToPanel(Order order, bool expanded) {
-    return ExpansionPanel(
-      isExpanded: expanded,
-      headerBuilder: (BuildContext context, bool isExpanded) {
-        return isExpanded
-            ? ListTile(
-                title: Text(
-                  "${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
-                ),
-                tileColor: PlaceUtils.placeToColor(order.place),
-              )
-            : ListTile(
-                title: Text(
-                  "${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
-                ),
-                tileColor: PlaceUtils.placeToColor(order.place),
-                selectedTileColor: PlaceUtils.placeToColor(order.place),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: order.articles
-                      .map<Widget>(
-                        (article) =>
-                            BlocBuilder<OrderAdminCubit, OrderAdminState>(
-                          buildWhen: (prev, next) =>
-                              !IterableEquality().equals(
-                                prev.products.values,
-                                next.products.values,
-                              ) ||
-                              !IterableEquality().equals(
-                                prev.products.keys,
-                                next.products.keys,
-                              ),
-                          builder: (context, state) => Text(
-                            '${article.amount.toString()}x ${state.products[article.productId]?.name}',
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              );
-      },
-      body: _OrderCompleteView(
-        order: order,
+class _OrderTile extends StatelessWidget {
+  _OrderTile(this.order);
+
+  Order order;
+
+  @override
+  Widget build(context) {
+    final theme = Theme.of(context);
+
+    return ExpansionTile(
+      key: order.id != null ? Key(order.id ?? '') : null,
+      backgroundColor: PlaceUtils.placeToColor(order.place),
+      collapsedBackgroundColor: PlaceUtils.placeToColor(order.place),
+      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+      childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: order.articles
+            .map(
+              (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
+                buildWhen: (prev, next) =>
+                    prev.products[article.productId] !=
+                    next.products[article.productId],
+                builder: (context, state) => Text(
+                    '${article.amount.toString()}x ${state.products[article.productId]?.name ?? article.productId}'),
+              ),
+            )
+            .toList(),
       ),
+      title: Text(
+        "${order.owner} - ${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
+      ),
+      children: [
+        Text(
+          'Nom :',
+          style: theme.textTheme.caption,
+        ),
+        _UserLabel(
+          userId: order.owner,
+          classe: true,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          'Adresse :',
+          style: theme.textTheme.caption,
+        ),
+        Text(
+          '${PlaceUtils.placeToString(order.place)}  -  ${order.room}',
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          'Commande :',
+          style: theme.textTheme.caption,
+        ),
+        ...order.articles
+            .map(
+              (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
+                buildWhen: (prev, next) =>
+                    prev.products[article.productId] !=
+                    next.products[article.productId],
+                builder: (context, state) => Text(
+                  '${article.amount.toString()}x ${state.products[article.productId]?.name}',
+                ),
+              ),
+            )
+            .toList(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10),
+            Text(
+              'Commentaire :',
+              style: theme.textTheme.caption,
+            ),
+            Text(order.message),
+          ],
+        ),
+        _StateSelector(
+          order: order,
+        ),
+      ],
     );
   }
 }
@@ -215,101 +251,6 @@ class _FilterView extends StatelessWidget {
       ),
     );
   }
-
-  String labelGen(Map<dynamic, bool> m) {
-    /*
-    if (m.values.every((element) => true)) {
-      return "Tous";
-    }
-    */
-
-    var ret = '';
-    m.forEach((key, value) {
-      if (!value) return;
-      ret += key.toString() + ' ';
-    });
-
-    return ret;
-  }
-}
-
-class _OrderCompleteView extends StatelessWidget {
-  final Order order;
-
-  const _OrderCompleteView({
-    Key? key,
-    required this.order,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return ListTile(
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Nom :',
-            style: theme.textTheme.caption,
-          ),
-          _UserLabel(
-            userId: order.owner,
-            classe: true,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            'Adresse :',
-            style: theme.textTheme.caption,
-          ),
-          Text(
-            '${PlaceUtils.placeToString(order.place)}  -  ${order.room}',
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            'Commande :',
-            style: theme.textTheme.caption,
-          ),
-          ...order.articles
-              .map(
-                (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
-                  buildWhen: (prev, next) =>
-                      !IterableEquality().equals(
-                        prev.products.values,
-                        next.products.values,
-                      ) ||
-                      !IterableEquality().equals(
-                        prev.products.keys,
-                        next.products.keys,
-                      ),
-                  builder: (context, state) => Text(
-                    '${article.amount.toString()}x ${state.products[article.productId]?.name}',
-                  ),
-                ),
-              )
-              .toList(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 10),
-              Text(
-                'Commentaire :',
-                style: theme.textTheme.caption,
-              ),
-              Text(order.message),
-            ],
-          ),
-          _StateSelector(
-            order: order,
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _StateSelector extends StatelessWidget {
@@ -353,36 +294,8 @@ class _UserLabel extends Text {
     this.name = true,
     this.classe = false,
     this.id = false,
-    Key? key,
     required this.userId,
-    TextStyle? style,
-    StrutStyle? strutStyle,
-    TextAlign? textAlign,
-    TextDirection? textDirection,
-    Locale? locale,
-    bool? softWrap,
-    TextOverflow? overflow,
-    double? textScaleFactor,
-    int? maxLines,
-    String? semanticsLabel,
-    TextWidthBasis? textWidthBasis,
-    ui.TextHeightBehavior? textHeightBehavior,
-  }) : super(
-          userId,
-          key: key,
-          style: style,
-          strutStyle: strutStyle,
-          textAlign: textAlign,
-          textDirection: textDirection,
-          locale: locale,
-          softWrap: softWrap,
-          overflow: overflow,
-          textScaleFactor: textScaleFactor,
-          maxLines: maxLines,
-          semanticsLabel: semanticsLabel,
-          textWidthBasis: textWidthBasis,
-          textHeightBehavior: textHeightBehavior,
-        );
+  }) : super(userId);
 
   @override
   Widget build(BuildContext context) {

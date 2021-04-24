@@ -1,6 +1,7 @@
 import 'package:allocrepes/admin_user/cubit/admin_user_cubit.dart';
 import 'package:allocrepes/admin_user/cubit/admin_user_state.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -106,7 +107,7 @@ class _UserList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AdminUserCubit, AdminUserState>(
       buildWhen: (prev, next) =>
-          prev.users.keys.toList() != next.users.keys.toList(),
+          !IterableEquality().equals(prev.users.keys, next.users.keys),
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

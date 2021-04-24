@@ -63,15 +63,6 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
     return _authenticationRepository.getUserFromUid(user.toLowerCase());
   }
 
-  void expandOrder(Order order, bool expand) {
-    var expandedOrders = <String, bool>{};
-    expandedOrders.addAll(state.expandedOrders);
-
-    expandedOrders[order.id!] = expand;
-
-    emit(state.copyWith(expandedOrders: expandedOrders));
-  }
-
   void updateOrderStatus(Order order, OrderStatus status) {
     _orderRepository.editOrder(order.copyWith(status: status));
   }
