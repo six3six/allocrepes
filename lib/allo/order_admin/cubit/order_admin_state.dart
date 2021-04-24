@@ -8,14 +8,12 @@ class OrderAdminState extends Equatable {
     this.orders = const {},
     this.selectedStatus = const {},
     this.selectedPlaces = const {},
-    this.expandedOrders = const {},
     this.products = const {},
   });
 
   final Map<Place, bool> selectedPlaces;
   final Map<OrderStatus, bool> selectedStatus;
   final Map<OrderStatus, List<Order>> orders;
-  final Map<String, bool> expandedOrders;
   final Map<String, Product> products;
 
   @override
@@ -26,8 +24,6 @@ class OrderAdminState extends Equatable {
         ...selectedStatus.values,
         ...orders.keys,
         ...orders.values,
-        ...expandedOrders.keys,
-        ...expandedOrders.values,
         ...products.keys,
         ...products.values,
       ];
@@ -41,7 +37,6 @@ class OrderAdminState extends Equatable {
   }) {
     return OrderAdminState(
       orders: orders ?? this.orders,
-      expandedOrders: expandedOrders ?? this.expandedOrders,
       selectedPlaces: selectedPlaces ?? this.selectedPlaces,
       selectedStatus: selectedStatus ?? this.selectedStatus,
       products: products ?? this.products,

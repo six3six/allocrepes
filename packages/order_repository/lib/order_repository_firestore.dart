@@ -37,6 +37,9 @@ class OrderRepositoryFirestore extends OrderRepository {
 
     categories().forEach((categories) {
       _categories = categories;
+      _categories.forEach((category) {
+        productsFromCategory(category).forEach((n) => null);
+      });
     });
   }
 
