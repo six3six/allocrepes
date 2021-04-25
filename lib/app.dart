@@ -2,6 +2,7 @@ import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
 import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -99,10 +100,10 @@ class _AppViewState extends State<AppView> {
                 print('authenticated');
                 if (!kIsWeb && !state.user.student) {
                   print('subscribeToTopic(user${state.user.id})');
-                }
-                if (!kIsWeb) {
                   FirebaseMessaging.instance
                       .subscribeToTopic('user${state.user.id}');
+
+                  FirebaseCrashlytics.instance.setUserIdentifier(state.user.id);
                 }
                 RepositoryProvider.of<OrderRepositoryFirestore>(context)
                     .changeUser(state.user.id);

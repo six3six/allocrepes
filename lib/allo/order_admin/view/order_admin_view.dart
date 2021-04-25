@@ -147,18 +147,16 @@ class _OrderTile extends StatelessWidget {
           'Commande :',
           style: theme.textTheme.caption,
         ),
-        ...order.articles
-            .map(
-              (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
-                buildWhen: (prev, next) =>
-                    prev.products[article.productId] !=
-                    next.products[article.productId],
-                builder: (context, state) => Text(
-                  '${article.amount.toString()}x ${state.products[article.productId]?.name}',
-                ),
-              ),
-            )
-            .toList(),
+        ...order.articles.map(
+          (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
+            buildWhen: (prev, next) =>
+                prev.products[article.productId] !=
+                next.products[article.productId],
+            builder: (context, state) => Text(
+              '${article.amount.toString()}x ${state.products[article.productId]?.name}',
+            ),
+          ),
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
