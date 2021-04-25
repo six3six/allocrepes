@@ -39,7 +39,7 @@ class AuthWebViewState extends State<AuthWebView> {
       gestureNavigationEnabled: true,
       navigationDelegate: (NavigationRequest request) {
         if (request.url.startsWith(
-          'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin/',
+          'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin',
         )) {
           BlocProvider.of<LoginCubit>(context).login(request.url);
 
