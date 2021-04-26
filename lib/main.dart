@@ -51,7 +51,12 @@ void main() async {
     print('Handling a background message: ${message.messageId}');
   }
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  try{
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  } catch (e){
+    print(e);
+  }
+  
 
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = AppObserver();
