@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
 import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
@@ -95,6 +97,17 @@ class _AppViewState extends State<AppView> {
               prev.user.id != next.user.id ||
               prev.user.student != next.user.student,
           listener: (context, state) {
+            try {
+              FirebaseMessaging.instance.subscribeToTopic('allusers');
+              if (Platform.isAndroid) {
+                FirebaseMessaging.instance.subscribeToTopic('androidusers');
+              }
+              if (Platform.isIOS) {
+                FirebaseMessaging.instance.subscribeToTopic('iosusers');
+              }
+            } catch (exception, stack) {
+              FirebaseCrashlytics.instance.recordError(exception, stack);
+            }
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 print('authenticated');
