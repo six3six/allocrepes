@@ -103,6 +103,16 @@ class _LobbyMenu extends StatelessWidget {
                     },
                     icon: Icons.settings,
                   ),
+                if (state.user.id == 'lefevret')
+                  Column(
+                    children: [
+                      Text(
+                        'Sexe.',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      Text('Signé Louis <3'),
+                    ],
+                  ),
               ],
             ),
           );
