@@ -47,7 +47,7 @@ class PlaceUtils {
       case Place.Ampere_C:
         return "Olympère (Ampère) C";
       case Place.Arago:
-        return "Spararago (Arago)";
+        return "Sparago (Arago)";
       case Place.Campusea:
         return "Campusea";
       case Place.Kley:
