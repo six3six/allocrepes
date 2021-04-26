@@ -30,13 +30,17 @@ void main() async {
 
     var messaging = FirebaseMessaging.instance;
 
-    await messaging.subscribeToTopic('allusers');
-    if (Platform.isAndroid) await messaging.subscribeToTopic('androidusers');
-    if (Platform.isIOS) await messaging.subscribeToTopic('iosusers');
-
     await messaging.requestPermission(
       provisional: true,
     );
+
+    try {
+      await messaging.subscribeToTopic('allusers');
+      if (Platform.isAndroid) await messaging.subscribeToTopic('androidusers');
+      if (Platform.isIOS) await messaging.subscribeToTopic('iosusers');
+    } catch (exception, stack) {
+      await FirebaseCrashlytics.instance.recordError(exception, stack);
+    }
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(
