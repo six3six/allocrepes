@@ -97,17 +97,20 @@ class _AppViewState extends State<AppView> {
               prev.user.id != next.user.id ||
               prev.user.student != next.user.student,
           listener: (context, state) {
-            try {
-              FirebaseMessaging.instance.subscribeToTopic('allusers');
-              if (Platform.isAndroid) {
-                FirebaseMessaging.instance.subscribeToTopic('androidusers');
+            if (!kIsWeb){
+              try {
+                FirebaseMessaging.instance.subscribeToTopic('allusers');
+                if (Platform.isAndroid) {
+                  FirebaseMessaging.instance.subscribeToTopic('androidusers');
+                }
+                if (Platform.isIOS) {
+                  FirebaseMessaging.instance.subscribeToTopic('iosusers');
+                }
+              } catch (exception, stack) {
+                FirebaseCrashlytics.instance.recordError(exception, stack);
               }
-              if (Platform.isIOS) {
-                FirebaseMessaging.instance.subscribeToTopic('iosusers');
-              }
-            } catch (exception, stack) {
-              FirebaseCrashlytics.instance.recordError(exception, stack);
             }
+            
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 print('authenticated');
