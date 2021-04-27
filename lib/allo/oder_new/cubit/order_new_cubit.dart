@@ -87,7 +87,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
   void updateRoom(String? room) {
     emit(state.copyWith(room: room));
-    if (room == null || room == '') {
+    if ((room == null || room == '') && state.place != Place.ESIEE) {
       emit(state.copyWith(roomError: 'Salle non définie'));
     } else {
       emit(state.copyWith(roomError: ''));

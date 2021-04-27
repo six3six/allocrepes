@@ -267,7 +267,12 @@ class _OrderNewAddressInfo extends StatelessWidget {
             ),
           ),
           _OrderNewBatimentSelector(),
-          _OrderNewAppartSelector(),
+          BlocBuilder<OrderNewCubit, OrderNewState>(
+            builder: (context, state) {
+              if (state.place == Place.ESIEE) return SizedBox();
+              return _OrderNewAppartSelector();
+            },
+          ),
         ],
       ),
     );

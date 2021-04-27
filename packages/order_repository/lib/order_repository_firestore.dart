@@ -87,6 +87,17 @@ class OrderRepositoryFirestore extends OrderRepository {
     });
   }
 
+  Stream<bool> showProgramPages() {
+    final showOrder = ruleRoot.doc("show_program");
+    return showOrder.snapshots().map((snap) => snap.data()?["enable"] ?? false);
+  }
+
+  Future<void> changeProgramPagesView(bool shown) {
+    return ruleRoot.doc("show_program").update({
+      "enable": shown,
+    });
+  }
+
   @override
   Future<void> createOrder(Order order) async {
     final orderRef = await orderRoot.add(order.toEntity().toDocument());
