@@ -43,3 +43,44 @@ class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
     );
   }
 }
+
+class LobbyHeadlineViewer extends StatefulWidget {
+  final String url;
+
+  const LobbyHeadlineViewer({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+
+  @override
+  LobbyHeadlineViewerState createState() => LobbyHeadlineViewerState();
+}
+
+class LobbyHeadlineViewerState extends State<LobbyHeadlineViewer> {
+  @override
+  void initState() {
+    super.initState();
+    CookieManager().clearCookies();
+    // Enable hybrid composition.
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.url != ''
+        ? SizedBox(
+            height: 300,
+            width: double.infinity,
+            child: WebView(
+              debuggingEnabled: false,
+              javascriptMode: JavascriptMode.unrestricted,
+              initialUrl: widget.url,
+              gestureNavigationEnabled: true,
+              navigationDelegate: (NavigationRequest request) async {
+                return NavigationDecision.navigate;
+              },
+            ),
+          )
+        : SizedBox();
+  }
+}

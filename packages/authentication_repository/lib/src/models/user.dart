@@ -46,9 +46,9 @@ class User extends Equatable {
     email: '',
     id: '',
     admin: false,
-    name: "",
-    surname: "",
-    classe: "",
+    name: '',
+    surname: '',
+    classe: '',
     point: 0,
     photo: null,
     student: false,
@@ -79,10 +79,10 @@ class User extends Equatable {
 
   Map<String, Object?> toDocument() {
     return {
-      "surname": surname,
-      "name": name,
-      "email": email,
-      "point": point,
+      'surname': surname,
+      'name': name,
+      'email': email,
+      'point': point,
     };
   }
 
@@ -90,14 +90,14 @@ class User extends Equatable {
     var data = document.data() ?? {};
 
     return User(
-      email: data.containsKey("email") ? data["email"] : "",
+      email: data.containsKey('email') ? data['email'] : '',
       id: document.id,
       admin: false,
-      name: data["name"] ?? "",
-      surname: data["surname"] ?? "",
-      classe: data["classe"] ?? "",
-      point: data["point"] ?? 0,
-      student: data.containsKey("name") ? true : false,
+      name: data['name'] ?? '',
+      surname: data['surname'] ?? '',
+      classe: data['classe'] ?? '',
+      point: data['point'] ?? 0,
+      student: data.containsKey('name') ? true : false,
     );
   }
 

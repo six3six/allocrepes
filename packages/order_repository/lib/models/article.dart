@@ -15,9 +15,9 @@ class Article extends Equatable {
   final int amount;
 
   static const empty = Article(
-    id: "",
-    productId: "",
-    categoryId: "",
+    id: '',
+    productId: '',
+    categoryId: '',
     amount: 0,
   );
 

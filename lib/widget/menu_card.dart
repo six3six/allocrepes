@@ -32,37 +32,5 @@ class MenuCard extends StatelessWidget {
         ),
       ),
     );
-    /*
-    return SizedBox(
-      width: 200,
-      height: 200,
-      child: Card(
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: EdgeInsets.all(15),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    icon,
-                    size: 40,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );*/
   }
 }

@@ -12,25 +12,25 @@ class CategoryEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        this.id,
-        this.name,
+        id,
+        name,
       ];
 
   @override
-  String toString() => "CategoryEntity { id: $id, name: $name }";
+  String toString() => 'CategoryEntity { id: $id, name: $name }';
 
   static CategoryEntity fromJson(Map<String, Object> json) => CategoryEntity(
-        json["id"] as String,
-        json["name"] as String,
+        json['id'] as String,
+        json['name'] as String,
       );
 
   static CategoryEntity fromSnapshot(DocumentSnapshot snapshot) =>
       CategoryEntity(
         snapshot.id,
-        snapshot.get("name") as String,
+        snapshot.get('name') as String,
       );
 
   Map<String, Object> toDocument() => {
-        "name": name,
+        'name': name,
       };
 }

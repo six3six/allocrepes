@@ -40,12 +40,12 @@ class AuthenticationRepository {
   ///
   /// Emits [User.empty] if the user is not authenticated.
   Stream<Stream<User>> get user async* {
-    final Stream<firebase_auth.User?> stream = _firebaseAuth.authStateChanges();
+    final stream = _firebaseAuth.authStateChanges();
 
     await for (firebase_auth.User? firebaseUser in stream) {
-      if (firebaseUser == null)
+      if (firebaseUser == null) {
         yield Stream.value(User.empty);
-      else {
+      } else {
         yield firebaseUser.toUserStream;
       }
     }
@@ -60,8 +60,7 @@ class AuthenticationRepository {
     required String name,
   }) async {
     try {
-      final firebase_auth.UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -72,7 +71,7 @@ class AuthenticationRepository {
   }
 
   Future<void> loginDebug() async {
-    _firebaseAuth.signInWithCustomToken("guest");
+    await _firebaseAuth.signInWithCustomToken('guest');
   }
 
   Future<void> addUserInDatabase(
@@ -80,15 +79,15 @@ class AuthenticationRepository {
     String name,
     String email,
   ) async {
-    await _firestore.collection("users").doc(userUid).set({
-      "name": name,
-      "email": email,
+    await _firestore.collection('users').doc(userUid).set({
+      'name': name,
+      'email': email,
     });
   }
 
   Future<bool> userExistInDatabase(String userUid) async {
-    DocumentSnapshot doc =
-        await _firestore.collection("users").doc(userUid).get();
+    var doc =
+        await _firestore.collection('users').doc(userUid).get();
 
     return doc.exists;
   }
@@ -139,11 +138,11 @@ class AuthenticationRepository {
   }
 
   Future<bool> getUserRole(String uid) async {
-    bool admin = false;
+    var admin = false;
     try {
-      final DocumentSnapshot admins = await FirebaseFirestore.instance
-          .collection("roles")
-          .doc("admins")
+      final admins = await FirebaseFirestore.instance
+          .collection('roles')
+          .doc('admins')
           .get();
       admins.data()!.keys.contains(uid);
       admin = true;
@@ -155,8 +154,8 @@ class AuthenticationRepository {
   }
 
   Future<User> getUserFromUid(String uid) async {
-    final DocumentSnapshot snapshot =
-        await _firestore.collection("users").doc(uid).get();
+    final snapshot =
+        await _firestore.collection('users').doc(uid).get();
 
     if (!snapshot.exists) return User.empty.copyWith(id: uid, name: uid);
 
@@ -167,28 +166,28 @@ class AuthenticationRepository {
     String? username,
     SortUser sort = SortUser.Name,
   }) async* {
-    final adminCollection = FirebaseFirestore.instance.collection("roles");
-    final userCollection = FirebaseFirestore.instance.collection("users");
+    final adminCollection = FirebaseFirestore.instance.collection('roles');
+    final userCollection = FirebaseFirestore.instance.collection('users');
     Query userQuery = userCollection;
     switch (sort) {
       case SortUser.Name:
-        userQuery.orderBy("name", descending: true);
+        userQuery.orderBy('name', descending: true);
         break;
       case SortUser.Point:
-        userQuery = userQuery.orderBy("point", descending: true);
+        userQuery = userQuery.orderBy('point', descending: true);
         break;
     }
 
     userQuery = userQuery.limit(50);
 
     if (username != null && sort == SortUser.Name) {
-      userQuery = userQuery.where("name", isGreaterThanOrEqualTo: username);
+      userQuery = userQuery.where('name', isGreaterThanOrEqualTo: username);
     }
 
-    Map<String, User> users = {};
-    Map<String, bool> isAdmin = {};
+    var users = <String, User>{};
+    var isAdmin = <String, bool>{};
 
-    Stream<QuerySnapshot> mStream =
+    var mStream =
         userQuery.snapshots().merge(adminCollection.snapshots());
     await for (var snap in mStream) {
       if (snap.docs.first.reference.parent == userCollection) {
@@ -196,7 +195,7 @@ class AuthenticationRepository {
       }
       for (var doc in snap.docs) {
         if (doc.reference.parent == adminCollection) {
-          if (doc.reference == adminCollection.doc("admins")) {
+          if (doc.reference == adminCollection.doc('admins')) {
             isAdmin = doc.data().map((key, value) => MapEntry(key, true));
           }
         } else if (doc.reference.parent == userCollection) {
@@ -218,13 +217,13 @@ class AuthenticationRepository {
 
   void removeUser(String uid) {
     final adminCollection =
-        FirebaseFirestore.instance.collection("roles").doc("admins");
+        FirebaseFirestore.instance.collection('roles').doc('admins');
     final userCollection =
-        FirebaseFirestore.instance.collection("users").doc(uid);
+        FirebaseFirestore.instance.collection('users').doc(uid);
 
     userCollection.delete();
     adminCollection.update({
-      "$uid": FieldValue.delete(),
+      '$uid': FieldValue.delete(),
     });
   }
 
@@ -236,7 +235,7 @@ class AuthenticationRepository {
     int point,
   ) {
     final userCollection =
-        FirebaseFirestore.instance.collection("users").doc(uid);
+        FirebaseFirestore.instance.collection('users').doc(uid);
 
     userCollection.update(
       User(
@@ -245,8 +244,8 @@ class AuthenticationRepository {
         name: name,
         email: email,
         point: point,
-        classe: "",
-        photo: "",
+        classe: '',
+        photo: '',
         admin: false,
         student: false,
       ).toDocument(),
@@ -255,14 +254,14 @@ class AuthenticationRepository {
 
   void setUserAdmin(String uid, bool admin) {
     final adminCollection =
-        FirebaseFirestore.instance.collection("roles").doc("admins");
+        FirebaseFirestore.instance.collection('roles').doc('admins');
     if (admin) {
       adminCollection.update({
-        "$uid": true,
+        '$uid': true,
       });
     } else {
       adminCollection.update({
-        "$uid": FieldValue.delete(),
+        '$uid': FieldValue.delete(),
       });
     }
   }
@@ -276,18 +275,18 @@ enum SortUser {
 extension on firebase_auth.User {
   Stream<User> get toUserStream async* {
     final adminCollection =
-        FirebaseFirestore.instance.collection("roles").doc("admins");
+        FirebaseFirestore.instance.collection('roles').doc('admins');
     final userCollection =
-        FirebaseFirestore.instance.collection("users").doc(uid);
-    User user = User.empty.copyWith(
+        FirebaseFirestore.instance.collection('users').doc(uid);
+    var user = User.empty.copyWith(
       id: uid,
     );
-    Stream<DocumentSnapshot> mStream =
+    var mStream =
         userCollection.snapshots().merge(adminCollection.snapshots());
 
     await for (DocumentSnapshot snap in mStream) {
       if (snap.reference == adminCollection) {
-        print("admin " + (snap.data()?.keys.contains(uid) ?? false).toString());
+        print('admin ' + (snap.data()?.keys.contains(uid) ?? false).toString());
         user = user.copyWith(admin: snap.data()?.keys.contains(uid) ?? false);
       } else {
         String? email;
@@ -296,18 +295,18 @@ extension on firebase_auth.User {
         int? point;
 
         try {
-          email = snap["email"];
+          email = snap['email'];
         } catch (e) {}
 
         try {
-          name = snap["name"];
+          name = snap['name'];
         } catch (e) {}
         try {
-          surname = snap["surname"];
+          surname = snap['surname'];
         } catch (e) {}
 
         try {
-          point = snap["point"];
+          point = snap['point'];
         } catch (e) {}
 
         user = user.copyWith(

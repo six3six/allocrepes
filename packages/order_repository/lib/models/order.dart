@@ -4,7 +4,7 @@ import 'package:order_repository/models/place.dart';
 import '../entities/order_entity.dart';
 import 'article.dart';
 import 'order_status.dart';
-export "order_status.dart";
+export 'order_status.dart';
 
 class Order extends Equatable {
   const Order({
@@ -30,15 +30,15 @@ class Order extends Equatable {
   final String message;
 
   static final empty = Order(
-    id: "",
-    owner: "",
+    id: '',
+    owner: '',
     status: OrderStatus.UNKNOWN,
     createdAt: DateTime.now(),
     deliveredAt: null,
     articles: [],
     place: Place.UNKNOWN,
-    room: "",
-    message: "",
+    room: '',
+    message: '',
   );
 
   @override
@@ -108,17 +108,17 @@ class Order extends Equatable {
   static String statusToString(OrderStatus status) {
     switch (status) {
       case OrderStatus.CANCELED:
-        return "Annulé";
+        return 'Annulé';
       case OrderStatus.VALIDATING:
-        return "En cours de validation";
+        return 'En cours de validation';
       case OrderStatus.PENDING:
-        return "En cours de préparation";
+        return 'En cours de préparation';
       case OrderStatus.DELIVERING:
-        return "En cours de livraison";
+        return 'En cours de livraison';
       case OrderStatus.DELIVERED:
-        return "Livrée";
+        return 'Livrée';
       default:
-        return "Etat inconnu";
+        return 'Etat inconnu';
     }
   }
 }

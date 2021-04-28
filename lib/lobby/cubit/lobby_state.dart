@@ -6,12 +6,16 @@ class LobbyState extends Equatable {
   final bool isLoading;
   final bool showOrder;
   final bool showProgram;
+  final String headline;
+  final String headlineURL;
 
   LobbyState({
     this.news = const <New>[],
     this.isLoading = false,
     this.showOrder = false,
     this.showProgram = false,
+    this.headline = '',
+    this.headlineURL = '',
   });
 
   LobbyState copyWith({
@@ -19,12 +23,16 @@ class LobbyState extends Equatable {
     bool? isLoading,
     bool? showOrder,
     bool? showProgram,
+    String? headline,
+    String? headlineURL,
   }) {
     return LobbyState(
       news: news ?? this.news,
       isLoading: isLoading ?? this.isLoading,
       showOrder: showOrder ?? this.showOrder,
       showProgram: showProgram ?? this.showProgram,
+      headline: headline ?? this.headline,
+      headlineURL: headlineURL ?? this.headlineURL,
     );
   }
 
@@ -34,6 +42,8 @@ class LobbyState extends Equatable {
         isLoading,
         showOrder,
         showProgram,
+        headline,
+        headlineURL,
         ...news,
       ];
 }

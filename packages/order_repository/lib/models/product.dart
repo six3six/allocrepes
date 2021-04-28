@@ -22,8 +22,8 @@ class Product extends Equatable {
   final bool oneOrder;
 
   static const empty = Product(
-    id: "",
-    name: "",
+    id: '',
+    name: '',
     available: false,
     availableESIEE: false,
     maxAmount: 0,

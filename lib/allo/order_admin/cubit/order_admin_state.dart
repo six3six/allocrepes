@@ -42,4 +42,22 @@ class OrderAdminState extends Equatable {
       products: products ?? this.products,
     );
   }
+
+  Map<OrderStatus, List<Order>> getOrders() {
+    var orders = <OrderStatus, List<Order>>{};
+    var status = selectedStatus.keys.where(
+      (status) => selectedStatus[status] ?? false,
+    );
+
+    status.forEach(
+      (s) {
+        orders[s] = this
+                .orders[s]
+                ?.where((order) => selectedPlaces[order.place] ?? false)
+                .toList() ??
+            [];
+      },
+    );
+    return orders;
+  }
 }

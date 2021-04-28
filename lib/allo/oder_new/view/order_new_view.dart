@@ -269,8 +269,9 @@ class _OrderNewAddressInfo extends StatelessWidget {
           _OrderNewBatimentSelector(),
           BlocBuilder<OrderNewCubit, OrderNewState>(
             builder: (context, state) {
-              if (state.place == Place.ESIEE) return SizedBox();
-              return _OrderNewAppartSelector();
+              return state.place == Place.ESIEE
+                  ? Text('Rendez-vous au stand extérieur')
+                  : _OrderNewAppartSelector();
             },
           ),
         ],

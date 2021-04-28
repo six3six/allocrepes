@@ -39,23 +39,23 @@ class PlaceUtils {
   static String placeToString(Place place) {
     switch (place) {
       case Place.ESIEE:
-        return "ESIEE";
+        return 'ESIEE';
       case Place.Ampere_A:
-        return "Olympère (Ampère) A";
+        return 'Olympère (Ampère) A';
       case Place.Ampere_B:
-        return "Olympère (Ampère) B";
+        return 'Olympère (Ampère) B';
       case Place.Ampere_C:
-        return "Olympère (Ampère) C";
+        return 'Olympère (Ampère) C';
       case Place.Arago:
-        return "Sparago (Arago)";
+        return 'Sparago (Arago)';
       case Place.Campusea:
-        return "Campusea";
+        return 'Campusea';
       case Place.Kley:
-        return "Akleytide (Kley)";
+        return 'Akleytide (Kley)';
       case Place.Kley_2:
-        return "Akleytide (Kley) 2";
+        return 'Akleytide (Kley) 2';
       case Place.UNKNOWN:
-        return "UNKNOWN";
+        return 'UNKNOWN';
     }
   }
 }
