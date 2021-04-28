@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class AdminUserState extends Equatable {
   final bool isLoading;
+  final bool showCls;
   final Map<String, User> users;
   final Map<String, bool> admin;
 
@@ -11,6 +12,7 @@ class AdminUserState extends Equatable {
 
   AdminUserState({
     this.isLoading = false,
+    this.showCls = false,
     this.users = const {},
     this.admin = const {},
     this.usernameQuery = '',
@@ -20,6 +22,7 @@ class AdminUserState extends Equatable {
   @override
   List<Object?> get props => [
         isLoading,
+        showCls,
         usernameQuery,
         sortUser,
         ...users.keys,
@@ -30,11 +33,12 @@ class AdminUserState extends Equatable {
 
   @override
   String toString() {
-    return 'AdminUserState(isLoading: $isLoading, users: $users, admin: $admin, usernameQuery: $usernameQuery, sortUser: $sortUser)';
+    return 'AdminUserState(isLoading: $isLoading, showCls: $showCls, users: $users, admin: $admin, usernameQuery: $usernameQuery, sortUser: $sortUser)';
   }
 
   AdminUserState copyWith({
     bool? isLoading,
+    bool? showCls,
     Map<String, User>? users,
     Map<String, bool>? admin,
     String? usernameQuery,
@@ -42,6 +46,7 @@ class AdminUserState extends Equatable {
   }) {
     return AdminUserState(
       isLoading: isLoading ?? this.isLoading,
+      showCls: showCls ?? this.showCls,
       users: users ?? this.users,
       admin: admin ?? this.admin,
       usernameQuery: usernameQuery ?? this.usernameQuery,
