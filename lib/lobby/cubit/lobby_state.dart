@@ -6,6 +6,7 @@ class LobbyState extends Equatable {
   final bool isLoading;
   final bool showOrder;
   final bool showProgram;
+  final bool showCls;
   final String headline;
   final String headlineURL;
 
@@ -14,6 +15,7 @@ class LobbyState extends Equatable {
     this.isLoading = false,
     this.showOrder = false,
     this.showProgram = false,
+    this.showCls = false,
     this.headline = '',
     this.headlineURL = '',
   });
@@ -23,6 +25,7 @@ class LobbyState extends Equatable {
     bool? isLoading,
     bool? showOrder,
     bool? showProgram,
+    bool? showCls,
     String? headline,
     String? headlineURL,
   }) {
@@ -30,6 +33,7 @@ class LobbyState extends Equatable {
       news: news ?? this.news,
       isLoading: isLoading ?? this.isLoading,
       showOrder: showOrder ?? this.showOrder,
+      showCls: showCls ?? this.showCls,
       showProgram: showProgram ?? this.showProgram,
       headline: headline ?? this.headline,
       headlineURL: headlineURL ?? this.headlineURL,
@@ -44,6 +48,7 @@ class LobbyState extends Equatable {
         showProgram,
         headline,
         headlineURL,
+        showCls,
         ...news,
       ];
 }
