@@ -16,7 +16,7 @@ class PlaceEntity extends Equatable {
   @override
   String toString() => 'PlaceEntity{name: $name, available: $available}';
 
-  static fromSnapshot(DocumentSnapshot snapshot) => PlaceEntity(
+  static PlaceEntity fromSnapshot(DocumentSnapshot snapshot) => PlaceEntity(
         name: snapshot.id,
         available: snapshot.get('available') as bool,
       );

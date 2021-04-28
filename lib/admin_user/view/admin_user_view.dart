@@ -242,7 +242,6 @@ class _ClsSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15),
