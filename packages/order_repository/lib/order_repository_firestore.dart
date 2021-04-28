@@ -108,6 +108,20 @@ class OrderRepositoryFirestore extends OrderRepository {
     });
   }
 
+  @override
+  Stream<bool> showCls() {
+    return ruleRoot.doc('show_cls').snapshots().map(
+          (snap) => snap.data()?['enable'] ?? false,
+        );
+  }
+
+  @override
+  Future<void> changeClsView(bool shown) {
+    return ruleRoot.doc('show_cls').update({
+      'enable': shown,
+    });
+  }
+
   final String headlineRule = 'headline';
 
   @override
@@ -154,8 +168,7 @@ class OrderRepositoryFirestore extends OrderRepository {
   Future<void> editOrder(Order order) async {
     await orderRoot.doc(order.id).set(order.toEntity().toDocument());
 
-    final articlesRef =
-        orderRoot.doc(order.id).collection('articles');
+    final articlesRef = orderRoot.doc(order.id).collection('articles');
     var articleList = await articlesRef.get();
 
     articleList.docs.map((doc) => articlesRef.doc(doc.id).delete());
@@ -226,11 +239,9 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   Future<Order> _orderFromEntity(OrderEntity entity) async {
-    final articlesRef =
-        orderRoot.doc(entity.id).collection('articles');
+    final articlesRef = orderRoot.doc(entity.id).collection('articles');
     final querySnapshot = await articlesRef.get();
-    var articles =
-        querySnapshot.docs.map((QueryDocumentSnapshot doc) {
+    var articles = querySnapshot.docs.map((QueryDocumentSnapshot doc) {
       final entity = ArticleEntity.fromSnapshot(doc);
 
       return Article.fromEntity(entity);

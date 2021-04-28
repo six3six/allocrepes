@@ -7,6 +7,7 @@ import 'package:allocrepes/lobby/cubit/lobby_state.dart';
 import 'package:allocrepes/program/view/program_page.dart';
 import 'package:allocrepes/widget/menu_card.dart';
 import 'package:allocrepes/widget/news_card.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +46,59 @@ class LobbyView extends StatelessWidget {
           },
         ),
         if (!kIsWeb) _LobbyTwitchMenu(),
+        _LobbyCls(),
         _LobbyActuMenu(),
       ],
+    );
+  }
+}
+
+class _LobbyCls extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final getList = FirebaseFunctions.instance.httpsCallable('getPointsCls');
+
+    return SliverToBoxAdapter(
+      child: BlocBuilder<LobbyCubit, LobbyState>(
+        builder: (context, state) {
+          return state.showCls
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Classement des meilleurs athlètes',
+                        style: textTheme.headline5,
+                      ),
+                      FutureBuilder<HttpsCallableResult<List<dynamic>>>(
+                        future: getList(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) return SizedBox();
+                          var list = snapshot.data;
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 13, vertical: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: list?.data
+                                      .map((e) => Text(
+                                            e,
+                                            style: textTheme.bodyText1,
+                                          ))
+                                      .toList() ??
+                                  [],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              : SizedBox();
+        },
+      ),
     );
   }
 }

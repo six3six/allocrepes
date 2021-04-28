@@ -17,6 +17,10 @@ abstract class OrderRepository {
 
   Future<void> changeProgramPagesView(bool shown);
 
+  Stream<bool> showCls();
+
+  Future<void> changeClsView(bool shown);
+
   Stream<String> headline();
 
   Future<void> changeHeadline(String headline);

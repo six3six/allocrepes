@@ -159,7 +159,7 @@ exports.onCommandStatusChange = functions.firestore
         case OrderStatus.DELIVERED:
             title = "Bon appétit";
             body = "Votre commande est arrivée et est prête à être degustée\n" +
-                "Bon appétit et merci pour votre commande";
+                    "Bon appétit et merci pour votre commande";
             break;
         case OrderStatus.PENDING:
             title = "On cuisine pour vous !";
@@ -204,6 +204,13 @@ enum OrderStatus {
     CANCELED,
 }
 
+exports.getPointsCls = functions.https.onCall(async (requestData, context) => {
+    const users = await db.collection("users").orderBy("point", "desc")
+        .limit(5).get();
+    return users.docs.map((doc) =>
+        doc.get("surname") + " " + doc.get("name") + " : " + doc.get("point")
+    );
+});
 
 exports.sendNotif = functions.https.onCall(async (requestData, context) => {
     if (!await isAdmin(context.auth?.uid)) {
