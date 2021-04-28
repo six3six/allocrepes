@@ -17,73 +17,81 @@ class OrderAdminView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    var slivers = [];
+
+    OrderStatus.values.forEach((status) {
+      slivers.add(SliverPersistentHeader(
+        floating: true,
+        delegate: _SliverAppBarDelegate(
+          minHeight: 40.0,
+          maxHeight: 40.0,
+          child: Container(
+            color: theme.primaryColorDark,
+            child: Center(
+              child: Text(
+                Order.statusToString(status),
+              ),
+            ),
+          ),
+        ),
+      ));
+
+      slivers.add(
+        _StatusList(
+          status: status,
+        ),
+      );
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text('Commandes'),
       ),
-      body: BlocBuilder<OrderAdminCubit, OrderAdminState>(
-        buildWhen: (prev, next) => !IterableEquality().equals(
-          prev.orders.keys,
-          next.orders.keys,
-        ),
-        builder: (context, state) {
-          var slivers = <Widget>[];
-
-          slivers.add(
-            BlocBuilder<OrderAdminCubit, OrderAdminState>(
-              buildWhen: (prev, next) => !IterableEquality().equals(
-                prev.selectedPlaces.keys,
-                next.selectedPlaces.keys,
-              ),
-              builder: (context, state) => _FilterView(
-                selectedPlaces: state.selectedPlaces,
-                selectedStatus: state.selectedStatus,
-              ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          BlocBuilder<OrderAdminCubit, OrderAdminState>(
+            buildWhen: (prev, next) => !IterableEquality().equals(
+              prev.selectedPlaces.keys,
+              next.selectedPlaces.keys,
             ),
-          );
+            builder: (context, state) => _FilterView(),
+          ),
+          ...slivers,
+        ],
+      ),
+    );
+  }
+}
 
-          OrderStatus.values.forEach((status) {
-            if (!state.orders.keys.contains(status)) return;
-            slivers.add(SliverPersistentHeader(
-              floating: true,
-              delegate: _SliverAppBarDelegate(
-                minHeight: 40.0,
-                maxHeight: 40.0,
-                child: Container(
-                  color: theme.primaryColorDark,
-                  child: Center(
-                    child: Text(
-                      Order.statusToString(status),
-                    ),
-                  ),
-                ),
-              ),
-            ));
+class _StatusList extends StatelessWidget {
+  final OrderStatus status;
 
-            slivers.add(
-              SliverToBoxAdapter(
-                child: BlocBuilder<OrderAdminCubit, OrderAdminState>(
-                  buildWhen: (prev, next) => !IterableEquality().equals(
-                    prev.orders[status],
-                    next.orders[status],
-                  ),
-                  builder: (context, state) {
-                    return Column(
-                      children: state.orders[status]
-                              ?.map((e) => _OrderTile(e))
-                              .toList() ??
-                          [],
-                    );
-                  },
-                ),
-              ),
-            );
-          });
+  const _StatusList({
+    Key? key,
+    required this.status,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          BlocBuilder<OrderAdminCubit, OrderAdminState>(
+            buildWhen: (prev, next) => !IterableEquality().equals(
+              prev.getOrders()[status],
+              next.getOrders()[status],
+            ),
+            builder: (context, state) {
+              final orders =
+                  BlocProvider.of<OrderAdminCubit>(context).state.getOrders();
 
-          return CustomScrollView(
-            slivers: slivers,
-          );
-        },
+              return Column(
+                children: orders[status]
+                        ?.map((order) => _OrderTile(order))
+                        .toList() ??
+                    [],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -92,7 +100,7 @@ class OrderAdminView extends StatelessWidget {
 class _OrderTile extends StatelessWidget {
   _OrderTile(this.order);
 
-  Order order;
+  final Order order;
 
   @override
   Widget build(context) {
@@ -153,7 +161,7 @@ class _OrderTile extends StatelessWidget {
                 prev.products[article.productId] !=
                 next.products[article.productId],
             builder: (context, state) => Text(
-              '${article.amount.toString()}x ${state.products[article.productId]?.name}',
+              '${article.amount.toString()}x ${state.products[article.productId]?.name ?? ""}',
             ),
           ),
         ),
@@ -177,13 +185,8 @@ class _OrderTile extends StatelessWidget {
 }
 
 class _FilterView extends StatelessWidget {
-  final Map<OrderStatus, bool> selectedStatus;
-  final Map<Place, bool> selectedPlaces;
-
   const _FilterView({
     Key? key,
-    required this.selectedStatus,
-    required this.selectedPlaces,
   }) : super(key: key);
 
   @override
@@ -202,8 +205,8 @@ class _FilterView extends StatelessWidget {
           ),
           BlocBuilder<OrderAdminCubit, OrderAdminState>(
             buildWhen: (prev, next) => !IterableEquality().equals(
-              prev.selectedPlaces.entries,
-              next.selectedPlaces.entries,
+              prev.selectedPlaces.values,
+              next.selectedPlaces.values,
             ),
             builder: (context, state) {
               return ExpansionTile(
@@ -228,22 +231,30 @@ class _FilterView extends StatelessWidget {
             'Etat :',
             style: theme.textTheme.caption,
           ),
-          ExpansionTile(
-            title: Text('Etat'),
-            children: OrderStatus.values
-                .map(
-                  (status) => CheckboxListTile(
-                    title: Text(
-                      Order.statusToString(status),
-                      overflow: TextOverflow.clip,
-                    ),
-                    value: selectedStatus[status] ?? false,
-                    onChanged: (bool? activate) =>
-                        BlocProvider.of<OrderAdminCubit>(context)
-                            .updateFilterStatus(status, activate ?? false),
-                  ),
-                )
-                .toList(),
+          BlocBuilder<OrderAdminCubit, OrderAdminState>(
+            buildWhen: (prev, next) => !IterableEquality().equals(
+              prev.selectedStatus.values,
+              next.selectedStatus.values,
+            ),
+            builder: (context, state) {
+              return ExpansionTile(
+                title: Text('Etat'),
+                children: OrderStatus.values
+                    .map(
+                      (status) => CheckboxListTile(
+                        title: Text(
+                          Order.statusToString(status),
+                          overflow: TextOverflow.clip,
+                        ),
+                        value: state.selectedStatus[status] ?? false,
+                        onChanged: (bool? activate) =>
+                            BlocProvider.of<OrderAdminCubit>(context)
+                                .updateFilterStatus(status, activate ?? false),
+                      ),
+                    )
+                    .toList(),
+              );
+            },
           ),
         ],
       ),

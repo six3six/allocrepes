@@ -14,14 +14,14 @@ class PlaceEntity extends Equatable {
   List<Object> get props => [name, available];
 
   @override
-  String toString() => "PlaceEntity{name: $name, available: $available}";
+  String toString() => 'PlaceEntity{name: $name, available: $available}';
 
   static fromSnapshot(DocumentSnapshot snapshot) => PlaceEntity(
         name: snapshot.id,
-        available: snapshot.get("available") as bool,
+        available: snapshot.get('available') as bool,
       );
 
   Map<String, Object> toDocument() => {
-        "available": available,
+        'available': available,
       };
 }

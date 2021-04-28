@@ -97,7 +97,7 @@ class _AppViewState extends State<AppView> {
               prev.user.id != next.user.id ||
               prev.user.student != next.user.student,
           listener: (context, state) {
-            if (!kIsWeb){
+            if (!kIsWeb) {
               try {
                 FirebaseMessaging.instance.subscribeToTopic('allusers');
                 if (Platform.isAndroid) {
@@ -110,7 +110,7 @@ class _AppViewState extends State<AppView> {
                 FirebaseCrashlytics.instance.recordError(exception, stack);
               }
             }
-            
+
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 print('authenticated');

@@ -17,6 +17,14 @@ abstract class OrderRepository {
 
   Future<void> changeProgramPagesView(bool shown);
 
+  Stream<String> headline();
+
+  Future<void> changeHeadline(String headline);
+
+  Stream<String> headlineURL();
+
+  Future<void> changeHeadlineURL(String url);
+
   Future<void> removeOrders({
     List<OrderStatus>? orderStatus,
   });

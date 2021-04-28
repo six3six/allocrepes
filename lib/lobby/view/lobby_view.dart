@@ -64,6 +64,32 @@ class _LobbyMenu extends StatelessWidget {
               alignment: WrapAlignment.center,
               children: <Widget>[
                 BlocBuilder<LobbyCubit, LobbyState>(
+                  buildWhen: (prev, next) => prev.headline != next.headline,
+                  builder: (context, state) {
+                    return state.headline != ''
+                        ? SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'News : ' + state.headline,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .merge(TextStyle(color: Colors.red)),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                )
+                              ],
+                            ),
+                          )
+                        : SizedBox();
+                  },
+                ),
+                BlocBuilder<LobbyCubit, LobbyState>(
+                  buildWhen: (prev, next) => prev.showOrder != next.showOrder,
                   builder: (context, state) {
                     return MenuCard(
                       title: 'Passer commande',
@@ -74,16 +100,10 @@ class _LobbyMenu extends StatelessWidget {
                     );
                   },
                 ),
-                BlocBuilder<LobbyCubit, LobbyState>(
-                  builder: (context, state) {
-                    return MenuCard(
-                      title: 'Mes commandes',
-                      onTap: () =>
-                          Navigator.push(context, OrderListPage.route()),
-                      icon: Icons.shopping_basket_outlined,
-                      enable: state.showOrder,
-                    );
-                  },
+                MenuCard(
+                  title: 'Mes commandes',
+                  onTap: () => Navigator.push(context, OrderListPage.route()),
+                  icon: Icons.shopping_basket_outlined,
                 ),
                 MenuCard(
                   title: 'En savoir +',
@@ -153,6 +173,12 @@ class _LobbyTwitchMenu extends StatelessWidget {
             width: double.infinity,
             child: LobbyTwitchViewer(),
           ),
+          SizedBox(height: 10),
+          BlocBuilder<LobbyCubit, LobbyState>(
+            buildWhen: (prev, next) => prev.headlineURL != next.headlineURL,
+            builder: (context, state) =>
+                LobbyHeadlineViewer(url: state.headlineURL),
+          )
         ],
       ),
     );

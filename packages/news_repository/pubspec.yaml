@@ -12,6 +12,7 @@ dependencies:
 
   dart_rss: ^2.0.1
   http: ^0.13.1
+  pedantic: ^1.11.0
 
 dev_dependencies:
   flutter_test:

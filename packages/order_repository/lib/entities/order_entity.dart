@@ -26,49 +26,49 @@ class OrderEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        this.id,
-        this.status,
-        this.createdAt,
-        this.deliveredAt,
-        this.place,
-        this.room,
-        this.owner,
-        this.message,
+        id,
+        status,
+        createdAt,
+        deliveredAt,
+        place,
+        room,
+        owner,
+        message,
       ];
 
   @override
   String toString() =>
-      "OrderEntity { id: $id, status: $status, created_at: $createdAt, delivered_at: $deliveredAt, place: $place, room: $room, owner: $owner, message: $message }";
+      'OrderEntity { id: $id, status: $status, created_at: $createdAt, delivered_at: $deliveredAt, place: $place, room: $room, owner: $owner, message: $message }';
 
   static OrderEntity fromJson(Map<String, Object> json) => OrderEntity(
-        json["id"] as String,
-        OrderStatus.values[(json["status"] as int)],
-        json["owner"] as String,
-        DateTime.parse(json["created_at"].toString()),
-        DateTime.parse(json["delivered_at"].toString()),
-        Place.values[json["place"] as int],
-        json["room"] as String,
-        json["message"] as String,
+        json['id'] as String,
+        OrderStatus.values[(json['status'] as int)],
+        json['owner'] as String,
+        DateTime.parse(json['created_at'].toString()),
+        DateTime.parse(json['delivered_at'].toString()),
+        Place.values[json['place'] as int],
+        json['room'] as String,
+        json['message'] as String,
       );
 
   static OrderEntity fromSnapshot(DocumentSnapshot snapshot) => OrderEntity(
         snapshot.id,
-        OrderStatus.values[(snapshot.get("status") as int)],
-        snapshot.get("owner") as String,
-        (snapshot.get("created_at") as Timestamp).toDate(),
-        (snapshot.get("delivered_at") as Timestamp?)?.toDate(),
-        Place.values[snapshot.get("place") as int],
-        snapshot.get("room") as String,
-        snapshot.data()?["message"] ?? "",
+        OrderStatus.values[(snapshot.get('status') as int)],
+        snapshot.get('owner') as String,
+        (snapshot.get('created_at') as Timestamp).toDate(),
+        (snapshot.get('delivered_at') as Timestamp?)?.toDate(),
+        Place.values[snapshot.get('place') as int],
+        snapshot.get('room') as String,
+        snapshot.data()?['message'] ?? '',
       );
 
   Map<String, Object?> toDocument() => {
-        "status": status.index,
-        "owner": owner,
-        "created_at": createdAt,
-        "delivered_at": deliveredAt,
-        "place": place.index,
-        "room": room,
-        "message": message,
+        'status': status.index,
+        'owner': owner,
+        'created_at': createdAt,
+        'delivered_at': deliveredAt,
+        'place': place.index,
+        'room': room,
+        'message': message,
       };
 }

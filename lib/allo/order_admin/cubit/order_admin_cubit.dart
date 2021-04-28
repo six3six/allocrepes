@@ -19,6 +19,12 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
           ),
         ) {
     getOrders();
+  }
+
+  final OrderRepository _orderRepository;
+  final AuthenticationRepository _authenticationRepository;
+
+  void getOrders() {
     _orderRepository.products().forEach((products) {
       var productsMap = <String, Product>{};
       products.forEach((product) {
@@ -26,29 +32,8 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
       });
       emit(state.copyWith(products: productsMap));
     });
-  }
 
-  final OrderRepository _orderRepository;
-  final AuthenticationRepository _authenticationRepository;
-
-  Stream<List<Order>>? orderStream;
-
-  void getOrders() {
-    orderStream = null;
-
-    final status = <OrderStatus>[];
-    state.selectedStatus.forEach((sStatus, selected) {
-      if (selected) status.add(sStatus);
-    });
-
-    final places = <Place>[];
-    state.selectedPlaces.forEach((sPlaces, selected) {
-      if (selected) places.add(sPlaces);
-    });
-
-    orderStream = _orderRepository.orders(orderStatus: status, places: places);
-
-    orderStream?.forEach((orders) {
+    _orderRepository.orders().forEach((orders) {
       var ordersMap = <OrderStatus, List<Order>>{};
       orders.forEach((order) {
         if (!ordersMap.containsKey(order.status)) ordersMap[order.status] = [];
@@ -73,7 +58,6 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
         ..addAll(state.selectedStatus)
         ..[status] = activate,
     ));
-    getOrders();
   }
 
   void updateFilterRoom(Place place, bool activate) {
@@ -82,6 +66,5 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
         ..addAll(state.selectedPlaces)
         ..[place] = activate,
     ));
-    getOrders();
   }
 }

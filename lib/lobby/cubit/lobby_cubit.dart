@@ -34,6 +34,14 @@ class LobbyCubit extends Cubit<LobbyState> {
     orderRepository.showProgramPages().forEach((enable) {
       emit(state.copyWith(showProgram: enable));
     });
+
+    orderRepository.headline().forEach((headline) {
+      emit(state.copyWith(headline: headline));
+    });
+
+    orderRepository.headlineURL().forEach((headlineURL) {
+      emit(state.copyWith(headlineURL: headlineURL));
+    });
   }
 
   void updateNews() {

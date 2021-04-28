@@ -10,7 +10,7 @@ class Category extends Equatable {
   final String? id;
   final String name;
 
-  static const empty = Category(id: null, name: "");
+  static const empty = Category(id: null, name: '');
 
   @override
   List<Object?> get props => [id, name];
