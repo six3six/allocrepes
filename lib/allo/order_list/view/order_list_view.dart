@@ -41,6 +41,12 @@ class OrderListView extends StatelessWidget {
                         text:
                             "Commandez dès maintenant en appuyant sur l'icone ",
                       ),
+                      const WidgetSpan(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 2.0),
+                          child: Icon(Icons.shopping_cart),
+                        ),
+                      ),
                       const TextSpan(text: 'en bas à droite'),
                     ],
                   ),

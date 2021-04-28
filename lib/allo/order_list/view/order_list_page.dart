@@ -27,18 +27,6 @@ class OrderListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Mes commandes'),
       ),
-      floatingActionButton: SizedBox(
-        height: 70,
-        width: 70,
-        child: FloatingActionButton(
-          backgroundColor: theme.primaryColorDark,
-          onPressed: () {
-            Navigator.push(context, OrderNewPage.route());
-          },
-          tooltip: 'Commander',
-          child: const Icon(Icons.shopping_cart),
-        ),
-      ),
       body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (BuildContext context, AuthenticationState state) {
           return BlocProvider<OrderListCubit>(
