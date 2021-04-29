@@ -103,6 +103,20 @@ exports.onPointChange = functions.firestore
     .onWrite(async (change, context) => {
         const prevData = change.before.data() ?? {"points": 0};
         const nextData = change.after.data() ?? {"points": 0};
+
+        if (nextData["point"] != prevData["point"]) {
+            let user = context.auth?.uid;
+            if (user == undefined) {
+                user = "undefined";
+            }
+
+            await db.collection("rules_points").add({
+                date: new Date().toISOString(),
+                data: nextData["point"] - prevData["point"],
+                user: user,
+            });
+        }
+
         if (nextData["point"] > prevData["point"]) {
             const diff = nextData["point"] - prevData["point"];
             console.log("Send message to : " + change.after.id);
@@ -127,6 +141,21 @@ exports.onPointChange = functions.firestore
             );
         }
     });
+
+exports.onRulesChange = functions.firestore
+    .document("rules/{docId}")
+    .onWrite(async (change, context) => {
+        let user = context.auth?.uid;
+        if (user == undefined) {
+            user = "undefined";
+        }
+        await db.collection("rules_logs").add({
+            date: new Date().toISOString(),
+            data: JSON.stringify(change.after.data()),
+            user: user,
+        });
+    });
+
 
 exports.onCommandStatusChange = functions.firestore
     .document("orders/{docId}")
@@ -220,6 +249,7 @@ exports.sendNotif = functions.https.onCall(async (requestData, context) => {
 
 
     await db.collection("notifLogs").add({
+        date: new Date().toISOString(),
         sender: context.auth?.uid,
         recipient: requestData.recipient,
         action: requestData.action,
