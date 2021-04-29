@@ -253,7 +253,9 @@ class _ClsSelector extends StatelessWidget {
             children: [
               Expanded(
                 flex: 7,
-                child: Text('Activer l\'affichage des classements '),
+                child: Text(
+                  'Activer l\'affichage des classements sur la page principal (à utiliser avec précaution)',
+                ),
               ),
               Expanded(
                 flex: 2,

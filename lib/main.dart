@@ -29,10 +29,13 @@ void main() async {
     };
 
     var messaging = FirebaseMessaging.instance;
-
-    await messaging.requestPermission(
-      provisional: true,
-    );
+    try {
+      await messaging.requestPermission(
+        provisional: true,
+      );
+    } catch (exception, stack) {
+      await FirebaseCrashlytics.instance.recordError(exception, stack);
+    }
 
     try {
       await messaging.subscribeToTopic('allusers');
@@ -51,12 +54,11 @@ void main() async {
     print('Handling a background message: ${message.messageId}');
   }
 
-  try{
+  try {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  } catch (e){
+  } catch (e) {
     print(e);
   }
-  
 
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = AppObserver();
