@@ -5,6 +5,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
 import 'login_form.dart';
 
@@ -18,35 +19,57 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          children: <Widget>[
-            Center(
-              child: Hero(
-                tag: 'logo',
-                child: Image.asset(
-                  'assets/logo.png',
-                  height: 250,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            BlocProvider(
-              create: (_) => LoginCubit(
-                context.read<AuthenticationRepository>(),
-              ),
-              child: BlocBuilder<LoginCubit, LoginState>(
-                builder: (context, state) {
-                  if (state.showLoginForm) return LoginForm();
+    final theme = Theme.of(context);
 
-                  return LoginWelcome();
-                },
-              ),
-              //child: LoginForm(),
+    return BlocProvider(
+      create: (_) => LoginCubit(
+        context.read<AuthenticationRepository>(),
+      ),
+      child: Scaffold(
+        body: BlocBuilder<LoginCubit, LoginState>(
+          buildWhen: (prev, next) => prev.isLoading != next.isLoading,
+          builder: (context, state) => LoadingOverlay(
+            isLoading: state.isLoading,
+            color: theme.primaryColor,
+            progressIndicator: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Chargement...',
+                  style: theme.textTheme.headline6,
+                ),
+              ],
             ),
-          ],
+            child: SafeArea(
+              child: ListView(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                children: <Widget>[
+                  Center(
+                    child: Hero(
+                      tag: 'logo',
+                      child: Image.asset(
+                        'assets/logo.png',
+                        height: 250,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  BlocBuilder<LoginCubit, LoginState>(
+                    builder: (context, state) {
+                      if (state.showLoginForm) return LoginForm();
+
+                      return LoginWelcome();
+                    },
+                  ),
+                  //child: LoginForm(),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

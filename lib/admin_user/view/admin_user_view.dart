@@ -241,8 +241,6 @@ class _UserTile extends StatelessWidget {
 class _ClsSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15),
       child: Column(
