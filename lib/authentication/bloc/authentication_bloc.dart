@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:pedantic/pedantic.dart';
 
 part 'authentication_event.dart';
@@ -17,9 +18,16 @@ class AuthenticationBloc
         super(const AuthenticationState.unknown()) {
     _userSubscription = _authenticationRepository.user.listen(
       (userStream) async {
-        userStream.listen((user) {
-          add(AuthenticationUserChanged(user));
-        });
+        print(userStream);
+        try {
+          userStream.listen((user) {
+            print(user);
+            add(AuthenticationUserChanged(user));
+          });
+        } catch (e, stack) {
+          await FirebaseCrashlytics.instance.recordError(e, stack);
+          print(e);
+        }
       },
     );
   }
