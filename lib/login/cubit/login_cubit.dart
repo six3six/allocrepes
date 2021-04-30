@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,10 +17,17 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> login(String url) async {
-    final response = await http.get(Uri.parse(url));
-    final decodedData = jsonDecode(response.body);
+    emit(state.copyWith(isLoading: true));
+    try {
+      final response = await http.get(Uri.parse(url));
+      final decodedData = jsonDecode(response.body);
 
-    await _authenticationRepository.logInWithToken(token: decodedData['token']);
+      await _authenticationRepository.logInWithToken(
+          token: decodedData['token']);
+    } catch (e, stack) {
+      await FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> loginWithToken(String token) async {
