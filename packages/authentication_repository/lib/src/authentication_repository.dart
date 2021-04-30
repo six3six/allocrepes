@@ -40,9 +40,11 @@ class AuthenticationRepository {
   ///
   /// Emits [User.empty] if the user is not authenticated.
   Stream<Stream<User>> get user async* {
-    final stream = _firebaseAuth.authStateChanges();
+    final stream = _firebaseAuth.userChanges();
 
     await for (firebase_auth.User? firebaseUser in stream) {
+      print("qzdqzd");
+      print(firebaseUser);
       if (firebaseUser == null) {
         yield Stream.value(User.empty);
       } else {
@@ -86,8 +88,7 @@ class AuthenticationRepository {
   }
 
   Future<bool> userExistInDatabase(String userUid) async {
-    var doc =
-        await _firestore.collection('users').doc(userUid).get();
+    var doc = await _firestore.collection('users').doc(userUid).get();
 
     return doc.exists;
   }
@@ -154,8 +155,7 @@ class AuthenticationRepository {
   }
 
   Future<User> getUserFromUid(String uid) async {
-    final snapshot =
-        await _firestore.collection('users').doc(uid).get();
+    final snapshot = await _firestore.collection('users').doc(uid).get();
 
     if (!snapshot.exists) return User.empty.copyWith(id: uid, name: uid);
 
@@ -187,8 +187,7 @@ class AuthenticationRepository {
     var users = <String, User>{};
     var isAdmin = <String, bool>{};
 
-    var mStream =
-        userQuery.snapshots().merge(adminCollection.snapshots());
+    var mStream = userQuery.snapshots().merge(adminCollection.snapshots());
     await for (var snap in mStream) {
       if (snap.docs.first.reference.parent == userCollection) {
         users = {};
@@ -281,8 +280,7 @@ extension on firebase_auth.User {
     var user = User.empty.copyWith(
       id: uid,
     );
-    var mStream =
-        userCollection.snapshots().merge(adminCollection.snapshots());
+    var mStream = userCollection.snapshots().merge(adminCollection.snapshots());
 
     await for (DocumentSnapshot snap in mStream) {
       if (snap.reference == adminCollection) {

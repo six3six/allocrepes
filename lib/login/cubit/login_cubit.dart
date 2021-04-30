@@ -23,9 +23,11 @@ class LoginCubit extends Cubit<LoginState> {
       final decodedData = jsonDecode(response.body);
 
       await _authenticationRepository.logInWithToken(
-          token: decodedData['token']);
+        token: decodedData['token'],
+      );
     } catch (e, stack) {
       await FirebaseCrashlytics.instance.recordError(e, stack);
+      print(e);
     }
     emit(state.copyWith(isLoading: false));
   }
