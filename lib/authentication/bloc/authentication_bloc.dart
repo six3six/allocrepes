@@ -18,10 +18,8 @@ class AuthenticationBloc
         super(const AuthenticationState.unknown()) {
     _userSubscription = _authenticationRepository.user.listen(
       (userStream) async {
-        print(userStream);
         try {
           userStream.listen((user) {
-            print(user);
             add(AuthenticationUserChanged(user));
           });
         } catch (e, stack) {
