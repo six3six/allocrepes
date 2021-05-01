@@ -5,12 +5,10 @@ import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/order_repository_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -100,31 +98,30 @@ class _AppViewState extends State<AppView> {
               prev.user.id != next.user.id ||
               prev.user.student != next.user.student,
           listener: (context, state) {
-            if (!kIsWeb) {
-              try {
-                FirebaseMessaging.instance.subscribeToTopic('allusers');
-                if (Platform.isAndroid) {
-                  FirebaseMessaging.instance.subscribeToTopic('androidusers');
-                }
-                if (Platform.isIOS) {
-                  FirebaseMessaging.instance.subscribeToTopic('iosusers');
-                }
-              } catch (exception, stack) {
-                FirebaseCrashlytics.instance.recordError(exception, stack);
-              }
-            }
-
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 print('authenticated');
                 if (!kIsWeb) {
                   try {
+                    if (state.user.student) {
+                      FirebaseMessaging.instance.subscribeToTopic('allusers');
+                      if (Platform.isAndroid) {
+                        FirebaseMessaging.instance
+                            .subscribeToTopic('androidusers');
+                      }
+                      if (Platform.isIOS) {
+                        FirebaseMessaging.instance.subscribeToTopic('iosusers');
+                      }
+                    }
+
                     print('subscribeToTopic(user${state.user.id})');
                     FirebaseMessaging.instance
                         .subscribeToTopic('user${state.user.id}');
                   } catch (exception, stack) {
                     FirebaseCrashlytics.instance.recordError(exception, stack);
                   }
+
+                  // App Tracking Transparency
                   try {
                     AppTrackingTransparency.requestTrackingAuthorization()
                         .then((status) {
@@ -157,8 +154,21 @@ class _AppViewState extends State<AppView> {
                 break;
               case AuthenticationStatus.unauthenticated:
                 if (!kIsWeb) {
-                  FirebaseMessaging.instance
-                      .unsubscribeFromTopic('user$prevUserId');
+                  try {
+                    FirebaseMessaging.instance
+                        .unsubscribeFromTopic('user$prevUserId');
+                    FirebaseMessaging.instance.unsubscribeFromTopic('allusers');
+                    if (Platform.isAndroid) {
+                      FirebaseMessaging.instance
+                          .unsubscribeFromTopic('androidusers');
+                    }
+                    if (Platform.isIOS) {
+                      FirebaseMessaging.instance
+                          .unsubscribeFromTopic('iosusers');
+                    }
+                  } catch (exception, stack) {
+                    FirebaseCrashlytics.instance.recordError(exception, stack);
+                  }
                 }
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
