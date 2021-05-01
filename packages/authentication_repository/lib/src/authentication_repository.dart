@@ -43,8 +43,6 @@ class AuthenticationRepository {
     final stream = _firebaseAuth.userChanges();
 
     await for (firebase_auth.User? firebaseUser in stream) {
-      print("qzdqzd");
-      print(firebaseUser);
       if (firebaseUser == null) {
         yield Stream.value(User.empty);
       } else {
