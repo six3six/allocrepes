@@ -36,14 +36,6 @@ void main() async {
     } catch (exception, stack) {
       await FirebaseCrashlytics.instance.recordError(exception, stack);
     }
-
-    try {
-      await messaging.subscribeToTopic('allusers');
-      if (Platform.isAndroid) await messaging.subscribeToTopic('androidusers');
-      if (Platform.isIOS) await messaging.subscribeToTopic('iosusers');
-    } catch (exception, stack) {
-      await FirebaseCrashlytics.instance.recordError(exception, stack);
-    }
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(
@@ -58,6 +50,18 @@ void main() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   } catch (e) {
     print(e);
+  }
+
+  try {
+    await FirebaseMessaging.instance.unsubscribeFromTopic('allusers');
+    if (Platform.isAndroid) {
+      await FirebaseMessaging.instance.unsubscribeFromTopic('androidusers');
+    }
+    if (Platform.isIOS) {
+      await FirebaseMessaging.instance.unsubscribeFromTopic('iosusers');
+    }
+  } catch (exception, stack) {
+    await FirebaseCrashlytics.instance.recordError(exception, stack);
   }
 
   EquatableConfig.stringify = kDebugMode;
