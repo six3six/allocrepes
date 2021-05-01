@@ -54,5 +54,7 @@
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<string>NO</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Permettez-vous que votre identifiant ESIEE puisse être transmit avec les rapports d'erreur de l'application ? Ceci est fait dans le but de vous apporter une application toujours plus fiable et de vous aider an cas de problèmes</string>
 </dict>
 </plist>
