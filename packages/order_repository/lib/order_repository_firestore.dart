@@ -200,7 +200,6 @@ class OrderRepositoryFirestore extends OrderRepository {
     String? userId,
   }) async* {
     Query query = orderRoot;
-
     if (orderStatus != null) {
       query = query.where(
         'status',
@@ -216,10 +215,16 @@ class OrderRepositoryFirestore extends OrderRepository {
     }
 
     if (start != null) {
-      query = query.where('create_at', isGreaterThanOrEqualTo: start);
+      query = query.where(
+        'created_at',
+        isGreaterThanOrEqualTo: start,
+      );
     }
     if (stop != null) {
-      query = query.where('create_at', isLessThanOrEqualTo: start);
+      query = query.where(
+        'created_at',
+        isLessThanOrEqualTo: start,
+      );
     }
 
     await for (QuerySnapshot snapshot in query.snapshots()) {
