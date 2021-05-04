@@ -47,7 +47,7 @@ class OrderNewPage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const OrderNewView(),
+              child: OrderNewView(),
             ),
           ),
         );

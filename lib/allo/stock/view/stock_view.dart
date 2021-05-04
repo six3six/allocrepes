@@ -19,6 +19,18 @@ class StockView extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.symmetric(vertical: 10),
         children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: BlocBuilder<StockCubit, StockState>(
+              builder: (context, state) {
+                var count = 0;
+                state.count.forEach((key, value) {
+                  count += value;
+                });
+                return Text('Commande : $count');
+              },
+            ),
+          ),
           BlocBuilder<StockCubit, StockState>(
             buildWhen: (prev, next) => !IterableEquality().equals(
               prev.categories.keys,

@@ -17,6 +17,7 @@ class Order extends Equatable {
     required this.room,
     this.deliveredAt,
     required this.message,
+    required this.phone,
   });
 
   final String? id;
@@ -28,6 +29,7 @@ class Order extends Equatable {
   final Place place;
   final String room;
   final String message;
+  final String phone;
 
   static final empty = Order(
     id: '',
@@ -39,6 +41,7 @@ class Order extends Equatable {
     place: Place.UNKNOWN,
     room: '',
     message: '',
+    phone: '',
   );
 
   @override
@@ -52,6 +55,7 @@ class Order extends Equatable {
         room,
         owner,
         message,
+        phone,
       ];
 
   Order copyWith({
@@ -64,6 +68,7 @@ class Order extends Equatable {
     Place? place,
     String? room,
     String? message,
+    String? phone,
   }) {
     return Order(
       id: id ?? this.id,
@@ -75,6 +80,7 @@ class Order extends Equatable {
       place: place ?? this.place,
       room: room ?? this.room,
       message: message ?? this.message,
+      phone: phone ?? this.phone,
     );
   }
 
@@ -88,6 +94,7 @@ class Order extends Equatable {
       place,
       room,
       message,
+      phone,
     );
   }
 
@@ -102,6 +109,7 @@ class Order extends Equatable {
       place: entity.place,
       room: entity.room,
       message: entity.message,
+      phone: entity.phone,
     );
   }
 

@@ -11,12 +11,11 @@ import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
 
 class OrderNewView extends StatelessWidget {
-  const OrderNewView({Key? key}) : super(key: key);
+  OrderNewView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nouvelle commandes'),
@@ -27,25 +26,7 @@ class OrderNewView extends StatelessWidget {
           SizedBox(height: 10),
           _OrderNewCategories(),
           SizedBox(height: 10),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Commentaire :'),
-                Text(
-                  '(un anniversaire, un message à nous passer...)',
-                  style: theme.textTheme.caption,
-                ),
-                TextField(
-                  maxLines: 5,
-                  onChanged: (message) =>
-                      BlocProvider.of<OrderNewCubit>(context)
-                          .updateMessage(message),
-                ),
-              ],
-            ),
-          ),
+          _AdditionalInformation(),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SizedBox(
@@ -317,10 +298,93 @@ class _OrderNewBatimentSelector extends StatelessWidget {
   }
 }
 
-class _OrderNewAppartSelector extends StatelessWidget {
+class _AdditionalInformation extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _AdditionalInformationState();
+}
+
+class _AdditionalInformationState extends State<_AdditionalInformation> {
+  final _phoneController = TextEditingController();
+  final _messageController = TextEditingController();
+
+  @override
+  void initState() {
+    _phoneController.text = BlocProvider.of<OrderNewCubit>(context).state.phone;
+    _messageController.text =
+        BlocProvider.of<OrderNewCubit>(context).state.message;
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _phoneController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Numéro de tél (facultatif) :'),
+          TextField(
+            controller: _phoneController,
+            keyboardType: TextInputType.phone,
+            onChanged: (phone) =>
+                BlocProvider.of<OrderNewCubit>(context).updatePhone(phone),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text('Commentaire :'),
+          Text(
+            '(un anniversaire, un message à nous passer...)',
+            style: theme.textTheme.caption,
+          ),
+          TextField(
+            controller: _messageController,
+            maxLines: 5,
+            onChanged: (message) =>
+                BlocProvider.of<OrderNewCubit>(context).updateMessage(message),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OrderNewAppartSelector extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _OrderNewAppartSelectorState();
+}
+
+class _OrderNewAppartSelectorState extends State<_OrderNewAppartSelector> {
+  final TextEditingController _roomController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _roomController.text =
+        BlocProvider.of<OrderNewCubit>(context).state.room ?? '';
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _roomController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: _roomController,
       onChanged: (val) =>
           BlocProvider.of<OrderNewCubit>(context).updateRoom(val),
       autocorrect: false,

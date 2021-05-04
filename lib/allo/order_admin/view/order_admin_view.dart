@@ -152,6 +152,16 @@ class _OrderTile extends StatelessWidget {
           height: 10,
         ),
         Text(
+          'Telephone :',
+          style: theme.textTheme.caption,
+        ),
+        Text(
+          '${order.phone}',
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
           'Commande :',
           style: theme.textTheme.caption,
         ),
