@@ -142,7 +142,9 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     try {
       emit(state.copyWith(loading: true));
       if (state.place == null) throw Exception('Il manque le batiment');
-      if (state.room == null) throw Exception('Il manque la piece');
+      if (state.room == null && state.place != Place.ESIEE) {
+        throw Exception('Il manque la piece');
+      }
       await orderRepository.createOrder(Order(
         status: OrderStatus.VALIDATING,
         owner: user.id,
