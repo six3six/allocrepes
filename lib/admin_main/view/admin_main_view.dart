@@ -38,6 +38,19 @@ class AdminMainView extends StatelessWidget {
                     icon: Icons.book_outlined,
                   ),
                   MenuCard(
+                    title:
+                        'Afficher les commandes de moins de 1H (PLUS RAPIDE)',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        OrderAdminPage.route(
+                          fast: true,
+                        ),
+                      );
+                    },
+                    icon: Icons.book_outlined,
+                  ),
+                  MenuCard(
                     title: 'Modifier les produits',
                     onTap: () {
                       Navigator.push(context, ProductListPage.route());

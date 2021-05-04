@@ -44,7 +44,9 @@ class OrderAdminView extends StatelessWidget {
     });
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Commandes'),
+        title: Text(BlocProvider.of<OrderAdminCubit>(context).fast
+            ? 'Commandes RAPIDE'
+            : 'Commandes'),
       ),
       body: CustomScrollView(
         slivers: <Widget>[

@@ -7,8 +7,11 @@ import 'package:order_repository/models/product.dart';
 import 'package:order_repository/order_repository.dart';
 
 class OrderAdminCubit extends Cubit<OrderAdminState> {
-  OrderAdminCubit(this._authenticationRepository, this._orderRepository)
-      : super(
+  OrderAdminCubit(
+    this._authenticationRepository,
+    this._orderRepository,
+    this.fast,
+  ) : super(
           OrderAdminState(
             selectedPlaces: Place.values.asMap().map(
                   (key, value) => MapEntry(value, true),
@@ -24,7 +27,7 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
         ) {
     getOrders();
   }
-
+  final bool fast;
   final OrderRepository _orderRepository;
   final AuthenticationRepository _authenticationRepository;
 
@@ -37,10 +40,19 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
       emit(state.copyWith(products: productsMap));
     });
 
-    _orderRepository.orders().forEach((orders) {
+    (!fast
+            ? _orderRepository.orders()
+            : _orderRepository.orders(
+                start: DateTime.now().subtract(
+                  const Duration(hours: 1),
+                ),
+              ))
+        .forEach((orders) {
       var ordersMap = <OrderStatus, List<Order>>{};
       orders.forEach((order) {
-        if (!ordersMap.containsKey(order.status)) ordersMap[order.status] = [];
+        if (!ordersMap.containsKey(order.status)) {
+          ordersMap[order.status] = [];
+        }
         ordersMap[order.status]?.add(order);
       });
 
