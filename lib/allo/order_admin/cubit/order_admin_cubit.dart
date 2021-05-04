@@ -14,7 +14,11 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
                   (key, value) => MapEntry(value, true),
                 ),
             selectedStatus: OrderStatus.values.asMap().map(
-                  (key, value) => MapEntry(value, true),
+                  (key, value) => MapEntry(
+                      value,
+                      !(value == OrderStatus.UNKNOWN ||
+                          value == OrderStatus.DELIVERED ||
+                          value == OrderStatus.CANCELED)),
                 ),
           ),
         ) {

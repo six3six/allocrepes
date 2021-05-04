@@ -14,6 +14,7 @@ class OrderNewState extends Equatable {
     this.loading = true,
     this.roomError = '',
     this.message = '',
+    this.phone = '',
   });
 
   final Map<Category, List<Product>> categories;
@@ -25,6 +26,7 @@ class OrderNewState extends Equatable {
   final String roomError;
   final bool loading;
   final String message;
+  final String phone;
 
   @override
   List<Object?> get props => [
@@ -34,6 +36,7 @@ class OrderNewState extends Equatable {
         roomError,
         loading,
         message,
+        phone,
         ...categories.keys,
         ...categories.values,
         ...quantities.keys,
@@ -59,6 +62,7 @@ class OrderNewState extends Equatable {
     String? roomError,
     bool? loading,
     String? message,
+    String? phone,
     List<String>? alreadyOrdered,
   }) {
     return OrderNewState(
@@ -71,6 +75,7 @@ class OrderNewState extends Equatable {
       loading: loading ?? this.loading,
       message: message ?? this.message,
       alreadyOrdered: alreadyOrdered ?? this.alreadyOrdered,
+      phone: phone ?? this.phone,
     );
   }
 }

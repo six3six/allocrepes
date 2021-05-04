@@ -228,7 +228,7 @@ class OrderRepositoryFirestore extends OrderRepository {
       for (var doc in snapshot.docs) {
         final order = await _orderFromEntity(OrderEntity.fromSnapshot(doc));
 
-        if (places != null && !places.map((e) => e).contains(order.place)) {
+        if (places != null && !places.contains(order.place)) {
           continue;
         }
         orders.add(order);

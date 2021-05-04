@@ -51,17 +51,18 @@ void main() async {
   } catch (e) {
     print(e);
   }
-
-  try {
-    await FirebaseMessaging.instance.unsubscribeFromTopic('allusers');
-    if (Platform.isAndroid) {
-      await FirebaseMessaging.instance.unsubscribeFromTopic('androidusers');
+  if (!kIsWeb) {
+    try {
+      await FirebaseMessaging.instance.unsubscribeFromTopic('allusers');
+      if (Platform.isAndroid) {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('androidusers');
+      }
+      if (Platform.isIOS) {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('iosusers');
+      }
+    } catch (exception, stack) {
+      await FirebaseCrashlytics.instance.recordError(exception, stack);
     }
-    if (Platform.isIOS) {
-      await FirebaseMessaging.instance.unsubscribeFromTopic('iosusers');
-    }
-  } catch (exception, stack) {
-    await FirebaseCrashlytics.instance.recordError(exception, stack);
   }
 
   EquatableConfig.stringify = kDebugMode;

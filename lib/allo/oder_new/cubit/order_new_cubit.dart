@@ -103,6 +103,10 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     }
   }
 
+  void updatePhone(String? phone) {
+    emit(state.copyWith(phone: phone ?? ''));
+  }
+
   void updateMessage(String message) {
     emit(state.copyWith(message: message));
   }
@@ -153,6 +157,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         place: state.place ?? Place.UNKNOWN,
         room: state.room ?? '',
         message: state.message,
+        phone: state.phone,
       ));
 
       return true;
