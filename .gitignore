@@ -46,6 +46,3 @@ export.csv
 
 .ipynb_checkpoints
 .firebase
-
-**/ios/Runner/GoogleService-Info.plist
-**/android/app/google-services.json
