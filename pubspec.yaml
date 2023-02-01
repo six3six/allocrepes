@@ -19,9 +19,6 @@ dependencies:
   authentication_repository:
     path: packages/authentication_repository
 
-  order_repository:
-    path: packages/order_repository
-
   news_repository:
     path: packages/news_repository
 

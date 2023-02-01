@@ -1,6 +1,4 @@
 import 'package:allocrepes/admin_main/view/admin_main_page.dart';
-import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
-import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
 import 'package:allocrepes/lobby/cubit/lobby_state.dart';
@@ -139,23 +137,6 @@ class _LobbyMenu extends StatelessWidget {
                           )
                         : SizedBox();
                   },
-                ),
-                BlocBuilder<LobbyCubit, LobbyState>(
-                  buildWhen: (prev, next) => prev.showOrder != next.showOrder,
-                  builder: (context, state) {
-                    return MenuCard(
-                      title: 'Passer commande',
-                      onTap: () =>
-                          Navigator.push(context, OrderNewPage.route()),
-                      icon: Icons.shopping_cart_outlined,
-                      enable: state.showOrder,
-                    );
-                  },
-                ),
-                MenuCard(
-                  title: 'Mes commandes',
-                  onTap: () => Navigator.push(context, OrderListPage.route()),
-                  icon: Icons.shopping_basket_outlined,
                 ),
                 MenuCard(
                   title: 'En savoir +',

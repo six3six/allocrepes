@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
 import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
@@ -10,7 +9,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:order_repository/order_repository_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'authentication/bloc/authentication_bloc.dart';
@@ -32,10 +30,7 @@ class App extends StatelessWidget {
         create: (_) => AuthenticationBloc(
           authenticationRepository: authenticationRepository,
         ),
-        child: RepositoryProvider(
-          create: (BuildContext context) => OrderRepositoryFirestore(),
-          child: AppView(),
-        ),
+        child: AppView(),
       ),
     );
   }
@@ -63,9 +58,6 @@ class _AppViewState extends State<AppView> {
 
     if (initialMessage.data.containsKey('type')) {
       switch (initialMessage.data['type'] as String) {
-        case 'order':
-          await Navigator.of(context).push(OrderNewPage.route());
-          return;
         default:
           return;
       }
@@ -143,8 +135,6 @@ class _AppViewState extends State<AppView> {
                     FirebaseCrashlytics.instance.recordError(e, stack);
                   }
                 }
-                RepositoryProvider.of<OrderRepositoryFirestore>(context)
-                    .changeUser(state.user.id);
                 prevUserId = state.user.id;
 
                 _navigator.pushAndRemoveUntil<void>(

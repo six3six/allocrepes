@@ -21,7 +21,6 @@ class AdminUserView extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              _ClsSelector(),
               _UserList(),
             ],
           ),
@@ -234,43 +233,6 @@ class _UserTile extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class _ClsSelector extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                flex: 7,
-                child: Text(
-                  'Activer l\'affichage des classements sur la page principal (à utiliser avec précaution)',
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: BlocBuilder<AdminUserCubit, AdminUserState>(
-                  buildWhen: (prev, next) => prev.showCls != next.showCls,
-                  builder: (context, state) => Checkbox(
-                    value: state.showCls,
-                    onChanged: (bool? enable) =>
-                        BlocProvider.of<AdminUserCubit>(context)
-                            .changeClsView(enable ?? false),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

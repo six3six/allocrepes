@@ -1,8 +1,0 @@
-enum OrderStatus {
-  UNKNOWN,
-  VALIDATING,
-  PENDING,
-  DELIVERING,
-  DELIVERED,
-  CANCELED,
-}

@@ -1,8 +1,5 @@
 import 'package:allocrepes/admin_notif/view/admin_notif_page.dart';
 import 'package:allocrepes/admin_user/view/admin_user_page.dart';
-import 'package:allocrepes/allo/order_admin/view/order_admin_page.dart';
-import 'package:allocrepes/allo/product_list/view/product_list_page.dart';
-import 'package:allocrepes/allo/stock/view/stock_page.dart';
 import 'package:allocrepes/widget/menu_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -30,40 +27,6 @@ class AdminMainView extends StatelessWidget {
                 spacing: 10,
                 alignment: WrapAlignment.center,
                 children: <Widget>[
-                  MenuCard(
-                    title: 'Afficher les commandes',
-                    onTap: () {
-                      Navigator.push(context, OrderAdminPage.route());
-                    },
-                    icon: Icons.book_outlined,
-                  ),
-                  MenuCard(
-                    title:
-                        'Afficher les commandes de moins de 1H (PLUS RAPIDE)',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        OrderAdminPage.route(
-                          fast: true,
-                        ),
-                      );
-                    },
-                    icon: Icons.book_outlined,
-                  ),
-                  MenuCard(
-                    title: 'Modifier les produits',
-                    onTap: () {
-                      Navigator.push(context, ProductListPage.route());
-                    },
-                    icon: Icons.free_breakfast_outlined,
-                  ),
-                  MenuCard(
-                    title: 'Modifier les stocks',
-                    onTap: () {
-                      Navigator.push(context, StockPage.route());
-                    },
-                    icon: Icons.workspaces_filled,
-                  ),
                   MenuCard(
                     title: 'Afficher les utilisateurs',
                     onTap: () {
