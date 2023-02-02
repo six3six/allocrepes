@@ -46,3 +46,4 @@ export.csv
 
 .ipynb_checkpoints
 .firebase
+lib/firebase_options.dart

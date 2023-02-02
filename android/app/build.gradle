@@ -46,7 +46,7 @@ android {
 
     defaultConfig {
         applicationId "fr.bde2021.allocrepes"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
