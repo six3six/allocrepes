@@ -15,12 +15,33 @@ class AuthWebView extends StatefulWidget {
 }
 
 class AuthWebViewState extends State<AuthWebView> {
+  late final controller;
+
+  static const sso_url = 'https://sso.esiee.fr/cas/login?service=https%3A%2F%2Fus-central1-allocrepes-4f992.cloudfunctions.net%2FssoLogin/';
+
   @override
   void initState() {
     super.initState();
-    CookieManager().clearCookies();
-    // Enable hybrid composition.
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    WebViewCookieManager().clearCookies();
+
+    controller = WebViewController()
+      ..loadRequest(Uri.parse(sso_url))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith(
+              'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin',
+            )) {
+              BlocProvider.of<LoginCubit>(context).login(request.url);
+
+              return NavigationDecision.prevent;
+            }
+
+            return NavigationDecision.navigate;
+          },
+        ),
+      );
   }
 
   @override
@@ -31,24 +52,7 @@ class AuthWebViewState extends State<AuthWebView> {
       );
     }
 
-    return WebView(
-      debuggingEnabled: true,
-      javascriptMode: JavascriptMode.unrestricted,
-      initialUrl:
-          'https://sso.esiee.fr/cas/login?service=https%3A%2F%2Fus-central1-allocrepes-4f992.cloudfunctions.net%2FssoLogin/',
-      gestureNavigationEnabled: true,
-      navigationDelegate: (NavigationRequest request) {
-        if (request.url.startsWith(
-          'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin',
-        )) {
-          BlocProvider.of<LoginCubit>(context).login(request.url);
-
-          return NavigationDecision.prevent;
-        }
-
-        return NavigationDecision.navigate;
-      },
-    );
+    return WebViewWidget(controller: controller);
   }
 }
 

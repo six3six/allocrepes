@@ -10,37 +10,41 @@ class LobbyTwitchViewer extends StatefulWidget {
 }
 
 class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
+  late final controller;
+
   @override
   void initState() {
     super.initState();
-    CookieManager().clearCookies();
-    // Enable hybrid composition.
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    WebViewCookieManager().clearCookies();
+
+    controller = WebViewController()
+      ..loadRequest(Uri.parse(
+          'https://player.twitch.tv/?channel=listexanthos&muted=true&parent=xanthos.fr'))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) async {
+            print(request.url);
+            if (request.url.startsWith('https://player.twitch.tv')) {
+              return NavigationDecision.navigate;
+            } else {
+              if (request.url.startsWith('https://twitch.tv/listexanthos') ||
+                  request.url
+                      .startsWith('https://www.twitch.tv/listexanthos')) {
+                try {
+                  await launch(request.url);
+                } catch (e) {}
+              }
+              return NavigationDecision.prevent;
+            }
+          },
+        ),
+      );
   }
 
   @override
   Widget build(BuildContext context) {
-    return WebView(
-      debuggingEnabled: false,
-      javascriptMode: JavascriptMode.unrestricted,
-      initialUrl:
-          'https://player.twitch.tv/?channel=listexanthos&muted=true&parent=xanthos.fr',
-      gestureNavigationEnabled: true,
-      navigationDelegate: (NavigationRequest request) async {
-        print(request.url);
-        if (request.url.startsWith('https://player.twitch.tv')) {
-          return NavigationDecision.navigate;
-        } else {
-          if (request.url.startsWith('https://twitch.tv/listexanthos') ||
-              request.url.startsWith('https://www.twitch.tv/listexanthos')) {
-            try {
-              await launch(request.url);
-            } catch (e) {}
-          }
-          return NavigationDecision.prevent;
-        }
-      },
-    );
+    return WebViewWidget(controller: controller);
   }
 }
 
@@ -57,12 +61,16 @@ class LobbyHeadlineViewer extends StatefulWidget {
 }
 
 class LobbyHeadlineViewerState extends State<LobbyHeadlineViewer> {
+  late final controller;
+
   @override
   void initState() {
     super.initState();
-    CookieManager().clearCookies();
-    // Enable hybrid composition.
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    WebViewCookieManager().clearCookies();
+
+    controller = WebViewController()
+      ..loadRequest(Uri.parse(widget.url))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted);
   }
 
   @override
@@ -71,15 +79,7 @@ class LobbyHeadlineViewerState extends State<LobbyHeadlineViewer> {
         ? SizedBox(
             height: 300,
             width: double.infinity,
-            child: WebView(
-              debuggingEnabled: false,
-              javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: widget.url,
-              gestureNavigationEnabled: true,
-              navigationDelegate: (NavigationRequest request) async {
-                return NavigationDecision.navigate;
-              },
-            ),
+            child: WebViewWidget(controller: controller),
           )
         : SizedBox();
   }

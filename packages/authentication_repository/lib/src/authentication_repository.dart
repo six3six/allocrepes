@@ -193,7 +193,10 @@ class AuthenticationRepository {
       for (var doc in snap.docs) {
         if (doc.reference.parent == adminCollection) {
           if (doc.reference == adminCollection.doc('admins')) {
-            isAdmin = doc.data().map((key, value) => MapEntry(key, true));
+            isAdmin = (doc as DocumentSnapshot<Map<String, dynamic>>)
+                    .data()
+                    ?.map((key, value) => MapEntry(key, true)) ??
+                {};
           }
         } else if (doc.reference.parent == userCollection) {
           users[doc.id] = User.fromDocument(doc);
@@ -280,7 +283,7 @@ extension on firebase_auth.User {
     );
     var mStream = userCollection.snapshots().merge(adminCollection.snapshots());
 
-    await for (DocumentSnapshot snap in mStream) {
+    await for (DocumentSnapshot<Map<String, dynamic>> snap in mStream) {
       if (snap.reference == adminCollection) {
         print('admin ' + (snap.data()?.keys.contains(uid) ?? false).toString());
         user = user.copyWith(admin: snap.data()?.keys.contains(uid) ?? false);

@@ -86,8 +86,9 @@ class User extends Equatable {
     };
   }
 
+  // TODO Refactor the "snapshot to data" system
   static User fromDocument(DocumentSnapshot document) {
-    var data = document.data() ?? {};
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>? ?? {};
 
     return User(
       email: data.containsKey('email') ? data['email'] : '',
@@ -102,6 +103,14 @@ class User extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [email, id, admin, name, photo, point, surname, student];
+  List<Object?> get props => [
+        email,
+        id,
+        admin,
+        name,
+        photo,
+        point,
+        surname,
+        student,
+      ];
 }
