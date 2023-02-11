@@ -2,7 +2,6 @@ import 'package:allocrepes/login/cubit/login_cubit.dart';
 import 'package:allocrepes/login/cubit/login_state.dart';
 import 'package:allocrepes/login/view/login_welcome.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -44,31 +43,14 @@ class LoginPage extends StatelessWidget {
                 ),
               ],
             ),
-            child: SafeArea(
-              child: ListView(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                children: <Widget>[
-                  Center(
-                    child: Hero(
-                      tag: 'logo',
-                      child: Image.asset(
-                        'assets/logo.png',
-                        height: 250,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
-                  BlocBuilder<LoginCubit, LoginState>(
-                    builder: (context, state) {
-                      if (state.showLoginForm) return LoginForm();
+            child: BlocBuilder<LoginCubit, LoginState>(
+              builder: (context, state) {
+                if (state.showLoginForm) return LoginForm();
 
-                      return LoginWelcome();
-                    },
-                  ),
-                  //child: LoginForm(),
-                ],
-              ),
+                return LoginWelcome();
+              },
             ),
+            //child: LoginForm(),
           ),
         ),
       ),

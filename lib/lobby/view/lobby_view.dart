@@ -36,7 +36,7 @@ class LobbyView extends StatelessWidget {
                       children: [
                         Text("Vous n'êtes pas étudiant..."),
                         Text(
-                          "Si c'est une erreur envoyez nous un message sur nos réseaux sociaux...",
+                          "Si c'est une erreur, envoyez nous un message sur nos réseaux sociaux...",
                         ),
                       ],
                     ),

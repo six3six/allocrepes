@@ -9,13 +9,25 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'firebase_options.dart';
 
 import 'app.dart';
 import 'app_observer.dart';
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(
+    RemoteMessage message,
+    ) async {
+  await Firebase.initializeApp();
+
+  print('Handling a background message: ${message.messageId}');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   if (!kIsWeb) {
     // Force enable crashlytics collection enabled if we're testing it.
@@ -38,19 +50,14 @@ void main() async {
     }
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(
-    RemoteMessage message,
-  ) async {
-    await Firebase.initializeApp();
 
-    print('Handling a background message: ${message.messageId}');
-  }
 
   try {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   } catch (e) {
     print(e);
   }
+
   if (!kIsWeb) {
     try {
       await FirebaseMessaging.instance.unsubscribeFromTopic('allusers');
@@ -67,6 +74,7 @@ void main() async {
 
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = AppObserver();
+
   if (!kIsWeb) {
     runZonedGuarded(
       () => runApp(App(authenticationRepository: AuthenticationRepository())),
