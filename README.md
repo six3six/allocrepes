@@ -1,16 +1,12 @@
 # allocrepes
 
-Allo Crêpes
+Système de commande de crêpes sur le principe des applications de livraison de plats à domicile.
 
-## Getting Started
+Cette application a été initialement créée pour la semaine d'élection (SE) 2021 du bureau des élèves 
+(BDE) de l'école d'ingénieur ESIEE Paris. Cette application permettait, dans le contexte COVID, de faire 
+bénéficier aux élèves une expérience de SE hybride avec la livraison de crêpes en résidence ainsi
+que d'autres services intéractifs.
 
-This project is a starting point for a Flutter application.
+L'application a participé au succès de la liste puis du BDE Xanthos. Le code est à présent ouvert
+et libre d'usages.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
