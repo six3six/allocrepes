@@ -3,13 +3,16 @@ import 'package:connectivity/connectivity.dart';
 import 'package:news_repository/model/new.dart';
 import 'package:news_repository/news_repository.dart';
 import 'package:news_repository/rss_news_repository.dart';
+import 'package:order_repository/order_repository.dart';
 
 import 'lobby_state.dart';
 
 class LobbyCubit extends Cubit<LobbyState> {
   final NewsRepository newsRepository;
+  final OrderRepository orderRepository;
 
   LobbyCubit({
+    required this.orderRepository,
     this.newsRepository =
         const RssNewsRepository(targetUrl: 'https://xanthos.fr/feed/'),
   }) : super(LobbyState()) {
@@ -24,7 +27,6 @@ class LobbyCubit extends Cubit<LobbyState> {
       }
     });
     updateNews();
-
 
     orderRepository.showOrderPages().forEach((enable) {
       emit(state.copyWith(showOrder: enable));

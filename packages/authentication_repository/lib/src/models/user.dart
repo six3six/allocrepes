@@ -88,7 +88,7 @@ class User extends Equatable {
 
   // TODO Refactor the "snapshot to data" system
   static User fromDocument(DocumentSnapshot document) {
-    Map<String, dynamic> data = document.data() as Map<String, dynamic>? ?? {};
+    final data = document.data() as Map<String, dynamic>? ?? {};
 
     return User(
       email: data.containsKey('email') ? data['email'] : '',

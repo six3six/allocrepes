@@ -5,7 +5,7 @@ import 'package:order_repository/entities/article_entity.dart';
 import 'package:order_repository/entities/category_entity.dart';
 import 'package:order_repository/entities/order_entity.dart';
 import 'package:order_repository/models/category.dart';
-import 'package:order_repository/models/order.dart';
+import 'package:order_repository/models/order.dart' as Order;
 import 'package:order_repository/order_repository.dart';
 
 import 'entities/product_entity.dart';
@@ -43,8 +43,8 @@ class OrderRepositoryFirestore extends OrderRepository {
     });
   }
 
-  Stream<List<Order>>? _streamUserOrder;
-  List<Order> _userOrders = [];
+  Stream<List<Order.Order>>? _streamUserOrder;
+  List<Order.Order> _userOrders = [];
 
   @override
   void changeUser(String userId) {
@@ -59,7 +59,7 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Stream<List<Order>> userOrders({
+  Stream<List<Order.Order>> userOrders({
     List<OrderStatus>? orderStatus,
   }) async* {
     if (orderStatus != null) {
@@ -70,7 +70,7 @@ class OrderRepositoryFirestore extends OrderRepository {
       yield _userOrders;
     }
 
-    await for (List<Order> orders
+    await for (List<Order.Order> orders
         in orders(userId: userId, orderStatus: orderStatus)) {
       yield orders;
     }
@@ -156,7 +156,7 @@ class OrderRepositoryFirestore extends OrderRepository {
   ------ ORDERS ------
   */
   @override
-  Future<void> createOrder(Order order) async {
+  Future<void> createOrder(Order.Order order) async {
     final orderRef = await orderRoot.add(order.toEntity().toDocument());
     final articlesRef = orderRef.collection('articles');
     for (var article in order.articles) {
@@ -165,7 +165,7 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Future<void> editOrder(Order order) async {
+  Future<void> editOrder(Order.Order order) async {
     await orderRoot.doc(order.id).set(order.toEntity().toDocument());
 
     final articlesRef = orderRoot.doc(order.id).collection('articles');
@@ -178,21 +178,21 @@ class OrderRepositoryFirestore extends OrderRepository {
   }
 
   @override
-  Future<void> cancelOrder(Order order) async {
+  Future<void> cancelOrder(Order.Order order) async {
     await orderRoot
         .doc(order.id)
         .update({'status': OrderStatus.CANCELED.index});
   }
 
   @override
-  Stream<Order> order(String id) async* {
+  Stream<Order.Order> order(String id) async* {
     await for (DocumentSnapshot doc in orderRoot.doc(id).snapshots()) {
       yield await _orderFromEntity(OrderEntity.fromSnapshot(doc));
     }
   }
 
   @override
-  Stream<List<Order>> orders({
+  Stream<List<Order.Order>> orders({
     List<OrderStatus>? orderStatus,
     List<Place>? places,
     DateTime? start,
@@ -228,7 +228,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     }
 
     await for (QuerySnapshot snapshot in query.snapshots()) {
-      var orders = <Order>[];
+      var orders = <Order.Order>[];
 
       for (var doc in snapshot.docs) {
         final order = await _orderFromEntity(OrderEntity.fromSnapshot(doc));
@@ -243,7 +243,7 @@ class OrderRepositoryFirestore extends OrderRepository {
     }
   }
 
-  Future<Order> _orderFromEntity(OrderEntity entity) async {
+  Future<Order.Order> _orderFromEntity(OrderEntity entity) async {
     final articlesRef = orderRoot.doc(entity.id).collection('articles');
     final querySnapshot = await articlesRef.get();
     var articles = querySnapshot.docs.map((QueryDocumentSnapshot doc) {
@@ -252,7 +252,7 @@ class OrderRepositoryFirestore extends OrderRepository {
       return Article.fromEntity(entity);
     }).toList();
 
-    return Order.fromEntity(entity, articles);
+    return Order.Order.fromEntity(entity, articles);
   }
 
   @override

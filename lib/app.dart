@@ -9,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:order_repository/order_repository_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'authentication/bloc/authentication_bloc.dart';
@@ -30,7 +31,10 @@ class App extends StatelessWidget {
         create: (_) => AuthenticationBloc(
           authenticationRepository: authenticationRepository,
         ),
-        child: AppView(),
+        child: RepositoryProvider(
+          create: (BuildContext context) => OrderRepositoryFirestore(),
+          child: AppView(),
+        ),
       ),
     );
   }
@@ -130,7 +134,6 @@ class _AppViewState extends State<AppView> {
                       }
                     });
                     // If the system can show an authorization request dialog
-
                   } catch (e, stack) {
                     FirebaseCrashlytics.instance.recordError(e, stack);
                   }

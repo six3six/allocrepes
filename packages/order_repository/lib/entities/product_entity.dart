@@ -44,15 +44,19 @@ class ProductEntity extends Equatable {
         json['one_order'] as bool,
       );
 
-  static ProductEntity fromSnapshot(DocumentSnapshot snapshot) => ProductEntity(
-        snapshot.id,
-        snapshot.get('name') as String,
-        snapshot.get('available') as bool,
-        snapshot.data()?['available_esiee'] ?? false,
-        snapshot.data()?['maxAmount'] ?? 0,
-        snapshot.data()?['initialStock'] ?? 0,
-        snapshot.data()?['one_order'] ?? false,
-      );
+  static ProductEntity fromSnapshot(DocumentSnapshot document) {
+    final data = document.data() as Map<String, dynamic>? ?? {};
+
+    return ProductEntity(
+      document.id,
+      document.get('name') as String,
+      document.get('available') as bool,
+      data['available_esiee'] ?? false,
+      data['maxAmount'] ?? 0,
+      data['initialStock'] ?? 0,
+      data['one_order'] ?? false,
+    );
+  }
 
   Map<String, Object> toDocument() => {
         'name': name,

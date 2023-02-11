@@ -55,17 +55,21 @@ class OrderEntity extends Equatable {
         json['phone'] as String,
       );
 
-  static OrderEntity fromSnapshot(DocumentSnapshot snapshot) => OrderEntity(
-        snapshot.id,
-        OrderStatus.values[(snapshot.get('status') as int)],
-        snapshot.get('owner') as String,
-        (snapshot.get('created_at') as Timestamp).toDate(),
-        (snapshot.get('delivered_at') as Timestamp?)?.toDate(),
-        Place.values[snapshot.get('place') as int],
-        snapshot.get('room') as String,
-        snapshot.data()?['message'] ?? '',
-        snapshot.data()?['phone'] ?? '',
-      );
+  static OrderEntity fromSnapshot(DocumentSnapshot document) {
+    final data = document.data() as Map<String, dynamic>? ?? {};
+
+    return OrderEntity(
+      document.id,
+      OrderStatus.values[(document.get('status') as int)],
+      document.get('owner') as String,
+      (document.get('created_at') as Timestamp).toDate(),
+      (document.get('delivered_at') as Timestamp?)?.toDate(),
+      Place.values[document.get('place') as int],
+      document.get('room') as String,
+      data['message'] ?? '',
+      data['phone'] ?? '',
+    );
+  }
 
   Map<String, Object?> toDocument() => {
         'status': status.index,
