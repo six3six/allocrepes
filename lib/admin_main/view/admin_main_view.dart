@@ -83,6 +83,7 @@ class AdminMainView extends StatelessWidget {
                       try {
                         launchUrl(
                           Uri.parse('https://docs.google.com/spreadsheets/d/1T0UaQHJ54quMv9mFMFQVHMiHO_SkY1bWGRw0miQsMik/edit#gid=1528048195'),
+                          mode: LaunchMode.externalApplication
                         );
                       } catch (e) {
                         return;

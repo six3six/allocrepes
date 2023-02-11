@@ -53,8 +53,9 @@ class _AppViewState extends State<AppView> {
   Future<void> getNotif(RemoteMessage? initialMessage) async {
     if (initialMessage == null) return;
     if (initialMessage.data.containsKey('link')) {
-      await canLaunchUrl(Uri.parse(initialMessage.data['link']))
-          ? await launchUrl(Uri.parse(initialMessage.data['link']))
+      final notifUrl = Uri.parse(initialMessage.data['link']);
+      await canLaunchUrl(notifUrl)
+          ? await launchUrl(notifUrl, mode: LaunchMode.externalApplication)
           : throw 'Could not launch ${initialMessage.data["link"]}';
 
       return;

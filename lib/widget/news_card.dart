@@ -24,7 +24,7 @@ class NewsCard extends StatelessWidget {
       title: title,
       onTap: () async {
         await canLaunchUrl(url)
-            ? await launchUrl(url)
+            ? await launchUrl(url, mode: LaunchMode.externalApplication)
             : throw 'Could not launch $url';
       },
     );
