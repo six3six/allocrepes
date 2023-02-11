@@ -139,6 +139,8 @@ class _AppViewState extends State<AppView> {
                     FirebaseCrashlytics.instance.recordError(e, stack);
                   }
                 }
+                RepositoryProvider.of<OrderRepositoryFirestore>(context)
+                    .changeUser(state.user.id);
                 prevUserId = state.user.id;
 
                 _navigator.pushAndRemoveUntil<void>(
