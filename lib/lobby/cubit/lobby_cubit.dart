@@ -24,6 +24,26 @@ class LobbyCubit extends Cubit<LobbyState> {
       }
     });
     updateNews();
+
+
+    orderRepository.showOrderPages().forEach((enable) {
+      emit(state.copyWith(showOrder: enable));
+    });
+    orderRepository.showProgramPages().forEach((enable) {
+      emit(state.copyWith(showProgram: enable));
+    });
+
+    orderRepository.showCls().forEach((enable) {
+      emit(state.copyWith(showCls: enable));
+    });
+
+    orderRepository.headline().forEach((headline) {
+      emit(state.copyWith(headline: headline));
+    });
+
+    orderRepository.headlineURL().forEach((headlineURL) {
+      emit(state.copyWith(headlineURL: headlineURL));
+    });
   }
 
   void updateNews() {

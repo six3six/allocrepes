@@ -42,7 +42,10 @@ class LobbyPage extends StatelessWidget {
           ),
         ],
       ),
-      body: LobbyView(),
+      body: BlocProvider(
+        create: (_) => LobbyCubit(),
+        child: LobbyView(),
+      ),
     );
   }
 }

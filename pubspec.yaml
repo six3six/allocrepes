@@ -9,7 +9,7 @@ version: 0.2.14+32
 
 
 environment:
-  sdk: ">=2.18.2 <3.0.0"
+  sdk: ">=2.18.2 <4.0.0"
 
 dependencies:
   flutter:
@@ -23,25 +23,25 @@ dependencies:
     path: packages/news_repository
 
 
-  firebase_core: ^2.4.1
-  firebase_analytics: ^10.1.0
-  firebase_crashlytics: ^3.0.11
-  firebase_messaging: ^14.2.1
-  cloud_functions: ^4.0.7
+  firebase_core: ^2.5.0
+  firebase_analytics: ^10.1.1
+  firebase_crashlytics: ^3.0.12
+  firebase_messaging: ^14.2.2
+  cloud_functions: ^4.0.8
   intl: ^0.17.0
 
   connectivity: ^3.0.6
-  collection: ^1.17.0
-  package_info_plus: ^3.0.2
+  collection: ^1.17.1
+  package_info_plus: ^3.0.3
 
-  font_awesome_flutter: ^10.3.0
+  font_awesome_flutter: ^10.4.0
 
-  bloc: ^8.1.0
-  flutter_bloc: ^8.1.1
+  bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
 
   equatable: ^2.0.5
 
-  url_launcher: ^6.1.8
+  url_launcher: ^6.1.9
 
   loading_overlay: ^0.3.0
   webview_flutter: ^4.0.2

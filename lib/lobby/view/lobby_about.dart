@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class LobbyAbout extends StatefulWidget {
@@ -26,7 +25,7 @@ class LobbyAboutState extends State<LobbyAbout> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Fait avec le ❤'),
-                  Text('par Louis DESPLANCHE'),
+                  Text('pour le BDE Xanthos'),
                 ],
               ),
             if (easter)
@@ -43,38 +42,24 @@ class LobbyAboutState extends State<LobbyAbout> {
             Text("Aucun test n'a été dev pour ce projet"),
             Text(
               "Tester c'est douter",
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             SizedBox(
               height: 20,
             ),
-            Text('© Liste BDE ESIEE Paris 2021-2022'),
+            Text('© Louis DESPLANCHE 2021-2023'),
             SizedBox(
               height: 20,
             ),
-            if (easter)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Nique tous ces RG',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text('Théo, 2021'),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
             FutureBuilder(
               future: PackageInfo.fromPlatform(),
               builder: (conext, snapshot) {
                 if (snapshot.hasData) {
-                  var infos = snapshot.data! as PackageInfo;
+                  var infos = snapshot.data!;
 
                   return Text(
                     'Version : ${infos.version} build ${infos.buildNumber}',
-                    style: textTheme.overline,
+                    style: textTheme.bodySmall,
                   );
                 } else {
                   return SizedBox();

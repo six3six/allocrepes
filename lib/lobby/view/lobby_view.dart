@@ -29,7 +29,7 @@ class LobbyView extends StatelessWidget {
         BlocBuilder<AuthenticationBloc, AuthenticationState>(
           buildWhen: (prev, next) => prev.user.student != next.user.student,
           builder: (context, state) {
-            return state.user.student
+            return !state.user.student
                 ? _LobbyMenu()
                 : SliverToBoxAdapter(
                     child: Column(
@@ -142,7 +142,7 @@ class _LobbyMenu extends StatelessWidget {
                   title: 'En savoir +',
                   onTap: () {
                     try {
-                      launch('https://xanthos.fr/a-propos');
+                      launchUrl(Uri.parse('https://esiee.fr'));
                     } catch (e) {
                       return;
                     }
@@ -209,8 +209,9 @@ class _LobbyTwitchMenu extends StatelessWidget {
           SizedBox(height: 10),
           BlocBuilder<LobbyCubit, LobbyState>(
             buildWhen: (prev, next) => prev.headlineURL != next.headlineURL,
-            builder: (context, state) =>
-                LobbyHeadlineViewer(url: state.headlineURL),
+            builder: (context, state) => state.headlineURL != ''
+                ? LobbyHeadlineViewer(url: state.headlineURL)
+                : SizedBox(),
           )
         ],
       ),
