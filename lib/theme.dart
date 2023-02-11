@@ -15,6 +15,7 @@ final theme = ThemeData(
   primaryColorLight: primaryColorLight,
   primaryColorDark: primaryColorDark,
   accentColor: accentColor,
+  useMaterial3: true,
 
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );
