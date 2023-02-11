@@ -16,5 +16,5 @@ final theme = ThemeData(
   primaryColorDark: primaryColorDark,
   useMaterial3: true,
 
-  visualDensity: VisualDensity.adaptivePlatformDensity, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: accentColor),
+  visualDensity: VisualDensity.adaptivePlatformDensity,
 );
