@@ -4,7 +4,6 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:pedantic/pedantic.dart';
 
 part 'authentication_event.dart';
 
@@ -14,8 +13,10 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
-  })   : _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(const AuthenticationState.unknown()) {
+    on<AuthenticationUserChanged>(_onUserChanged);
+    on<AuthenticationLogoutRequested>(_onLogoutRequested);
     _userSubscription = _authenticationRepository.user.listen(
       (userStream) async {
         try {
@@ -33,29 +34,23 @@ class AuthenticationBloc
   final AuthenticationRepository _authenticationRepository;
   StreamSubscription<Stream<User>>? _userSubscription;
 
-  @override
-  Stream<AuthenticationState> mapEventToState(
-    AuthenticationEvent event,
-  ) async* {
-    if (event is AuthenticationUserChanged) {
-      yield _mapAuthenticationUserChangedToState(event);
-    } else if (event is AuthenticationLogoutRequested) {
-      unawaited(_authenticationRepository.logOut());
-    }
+  void _onUserChanged(
+      AuthenticationUserChanged event, Emitter<AuthenticationState> emit) {
+    emit(
+      event.user.isNotEmpty()
+          ? AuthenticationState.authenticated(event.user)
+          : const AuthenticationState.unauthenticated(),
+    );
+  }
+
+  void _onLogoutRequested(
+      AuthenticationLogoutRequested event, Emitter<AuthenticationState> emit) {
+    unawaited(_authenticationRepository.logOut());
   }
 
   @override
   Future<void> close() {
     _userSubscription?.cancel();
-
     return super.close();
-  }
-
-  AuthenticationState _mapAuthenticationUserChangedToState(
-    AuthenticationUserChanged event,
-  ) {
-    return event.user != User.empty
-        ? AuthenticationState.authenticated(event.user)
-        : const AuthenticationState.unauthenticated();
   }
 }

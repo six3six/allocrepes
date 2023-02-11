@@ -102,6 +102,10 @@ class User extends Equatable {
     );
   }
 
+  bool isNotEmpty(){
+    return name != '' && surname != '';
+  }
+
   @override
   List<Object?> get props => [
         email,

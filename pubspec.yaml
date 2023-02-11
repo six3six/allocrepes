@@ -47,7 +47,6 @@ dependencies:
   webview_flutter: ^4.0.2
 
   cupertino_icons: ^1.0.5
-  pedantic: ^1.11.1
 
   app_tracking_transparency: ^2.0.3
   
