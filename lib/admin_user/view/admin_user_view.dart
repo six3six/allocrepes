@@ -47,7 +47,7 @@ class _FilterView extends StatelessWidget {
       children: [
         Text(
           'Nom de famille :',
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         TextField(
           onChanged: (value) {
@@ -60,7 +60,7 @@ class _FilterView extends StatelessWidget {
         ),
         Text(
           'Trié par :',
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         BlocBuilder<AdminUserCubit, AdminUserState>(
           buildWhen: (prev, next) => prev.sortUser != next.sortUser,
@@ -148,7 +148,7 @@ class _UserTile extends StatelessWidget {
           children: [
             Text(
               'Prenom:',
-              style: theme.textTheme.caption,
+              style: theme.textTheme.bodySmall,
             ),
             TextField(
               controller: surnameController..text = user.surname,
@@ -158,7 +158,7 @@ class _UserTile extends StatelessWidget {
             ),
             Text(
               'Nom:',
-              style: theme.textTheme.caption,
+              style: theme.textTheme.bodySmall,
             ),
             TextField(
               controller: nameController..text = user.name,
@@ -168,7 +168,7 @@ class _UserTile extends StatelessWidget {
             ),
             Text(
               'Email:',
-              style: theme.textTheme.caption,
+              style: theme.textTheme.bodySmall,
             ),
             TextField(
               controller: emailController..text = user.email,
@@ -178,7 +178,7 @@ class _UserTile extends StatelessWidget {
             ),
             Text(
               'Points:',
-              style: theme.textTheme.caption,
+              style: theme.textTheme.bodySmall,
             ),
             TextField(
               controller: pointsController..text = user.point.toString(),
@@ -222,7 +222,7 @@ class _UserTile extends StatelessWidget {
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
-                      primary: Colors.red,
+                      foregroundColor: Colors.red,
                     ),
                     onPressed: () =>
                         BlocProvider.of<AdminUserCubit>(context).removeUser(id),

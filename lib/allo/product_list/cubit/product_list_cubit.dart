@@ -1,6 +1,5 @@
 import 'package:allocrepes/allo/product_list/cubit/product_list_state.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/product.dart';

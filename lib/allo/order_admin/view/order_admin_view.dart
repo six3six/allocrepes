@@ -5,7 +5,6 @@ import 'package:allocrepes/allo/order_admin/cubit/order_admin_state.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/place.dart';
@@ -71,6 +70,7 @@ class _StatusList extends StatelessWidget {
     Key? key,
     required this.status,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -134,7 +134,7 @@ class _OrderTile extends StatelessWidget {
       children: [
         Text(
           'Nom :',
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         _UserLabel(
           userId: order.owner,
@@ -145,7 +145,7 @@ class _OrderTile extends StatelessWidget {
         ),
         Text(
           'Adresse :',
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         Text(
           '${PlaceUtils.placeToString(order.place)}  -  ${order.room}',
@@ -155,7 +155,7 @@ class _OrderTile extends StatelessWidget {
         ),
         Text(
           'Telephone :',
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         Text(
           '${order.phone}',
@@ -165,7 +165,7 @@ class _OrderTile extends StatelessWidget {
         ),
         Text(
           'Commande :',
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         ...order.articles.map(
           (article) => BlocBuilder<OrderAdminCubit, OrderAdminState>(
@@ -183,7 +183,7 @@ class _OrderTile extends StatelessWidget {
             SizedBox(height: 10),
             Text(
               'Commentaire :',
-              style: theme.textTheme.caption,
+              style: theme.textTheme.bodySmall,
             ),
             Text(order.message),
           ],
@@ -213,7 +213,7 @@ class _FilterView extends StatelessWidget {
         children: [
           Text(
             'Batiment :',
-            style: theme.textTheme.caption,
+            style: theme.textTheme.bodySmall,
           ),
           BlocBuilder<OrderAdminCubit, OrderAdminState>(
             buildWhen: (prev, next) => !IterableEquality().equals(
@@ -241,7 +241,7 @@ class _FilterView extends StatelessWidget {
           ),
           Text(
             'Etat :',
-            style: theme.textTheme.caption,
+            style: theme.textTheme.bodySmall,
           ),
           BlocBuilder<OrderAdminCubit, OrderAdminState>(
             buildWhen: (prev, next) => !IterableEquality().equals(

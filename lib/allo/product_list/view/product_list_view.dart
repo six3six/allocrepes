@@ -1,7 +1,6 @@
 import 'package:allocrepes/allo/product_list/cubit/product_list_cubit.dart';
 import 'package:allocrepes/allo/product_list/cubit/product_list_state.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/category.dart';
@@ -77,7 +76,7 @@ class _ProductCategory extends StatelessWidget {
                   Expanded(
                     child: Text(
                       category.name,
-                      style: textTheme.headline5,
+                      style: textTheme.headlineSmall,
                     ),
                   ),
                   IconButton(
@@ -318,14 +317,14 @@ class _ProductAvailability extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        AvailableESIEE(),
-        Available(),
-        OneOrder(),
+        _availableESIEE(),
+        _available(),
+        _oneOrder(),
       ],
     );
   }
 
-  Widget AvailableESIEE() => Row(
+  Widget _availableESIEE() => Row(
         children: [
           Expanded(
             flex: 7,
@@ -351,7 +350,7 @@ class _ProductAvailability extends StatelessWidget {
         ],
       );
 
-  Widget Available() => Row(
+  Widget _available() => Row(
         children: [
           Expanded(
             flex: 7,
@@ -377,7 +376,7 @@ class _ProductAvailability extends StatelessWidget {
         ],
       );
 
-  Widget OneOrder() => Row(
+  Widget _oneOrder() => Row(
         children: [
           Expanded(
             flex: 7,
@@ -420,7 +419,7 @@ class _ProductOrderPagesViewCheckbox extends StatelessWidget {
           ),
           Text(
             'Page de commandes',
-            style: textTheme.headline5,
+            style: textTheme.headlineSmall,
           ),
           Row(
             mainAxisSize: MainAxisSize.max,

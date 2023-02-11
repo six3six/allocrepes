@@ -2,9 +2,7 @@ import 'package:allocrepes/allo/oder_new/cubit/order_new_cubit.dart';
 import 'package:allocrepes/allo/oder_new/cubit/order_new_state.dart';
 import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/place.dart';
@@ -117,7 +115,7 @@ class _OrderNewCategory extends StatelessWidget {
             children: [
               Text(
                 category.name,
-                style: textTheme.headline5,
+                style: textTheme.headlineSmall,
               ),
               Column(
                 children: products
@@ -169,11 +167,11 @@ class _OrderNewItem extends StatelessWidget {
                   child: Text(
                     product.name,
                     style: state.isAlreadyOrdered(category, product)
-                        ? textTheme.headline6?.merge(TextStyle(
+                        ? textTheme.titleLarge?.merge(TextStyle(
                             decoration: TextDecoration.lineThrough,
                             color: Colors.grey,
                           ))
-                        : textTheme.headline6,
+                        : textTheme.titleLarge,
                   ),
                 ),
                 if (!state.isAlreadyOrdered(category, product)) nbSelector(),
@@ -183,12 +181,12 @@ class _OrderNewItem extends StatelessWidget {
           if (!product.availableESIEE)
             Text(
               "Ce produit n'est pas disponible à l'ESIEE",
-              style: textTheme.caption,
+              style: textTheme.bodySmall,
             ),
           if (product.oneOrder)
             Text(
               "Ce produit n'est commandable qu'une fois",
-              style: textTheme.caption,
+              style: textTheme.bodySmall,
             ),
         ],
       ),
@@ -234,7 +232,7 @@ class _OrderNewAddressInfo extends StatelessWidget {
             buildWhen: (prev, next) => prev.placeError != next.placeError,
             builder: (context, state) => Text(
               state.placeError,
-              style: theme.textTheme.bodyText2!
+              style: theme.textTheme.bodyMedium!
                   .merge(TextStyle(color: Colors.red)),
             ),
           ),
@@ -242,7 +240,7 @@ class _OrderNewAddressInfo extends StatelessWidget {
             buildWhen: (prev, next) => prev.roomError != next.roomError,
             builder: (context, state) => Text(
               state.roomError,
-              style: theme.textTheme.bodyText2!
+              style: theme.textTheme.bodyMedium!
                   .merge(TextStyle(color: Colors.red)),
             ),
           ),
@@ -270,7 +268,7 @@ class _OrderNewBatimentSelector extends StatelessWidget {
       children: [
         Text(
           'Batiment : ',
-          style: theme.textTheme.caption,
+          style: theme.textTheme.bodySmall,
         ),
         SizedBox(
           width: double.infinity,
@@ -344,7 +342,7 @@ class _AdditionalInformationState extends State<_AdditionalInformation> {
           Text('Commentaire :'),
           Text(
             '(un anniversaire, un message à nous passer...)',
-            style: theme.textTheme.caption,
+            style: theme.textTheme.bodySmall,
           ),
           TextField(
             controller: _messageController,

@@ -2,7 +2,6 @@ import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
 import 'package:allocrepes/lobby/view/lobby_about.dart';
 import 'package:allocrepes/lobby/view/lobby_view.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/order_repository_firestore.dart';

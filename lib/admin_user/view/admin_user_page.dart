@@ -41,7 +41,7 @@ class AdminUserPage extends StatelessWidget {
               ),
               Text(
                 'Chargement...',
-                style: theme.textTheme.headline6,
+                style: theme.textTheme.titleLarge,
               ),
             ],
           ),

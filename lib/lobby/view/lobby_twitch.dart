@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,7 +31,10 @@ class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
                   request.url
                       .startsWith('https://www.twitch.tv/listexanthos')) {
                 try {
-                  await launch(request.url);
+                  await launchUrl(
+                    Uri.parse(request.url),
+                    mode: LaunchMode.externalApplication,
+                  );
                 } catch (e) {}
               }
               return NavigationDecision.prevent;

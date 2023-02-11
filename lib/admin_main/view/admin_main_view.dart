@@ -5,7 +5,6 @@ import 'package:allocrepes/allo/product_list/view/product_list_page.dart';
 import 'package:allocrepes/allo/stock/view/stock_page.dart';
 import 'package:allocrepes/widget/menu_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AdminMainView extends StatelessWidget {
@@ -82,8 +81,8 @@ class AdminMainView extends StatelessWidget {
                     title: 'Accès EDT',
                     onTap: () {
                       try {
-                        launch(
-                          'https://docs.google.com/spreadsheets/d/1T0UaQHJ54quMv9mFMFQVHMiHO_SkY1bWGRw0miQsMik/edit#gid=1528048195',
+                        launchUrl(
+                          Uri.parse('https://docs.google.com/spreadsheets/d/1T0UaQHJ54quMv9mFMFQVHMiHO_SkY1bWGRw0miQsMik/edit#gid=1528048195'),
                         );
                       } catch (e) {
                         return;

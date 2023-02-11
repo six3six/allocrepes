@@ -2,7 +2,6 @@ import 'package:allocrepes/admin_notif/cubit/admin_notif_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AdminNotifCubit extends Cubit<AdminNotifState> {
   AdminNotifCubit() : super(AdminNotifState());

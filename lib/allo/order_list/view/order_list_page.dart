@@ -48,12 +48,12 @@ class OrderListPage extends StatelessWidget {
                     ),
                     Text(
                       'Chargement...',
-                      style: theme.textTheme.headline6,
+                      style: theme.textTheme.titleLarge,
                     ),
                     if (!state.isConnected)
                       Text(
                         'En attente de connexion...',
-                        style: theme.textTheme.headline6,
+                        style: theme.textTheme.titleLarge,
                       ),
                   ],
                 ),

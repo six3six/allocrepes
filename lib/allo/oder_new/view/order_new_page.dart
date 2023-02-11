@@ -43,7 +43,7 @@ class OrderNewPage extends StatelessWidget {
                   ),
                   Text(
                     'Chargement...',
-                    style: theme.textTheme.headline6,
+                    style: theme.textTheme.titleLarge,
                   ),
                 ],
               ),

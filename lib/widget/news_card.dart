@@ -17,14 +17,14 @@ class NewsCard extends StatelessWidget {
     Key? key,
     required String image,
     required String title,
-    required String url,
+    required Uri url,
   }) {
     return NewsCard(
       image: image,
       title: title,
       onTap: () async {
-        await canLaunch(url)
-            ? await launch(url)
+        await canLaunchUrl(url)
+            ? await launchUrl(url)
             : throw 'Could not launch $url';
       },
     );
@@ -32,7 +32,7 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headStyle = Theme.of(context).textTheme.bodyText1!.merge(TextStyle(
+    final headStyle = Theme.of(context).textTheme.bodyLarge!.merge(TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ));

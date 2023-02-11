@@ -1,7 +1,6 @@
 import 'package:allocrepes/allo/order_list/cubit/order_list_cubit.dart';
 import 'package:allocrepes/allo/order_list/cubit/order_list_state.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/article.dart';
@@ -23,7 +22,7 @@ class OrderListView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           child: Text(
             'Mes commandes en cours',
-            style: textTheme.headline5,
+            style: textTheme.headlineSmall,
           ),
         ),
         BlocBuilder<OrderListCubit, OrderListState>(
@@ -35,7 +34,7 @@ class OrderListView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: RichText(
                   text: TextSpan(
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                     children: [
                       const TextSpan(
                         text:
@@ -66,7 +65,7 @@ class OrderListView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           child: Text(
             'Mes commandes passées',
-            style: textTheme.headline5,
+            style: textTheme.headlineSmall,
           ),
         ),
         BlocBuilder<OrderListCubit, OrderListState>(
@@ -103,7 +102,7 @@ class _OrderSummary extends StatelessWidget {
           children: [
             Text(
               "${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
-              style: theme.textTheme.headline6,
+              style: theme.textTheme.titleLarge,
             ),
             Text(
               'Livraison à ${PlaceUtils.placeToString(order.place)}, salle/appartement ${order.room}',
@@ -157,7 +156,7 @@ class _OrderSummaryStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.bodyText1;
+    final textTheme = Theme.of(context).textTheme.bodyLarge;
 
     switch (status) {
       case OrderStatus.CANCELED:

@@ -1,4 +1,6 @@
 import 'package:allocrepes/admin_main/view/admin_main_page.dart';
+import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
+import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
 import 'package:allocrepes/lobby/cubit/lobby_state.dart';
@@ -6,11 +8,9 @@ import 'package:allocrepes/program/view/program_page.dart';
 import 'package:allocrepes/widget/menu_card.dart';
 import 'package:allocrepes/widget/news_card.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'lobby_top.dart';
 import 'lobby_twitch.dart';
@@ -68,7 +68,7 @@ class _LobbyCls extends StatelessWidget {
                     children: [
                       Text(
                         'Classement des meilleurs athlètes',
-                        style: textTheme.headline5,
+                        style: textTheme.headlineSmall,
                       ),
                       FutureBuilder<HttpsCallableResult<List<dynamic>>>(
                         future: getList(),
@@ -83,7 +83,7 @@ class _LobbyCls extends StatelessWidget {
                               children: list?.data
                                       .map((e) => Text(
                                             e,
-                                            style: textTheme.bodyText1,
+                                            style: textTheme.bodyLarge,
                                           ))
                                       .toList() ??
                                   [],
@@ -126,7 +126,7 @@ class _LobbyMenu extends StatelessWidget {
                                   'News : ' + state.headline,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headline6!
+                                      .titleLarge!
                                       .merge(TextStyle(color: Colors.red)),
                                 ),
                                 SizedBox(
@@ -138,15 +138,26 @@ class _LobbyMenu extends StatelessWidget {
                         : SizedBox();
                   },
                 ),
+                BlocBuilder<LobbyCubit, LobbyState>(
+                  buildWhen: (prev, next) => prev.showOrder != next.showOrder,
+                  builder: (context, state) {
+                    return MenuCard(
+                      title: 'Passer commande',
+                      onTap: () =>
+                          Navigator.push(context, OrderNewPage.route()),
+                      icon: Icons.shopping_cart_outlined,
+                      enable: state.showOrder,
+                    );
+                  },
+                ),
+                MenuCard(
+                  title: 'Mes commandes',
+                  onTap: () => Navigator.push(context, OrderListPage.route()),
+                  icon: Icons.shopping_basket_outlined,
+                ),
                 MenuCard(
                   title: 'En savoir +',
-                  onTap: () {
-                    try {
-                      launchUrl(Uri.parse('https://esiee.fr'));
-                    } catch (e) {
-                      return;
-                    }
-                  },
+                  onTap: BlocProvider.of<LobbyCubit>(context).knowMore,
                   icon: Icons.mood_rounded,
                 ),
                 BlocBuilder<LobbyCubit, LobbyState>(
@@ -172,7 +183,7 @@ class _LobbyMenu extends StatelessWidget {
                     children: [
                       Text(
                         'Sexe.',
-                        style: Theme.of(context).textTheme.headline1,
+                        style: Theme.of(context).textTheme.displayLarge,
                       ),
                       Text('Signé Louis <3'),
                     ],
@@ -198,7 +209,7 @@ class _LobbyTwitchMenu extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
             child: Text(
               'Suivre Xanthos sur Twitch',
-              style: textTheme.headline5,
+              style: textTheme.headlineSmall,
             ),
           ),
           SizedBox(
@@ -232,7 +243,7 @@ class _LobbyActuMenu extends StatelessWidget {
           children: [
             Text(
               'Suivre les actus Xanthos',
-              style: textTheme.headline5,
+              style: textTheme.headlineSmall,
             ),
             SizedBox(
               height: 10,
@@ -256,7 +267,7 @@ class _LobbyActuMenu extends StatelessWidget {
                         .map((_new) => NewsCard.tapUrl(
                               title: _new.title,
                               image: _new.media,
-                              url: _new.url,
+                              url: Uri.parse(_new.url),
                             ))
                         .toList(),
                   ),

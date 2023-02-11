@@ -4,6 +4,7 @@ import 'package:news_repository/model/new.dart';
 import 'package:news_repository/news_repository.dart';
 import 'package:news_repository/rss_news_repository.dart';
 import 'package:order_repository/order_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'lobby_state.dart';
 
@@ -54,5 +55,16 @@ class LobbyCubit extends Cubit<LobbyState> {
       print(news);
       emit(state.copyWith(news: news, isLoading: false));
     });
+  }
+
+  void knowMore() {
+    try {
+      launchUrl(
+        Uri.parse('https://www.esiee.fr'),
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      return;
+    }
   }
 }

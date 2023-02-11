@@ -1,7 +1,6 @@
 import 'package:allocrepes/allo/stock/cubit/stock_cubit.dart';
 import 'package:allocrepes/allo/stock/cubit/stock_state.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/category.dart';
@@ -93,7 +92,7 @@ class _ProductCategory extends StatelessWidget {
                   Expanded(
                     child: Text(
                       category.name,
-                      style: textTheme.headline5,
+                      style: textTheme.headlineSmall,
                     ),
                   ),
                 ],
@@ -156,7 +155,7 @@ class _StockEntry extends StatelessWidget {
                   flex: 7,
                   child: Text(
                     state.getProduct(category, rank).name,
-                    style: textTheme.headline6,
+                    style: textTheme.titleLarge,
                   ),
                 ),
               ),
