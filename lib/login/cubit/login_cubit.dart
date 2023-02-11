@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 import 'login_state.dart';
 
@@ -12,27 +11,21 @@ class LoginCubit extends Cubit<LoginState> {
 
   final AuthenticationRepository _authenticationRepository;
 
-  void showLoginForm() {
-    emit(state.copyWith(showLoginForm: true));
-  }
+  static final ssoUrl = Uri.https('sso.esiee.fr', '/cas/login', {
+    'service':
+        'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin/'
+  });
 
-  Future<void> login(String url) async {
-    emit(state.copyWith(isLoading: true));
-    try {
-      final response = await http.get(Uri.parse(url));
-      final decodedData = jsonDecode(response.body);
+  Future<void> showLoginForm() async {
+    print(ssoUrl.toString());
 
-      await _authenticationRepository.logInWithToken(
-        token: decodedData['token'],
-      );
-    } catch (e, stack) {
-      await FirebaseCrashlytics.instance.recordError(e, stack);
-      print(e);
+    final result = await FlutterWebAuth.authenticate(
+        url: ssoUrl.toString(), callbackUrlScheme: "allocrepes-auth");
+
+    final token = Uri.parse(result).queryParameters['token'];
+
+    if (token != null) {
+      await _authenticationRepository.logInWithToken(token: token);
     }
-    emit(state.copyWith(isLoading: false));
-  }
-
-  Future<void> loginWithToken(String token) async {
-    await _authenticationRepository.logInWithToken(token: token);
   }
 }

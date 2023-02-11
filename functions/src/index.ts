@@ -59,6 +59,8 @@ const getSSOToken = async (fncUrl: string, ticket: string): Promise<Token> => {
 
   const result: string = await requestCall;
 
+  console.log(result);
+
   const xmlS = new sxml.XML(result);
 
 
@@ -78,7 +80,6 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
   const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
   const ticket = typeof req.query.ticket === "string" ? req.query.ticket : "";
 
-
   const token = await getSSOToken(fncUrl, ticket);
 
 
@@ -87,7 +88,7 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
     console.log(req.query);
   }
 
-  res.json(token);
+  res.redirect(`allocrepes-auth://?token=${token.token}&user=${token.user}`);
 });
 
 exports.ssoLoginToken = functions.https.onRequest(async (req, res) => {

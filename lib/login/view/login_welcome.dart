@@ -42,6 +42,11 @@ class LoginWelcome extends StatelessWidget {
               style: textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
+            Text(
+              "Connectez-vous à votre compte ESIEE",
+              style: textTheme.bodyLarge,
+              textAlign: TextAlign.center,
+            ),
             SizedBox(
               height: 60,
             ),

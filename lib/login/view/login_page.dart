@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
-import 'login_form.dart';
-
 class LoginPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
@@ -39,18 +37,11 @@ class LoginPage extends StatelessWidget {
                 ),
                 Text(
                   'Chargement...',
-                  style: theme.textTheme.headline6,
+                  style: theme.textTheme.bodyLarge,
                 ),
               ],
             ),
-            child: BlocBuilder<LoginCubit, LoginState>(
-              builder: (context, state) {
-                if (state.showLoginForm) return LoginForm();
-
-                return LoginWelcome();
-              },
-            ),
-            //child: LoginForm(),
+            child: LoginWelcome(),
           ),
         ),
       ),

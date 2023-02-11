@@ -103,7 +103,7 @@ class User extends Equatable {
   }
 
   bool isNotEmpty(){
-    return name != '' && surname != '';
+    return id != '';
   }
 
   @override
