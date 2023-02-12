@@ -4,6 +4,7 @@ import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/order_repository_firestore.dart';
+import 'package:setting_repository/setting_repository_firestore.dart';
 
 class ProductListPage extends StatelessWidget {
   static Route route() {
@@ -22,6 +23,7 @@ class ProductListPage extends StatelessWidget {
         return BlocProvider(
           create: (context) => ProductListCubit(
             RepositoryProvider.of<OrderRepositoryFirestore>(context),
+            RepositoryProvider.of<SettingRepositoryFirestore>(context),
           ),
           child: const ProductListView(),
         );

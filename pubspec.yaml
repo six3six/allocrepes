@@ -25,6 +25,9 @@ dependencies:
   order_repository:
     path: packages/order_repository
 
+  setting_repository:
+    path: packages/setting_repository
+
 
   firebase_core: ^2.5.0
   firebase_analytics: ^10.1.1

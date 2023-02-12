@@ -3,20 +3,22 @@ import 'package:connectivity/connectivity.dart';
 import 'package:news_repository/model/new.dart';
 import 'package:news_repository/news_repository.dart';
 import 'package:news_repository/rss_news_repository.dart';
-import 'package:order_repository/order_repository.dart';
+import 'package:setting_repository/setting_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'lobby_state.dart';
 
 class LobbyCubit extends Cubit<LobbyState> {
-  final NewsRepository newsRepository;
-  final OrderRepository orderRepository;
+  final NewsRepository _newsRepository;
+  final SettingRepository _settingRepository;
 
   LobbyCubit({
-    required this.orderRepository,
-    this.newsRepository =
+    required SettingRepository settingRepository,
+    NewsRepository newsRepository =
         const RssNewsRepository(targetUrl: 'https://xanthos.fr/feed/'),
-  }) : super(LobbyState()) {
+  })  : _newsRepository = newsRepository,
+        _settingRepository = settingRepository,
+        super(LobbyState()) {
     Connectivity().onConnectivityChanged.forEach((result) {
       switch (result) {
         case ConnectivityResult.wifi:
@@ -29,29 +31,29 @@ class LobbyCubit extends Cubit<LobbyState> {
     });
     updateNews();
 
-    orderRepository.showOrderPages().forEach((enable) {
+    _settingRepository.showOrderPages().forEach((enable) {
       emit(state.copyWith(showOrder: enable));
     });
-    orderRepository.showProgramPages().forEach((enable) {
+    _settingRepository.showProgramPages().forEach((enable) {
       emit(state.copyWith(showProgram: enable));
     });
 
-    orderRepository.showCls().forEach((enable) {
+    _settingRepository.showCls().forEach((enable) {
       emit(state.copyWith(showCls: enable));
     });
 
-    orderRepository.headline().forEach((headline) {
+    _settingRepository.headline().forEach((headline) {
       emit(state.copyWith(headline: headline));
     });
 
-    orderRepository.headlineURL().forEach((headlineURL) {
+    _settingRepository.headlineURL().forEach((headlineURL) {
       emit(state.copyWith(headlineURL: headlineURL));
     });
   }
 
   void updateNews() {
     emit(state.copyWith(isLoading: true));
-    newsRepository.getNews().forEach((List<New> news) {
+    _newsRepository.getNews().forEach((List<New> news) {
       print(news);
       emit(state.copyWith(news: news, isLoading: false));
     });

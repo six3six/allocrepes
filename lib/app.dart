@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/order_repository_firestore.dart';
+import 'package:setting_repository/setting_repository_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'authentication/bloc/authentication_bloc.dart';
@@ -32,8 +33,11 @@ class App extends StatelessWidget {
           authenticationRepository: authenticationRepository,
         ),
         child: RepositoryProvider(
-          create: (BuildContext context) => OrderRepositoryFirestore(),
-          child: AppView(),
+          create: (BuildContext context) => SettingRepositoryFirestore(),
+          child: RepositoryProvider(
+            create: (BuildContext context) => OrderRepositoryFirestore(),
+            child: AppView(),
+          ),
         ),
       ),
     );

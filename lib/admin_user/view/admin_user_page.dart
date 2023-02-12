@@ -4,7 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:order_repository/order_repository_firestore.dart';
+import 'package:setting_repository/setting_repository_firestore.dart';
 
 import 'admin_user_view.dart';
 
@@ -25,7 +25,7 @@ class AdminUserPage extends StatelessWidget {
     return BlocProvider<AdminUserCubit>(
       create: (context) => AdminUserCubit(
         RepositoryProvider.of<AuthenticationRepository>(context),
-        RepositoryProvider.of<OrderRepositoryFirestore>(context),
+        RepositoryProvider.of<SettingRepositoryFirestore>(context),
       ),
       child: BlocBuilder<AdminUserCubit, AdminUserState>(
         buildWhen: (prev, next) => prev.isLoading != next.isLoading,

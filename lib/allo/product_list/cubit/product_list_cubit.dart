@@ -4,28 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/product.dart';
 import 'package:order_repository/order_repository.dart';
+import 'package:setting_repository/setting_repository.dart';
 
 class ProductListCubit extends Cubit<ProductListState> {
-  ProductListCubit(this.orderRepository) : super(const ProductListState()) {
+  ProductListCubit(
+    this._orderRepository,
+    this._settingRepository,
+  ) : super(const ProductListState()) {
     getProducts();
-    orderRepository.showOrderPages().forEach(
+    _settingRepository.showOrderPages().forEach(
           (showOrderPages) => emit(
             state.copyWith(showOrderPages: showOrderPages),
           ),
         );
   }
 
-  final OrderRepository orderRepository;
+  final OrderRepository _orderRepository;
+  final SettingRepository _settingRepository;
 
   void getProducts() {
-    orderRepository.categories().forEach((cats) {
+    _orderRepository.categories().forEach((cats) {
       var categories = <Category, List<Product>>{};
 
       cats.forEach((cat) {
         categories[cat] = [];
         emit(state.copyWith(categories: categories));
 
-        orderRepository.productsFromCategory(cat).forEach((prods) {
+        _orderRepository.productsFromCategory(cat).forEach((prods) {
           var categories = <Category, List<Product>>{}
             ..addAll(state.categories);
           categories[cat] = prods;
@@ -42,7 +47,7 @@ class ProductListCubit extends Cubit<ProductListState> {
     Product product,
     bool availability,
   ) {
-    orderRepository.updateProductAvailability(
+    _orderRepository.updateProductAvailability(
       category,
       product,
       availability,
@@ -54,7 +59,7 @@ class ProductListCubit extends Cubit<ProductListState> {
     Product product,
     bool availability,
   ) {
-    orderRepository.updateProductAvailabilityESIEE(
+    _orderRepository.updateProductAvailabilityESIEE(
       category,
       product,
       availability,
@@ -66,7 +71,7 @@ class ProductListCubit extends Cubit<ProductListState> {
     Product product,
     bool oneOrder,
   ) {
-    orderRepository.updateProductOneOrder(
+    _orderRepository.updateProductOneOrder(
       category,
       product,
       oneOrder,
@@ -78,15 +83,15 @@ class ProductListCubit extends Cubit<ProductListState> {
     String productId,
     int maxAmount,
   ) {
-    orderRepository.updateProductMaxAmount(category, productId, maxAmount);
+    _orderRepository.updateProductMaxAmount(category, productId, maxAmount);
   }
 
   void removeProduct(Category category, String productId) {
-    orderRepository.removeProduct(category, productId);
+    _orderRepository.removeProduct(category, productId);
   }
 
   void updateProductName(Category category, String productId, String name) {
-    orderRepository.updateProductName(category, productId, name);
+    _orderRepository.updateProductName(category, productId, name);
   }
 
   Future<void> addCategoryDialog(BuildContext context) {
@@ -118,7 +123,7 @@ class ProductListCubit extends Cubit<ProductListState> {
             ),
             TextButton(
               onPressed: () {
-                orderRepository.addCategory(Category(name: controller.text));
+                _orderRepository.addCategory(Category(name: controller.text));
                 Navigator.of(context).pop();
               },
               child: Text('Confirmer'),
@@ -164,7 +169,7 @@ class ProductListCubit extends Cubit<ProductListState> {
             ),
             TextButton(
               onPressed: () {
-                orderRepository.addProduct(
+                _orderRepository.addProduct(
                   category,
                   Product.empty.copyWith(name: controller.text),
                 );
@@ -179,8 +184,7 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   Future<void> editCategoryDialog(BuildContext context, Category category) {
-    var controller =
-        TextEditingController(text: category.name);
+    var controller = TextEditingController(text: category.name);
 
     return showDialog<void>(
       context: context,
@@ -208,7 +212,7 @@ class ProductListCubit extends Cubit<ProductListState> {
             ),
             TextButton(
               onPressed: () {
-                orderRepository.updateCategory(category.copyWith(
+                _orderRepository.updateCategory(category.copyWith(
                   name: controller.text,
                 ));
                 Navigator.of(context).pop();
@@ -247,7 +251,7 @@ class ProductListCubit extends Cubit<ProductListState> {
             ),
             TextButton(
               onPressed: () {
-                orderRepository.deleteCategory(category);
+                _orderRepository.deleteCategory(category);
                 Navigator.of(context).pop();
               },
               child: Text('Confirmer'),
@@ -288,7 +292,7 @@ class ProductListCubit extends Cubit<ProductListState> {
                 ),
                 TextButton(
                   onPressed: () {
-                    orderRepository.removeProduct(category, productId);
+                    _orderRepository.removeProduct(category, productId);
                     Navigator.of(context).pop(true);
                   },
                   child: Text('Confirmer'),
@@ -301,6 +305,6 @@ class ProductListCubit extends Cubit<ProductListState> {
   }
 
   void changeOrderPagesView(bool view) {
-    orderRepository.changeOrderPagesView(view);
+    _settingRepository.changeOrderPagesView(view);
   }
 }

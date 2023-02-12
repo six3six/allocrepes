@@ -1,18 +1,18 @@
 import 'package:allocrepes/admin_user/cubit/admin_user_state.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:order_repository/order_repository.dart';
+import 'package:setting_repository/setting_repository.dart';
 
 class AdminUserCubit extends Cubit<AdminUserState> {
   AdminUserCubit(
     this._authenticationRepository,
-    this._orderRepository,
+    this._settingRepository,
   ) : super(AdminUserState()) {
     getUser();
   }
 
   final AuthenticationRepository _authenticationRepository;
-  final OrderRepository _orderRepository;
+  final SettingRepository _settingRepository;
   Stream<Map<String, User>>? userStream;
 
   void getUser({
@@ -35,13 +35,13 @@ class AdminUserCubit extends Cubit<AdminUserState> {
       );
     });
 
-    _orderRepository.showCls().listen((event) {
+    _settingRepository.showCls().listen((event) {
       emit(state.copyWith(showCls: event));
     });
   }
 
   void changeClsView(bool show) {
-    _orderRepository.changeClsView(show);
+    _settingRepository.changeClsView(show);
   }
 
   void userUpdate(User user) {

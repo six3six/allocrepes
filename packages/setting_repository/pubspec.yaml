@@ -1,4 +1,4 @@
-name: order_repository
+name: setting_repository
 description: Dart package which manages the editions domain.
 version: 1.0.0
 

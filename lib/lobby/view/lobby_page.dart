@@ -4,7 +4,7 @@ import 'package:allocrepes/lobby/view/lobby_view.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:order_repository/order_repository_firestore.dart';
+import 'package:setting_repository/setting_repository_firestore.dart';
 
 class LobbyPage extends StatelessWidget {
   static Route route() {
@@ -44,8 +44,9 @@ class LobbyPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => LobbyCubit(
-            orderRepository:
-                RepositoryProvider.of<OrderRepositoryFirestore>(context)),
+          settingRepository:
+              RepositoryProvider.of<SettingRepositoryFirestore>(context),
+        ),
         child: LobbyView(),
       ),
     );

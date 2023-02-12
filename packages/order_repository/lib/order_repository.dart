@@ -9,26 +9,6 @@ import 'models/product.dart';
 abstract class OrderRepository {
   void changeUser(String userId);
 
-  Stream<bool> showOrderPages();
-
-  Future<void> changeOrderPagesView(bool shown);
-
-  Stream<bool> showProgramPages();
-
-  Future<void> changeProgramPagesView(bool shown);
-
-  Stream<bool> showCls();
-
-  Future<void> changeClsView(bool shown);
-
-  Stream<String> headline();
-
-  Future<void> changeHeadline(String headline);
-
-  Stream<String> headlineURL();
-
-  Future<void> changeHeadlineURL(String url);
-
   Future<void> removeOrders({
     List<OrderStatus>? orderStatus,
   });

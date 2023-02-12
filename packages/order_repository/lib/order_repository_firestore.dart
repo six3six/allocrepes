@@ -62,7 +62,6 @@ class OrderRepositoryFirestore extends OrderRepository {
   Stream<List<order_model.Order>> userOrders({
     List<OrderStatus>? orderStatus,
   }) async* {
-
     if (orderStatus != null) {
       yield _userOrders
           .where((order) => orderStatus.contains(order.status))
@@ -75,82 +74,6 @@ class OrderRepositoryFirestore extends OrderRepository {
         in orders(userId: userId, orderStatus: orderStatus)) {
       yield orders;
     }
-  }
-
-  /*
-  ------ RULES ------
-  */
-  static final ruleRoot = FirebaseFirestore.instance.collection('rules');
-
-  @override
-  Stream<bool> showOrderPages() {
-    final showOrder = ruleRoot.doc('show_order');
-    return showOrder.snapshots().map((snap) => snap.data()?['enable'] ?? false);
-  }
-
-  @override
-  Future<void> changeOrderPagesView(bool shown) {
-    return ruleRoot.doc('show_order').update({
-      'enable': shown,
-    });
-  }
-
-  @override
-  Stream<bool> showProgramPages() {
-    return ruleRoot.doc('show_program').snapshots().map(
-          (snap) => snap.data()?['enable'] ?? false,
-        );
-  }
-
-  @override
-  Future<void> changeProgramPagesView(bool shown) {
-    return ruleRoot.doc('show_program').update({
-      'enable': shown,
-    });
-  }
-
-  @override
-  Stream<bool> showCls() {
-    return ruleRoot.doc('show_cls').snapshots().map(
-          (snap) => snap.data()?['enable'] ?? false,
-        );
-  }
-
-  @override
-  Future<void> changeClsView(bool shown) {
-    return ruleRoot.doc('show_cls').update({
-      'enable': shown,
-    });
-  }
-
-  final String headlineRule = 'headline';
-
-  @override
-  Stream<String> headline() {
-    return ruleRoot.doc(headlineRule).snapshots().map(
-          (snap) => snap.data()?['headline'] ?? '',
-        );
-  }
-
-  @override
-  Future<void> changeHeadline(String headline) {
-    return ruleRoot.doc(headlineRule).update({
-      'headline': headline,
-    });
-  }
-
-  @override
-  Stream<String> headlineURL() {
-    return ruleRoot.doc(headlineRule).snapshots().map(
-          (snap) => snap.data()?['url'] ?? '',
-        );
-  }
-
-  @override
-  Future<void> changeHeadlineURL(String url) {
-    return ruleRoot.doc(headlineRule).update({
-      'url': url,
-    });
   }
 
   /*
