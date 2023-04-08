@@ -29,15 +29,14 @@ dependencies:
     path: packages/setting_repository
 
 
-  firebase_core: ^2.5.0
-  firebase_analytics: ^10.1.1
-  firebase_crashlytics: ^3.0.12
-  firebase_messaging: ^14.2.2
-  cloud_functions: ^4.0.8
+  firebase_core: ^2.9.0
+  firebase_analytics: ^10.2.0
+  firebase_crashlytics: ^3.1.0
+  firebase_messaging: ^14.4.0
+  cloud_functions: ^4.1.0
   intl: ^0.17.0
 
   connectivity: ^3.0.6
-  collection: ^1.17.1
   package_info_plus: ^3.0.3
 
   font_awesome_flutter: ^10.4.0
@@ -47,10 +46,10 @@ dependencies:
 
   equatable: ^2.0.5
 
-  url_launcher: ^6.1.9
+  url_launcher: ^6.1.10
 
   loading_overlay: ^0.3.0
-  webview_flutter: ^4.0.2
+  webview_flutter: ^4.0.7
 
   cupertino_icons: ^1.0.5
 
@@ -59,9 +58,7 @@ dependencies:
   
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.13.0
 
 flutter_icons:
   android: "launcher_icon"

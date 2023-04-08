@@ -1,6 +1,6 @@
-import 'package:dart_rss/domain/atom_item.dart';
+/*import 'package:dart_rss/domain/atom_item.dart';
 import 'package:dart_rss/domain/atom_person.dart';
-import 'package:dart_rss/domain/rss_item.dart';
+import 'package:dart_rss/domain/rss_item.dart';*/
 import 'package:equatable/equatable.dart';
 import 'package:html_unescape/html_unescape.dart';
 
@@ -23,7 +23,7 @@ class New extends Equatable {
     required this.media,
   });
 
-  static New fromAtom(AtomItem item) {
+  /*static New fromAtom(AtomItem item) {
     var unescape = new HtmlUnescape();
 
     List<String> authors = <String>[];
@@ -57,7 +57,7 @@ class New extends Equatable {
               : "") ??
           "",
     );
-  }
+  }*/
 
   static const MONTHS = {
     'Jan': '01',

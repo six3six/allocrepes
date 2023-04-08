@@ -1,5 +1,5 @@
-import 'package:dart_rss/domain/rss_feed.dart';
-import 'package:dart_rss/domain/rss_item.dart';
+/*import 'package:dart_rss/domain/rss_feed.dart';
+import 'package:dart_rss/domain/rss_item.dart';*/
 import 'package:http/http.dart' as http;
 
 import 'model/new.dart';
@@ -10,14 +10,16 @@ class RssNewsRepository extends NewsRepository {
 
   const RssNewsRepository({required this.targetUrl}) : super();
 
-  Future<RssFeed> _getFeed() =>
+  /*Future<RssFeed> _getFeed() =>
       http.read(Uri.parse(targetUrl)).then((xmlString) {
         return RssFeed.parse(xmlString);
       });
-
+*/
   @override
   Stream<List<New>> getNews() async* {
-    RssFeed feed = await _getFeed();
+    /* RssFeed feed = await _getFeed();
     yield feed.items.map<New>((RssItem item) => New.fromRss(item)).toList();
+    */
+     yield [];
   }
 }
