@@ -1,10 +1,11 @@
 import 'package:allocrepes/admin_user/cubit/admin_user_cubit.dart';
 import 'package:allocrepes/admin_user/cubit/admin_user_state.dart';
+import 'package:allocrepes/admin_user/view/admin_user_edit.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:collection/collection.dart';
-import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
+import 'package:flexible_scrollbar/flexible_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AdminUserView extends StatelessWidget {
   @override
@@ -16,11 +17,6 @@ class AdminUserView extends StatelessWidget {
       body: Column(
         children: [
           _FilterView(),
-          Divider(),
-          SizedBox(
-            height: 10,
-          ),
-          _ClsSelector(),
           _UserList(),
         ],
       ),
@@ -37,69 +33,75 @@ class _FilterView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return ExpansionTile(
-      title: Text('Filtres'),
-      childrenPadding: EdgeInsets.symmetric(horizontal: 10),
-      expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Nom de famille :',
-          style: theme.textTheme.bodySmall,
-        ),
-        TextField(
-          onChanged: (value) {
-            BlocProvider.of<AdminUserCubit>(context)
-                .updateUserQuery(username: value);
-          },
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          'Trié par :',
-          style: theme.textTheme.bodySmall,
-        ),
-        BlocBuilder<AdminUserCubit, AdminUserState>(
-          buildWhen: (prev, next) => prev.sortUser != next.sortUser,
-          builder: (context, state) {
-            return ExpansionTile(
-              title: Text(
-                'Trié par : ',
-              ),
-              children: [
-                ListTile(
-                  title: Text('Par identifiant'),
-                  leading: Radio<SortUser>(
-                    value: SortUser.Name,
-                    groupValue: state.sortUser,
-                    onChanged: (value) =>
-                        BlocProvider.of<AdminUserCubit>(context)
-                            .updateUserQuery(sortUser: value),
-                  ),
+    return Material(
+      elevation: 5,
+      child: ExpansionTile(
+        title: Text('Filtres'),
+        childrenPadding: EdgeInsets.symmetric(horizontal: 10),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Nom de famille :',
+            style: theme.textTheme.bodySmall,
+          ),
+          TextField(
+            onChanged: (value) {
+              BlocProvider.of<AdminUserCubit>(context)
+                  .updateUserQuery(username: value);
+            },
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          Text(
+            'Trié par :',
+            style: theme.textTheme.bodySmall,
+          ),
+          BlocBuilder<AdminUserCubit, AdminUserState>(
+            buildWhen: (prev, next) => prev.sortUser != next.sortUser,
+            builder: (context, state) {
+              return ExpansionTile(
+                title: Text(
+                  'Trié par : ',
                 ),
-                ListTile(
-                  title: Text('Par points'),
-                  leading: Radio<SortUser>(
-                    value: SortUser.Point,
-                    groupValue: state.sortUser,
-                    onChanged: (value) =>
-                        BlocProvider.of<AdminUserCubit>(context)
-                            .updateUserQuery(sortUser: value),
+                children: [
+                  ListTile(
+                    title: Text('Par identifiant'),
+                    leading: Radio<SortUser>(
+                      value: SortUser.Name,
+                      groupValue: state.sortUser,
+                      onChanged: (value) =>
+                          BlocProvider.of<AdminUserCubit>(context)
+                              .updateUserQuery(sortUser: value),
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
-        ),
-      ],
+                  ListTile(
+                    title: Text('Par points'),
+                    leading: Radio<SortUser>(
+                      value: SortUser.Point,
+                      groupValue: state.sortUser,
+                      onChanged: (value) =>
+                          BlocProvider.of<AdminUserCubit>(context)
+                              .updateUserQuery(sortUser: value),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+          _ClsSelector(),
+          SizedBox(height: 10)
+        ],
+      ),
     );
   }
 }
 
 class _UserList extends StatelessWidget {
-  const _UserList({
+  _UserList({
     Key? key,
   }) : super(key: key);
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -109,138 +111,52 @@ class _UserList extends StatelessWidget {
             prev.sortUser != next.sortUser ||
             prev.usernameQuery != next.usernameQuery,
         builder: (context, state) {
-          print("REVZDQDQZDQZD");
-          return FirestoreListView<User>(
-            query: RepositoryProvider.of<AuthenticationRepository>(context)
-                .getUsersQuery(
-              usernameSearch: state.usernameQuery,
-              sort: state.sortUser,
-            ),
-            itemBuilder: (context, snapshot) {
-              return _UserTile(
-                user: snapshot.data(),
-                onUpdate: (user) {
-                  BlocProvider.of<AdminUserCubit>(context).updateUser(user);
-                },
-                onRemove: (user) {
-                  BlocProvider.of<AdminUserCubit>(context).removeUser(user.id);
-                },
+          final query = RepositoryProvider.of<AuthenticationRepository>(context)
+              .getUsersQuery(
+            usernameSearch: state.usernameQuery,
+            sort: state.sortUser,
+          );
+
+          return StreamBuilder(
+            stream: query.snapshots(),
+            builder: (context, streamSnapshot) {
+              if (!streamSnapshot.hasData) return CircularProgressIndicator();
+              if ((streamSnapshot.data?.docs.length ?? 0) == 0) {
+                return Text('No data');
+              }
+
+              return Scrollbar(
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: streamSnapshot.data?.docs.length ?? 0,
+                  itemBuilder: (context, item) {
+                    final user = streamSnapshot.data!.docs[item].data();
+                    return ListTile(
+                      key: Key('${user.id}-tile'),
+                      title: Row(
+                        children: [
+                          Text('${user.name.toUpperCase()} ${user.surname}'),
+                          if (user.admin)
+                            Icon(
+                              FontAwesomeIcons.crown,
+                              size: 15,
+                            )
+                        ],
+                      ),
+                      subtitle: Text('${user.point} points'),
+                      onTap: () {
+                        Navigator.of(context).push(AdminUserEdit.route(
+                          user,
+                          BlocProvider.of<AdminUserCubit>(context),
+                        ));
+                      },
+                    );
+                  },
+                ),
               );
             },
           );
         },
-      ),
-    );
-  }
-}
-
-class _UserTile extends StatelessWidget {
-  final User user;
-  final Function(User) onUpdate;
-  final Function(User) onRemove;
-
-  _UserTile({
-    Key? key,
-    required this.user,
-    required this.onUpdate,
-    required this.onRemove,
-  }) : super(key: key);
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController surnameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController pointsController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      child: ExpansionTile(
-        title: Text('${user.id} : ${user.surname} ${user.name}'),
-        //childrenPadding: EdgeInsets.symmetric(horizontal: 10),
-        expandedCrossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Prenom:',
-            style: theme.textTheme.bodySmall,
-          ),
-          TextField(
-            controller: surnameController..text = user.surname,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Text(
-            'Nom:',
-            style: theme.textTheme.bodySmall,
-          ),
-          TextField(
-            controller: nameController..text = user.name,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Text(
-            'Email:',
-            style: theme.textTheme.bodySmall,
-          ),
-          TextField(
-            controller: emailController..text = user.email,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Text(
-            'Points:',
-            style: theme.textTheme.bodySmall,
-          ),
-          TextField(
-            controller: pointsController..text = user.point.toString(),
-            keyboardType: TextInputType.number,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          CheckboxListTile(
-            title: Text('Admin'),
-            value: user.admin,
-            onChanged: (va) {
-              onUpdate(user);
-            },
-          ),
-          Center(
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      final _user = user.copyWith(
-                        surname: surnameController.text,
-                        name: nameController.text,
-                        email: emailController.text,
-                        point: int.tryParse(pointsController.text) ?? 0,
-                      );
-
-                      onUpdate(_user);
-                    },
-                    child: Text('Valider'),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.red,
-                  ),
-                  onPressed: () => onRemove(user),
-                  child: Text('Supprimer'),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

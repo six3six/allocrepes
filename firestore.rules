@@ -8,7 +8,7 @@ service cloud.firestore {
     
     function isAdmin() {
     	let user_profile = /databases/$(database)/documents/users/$(request.auth.uid);
-      return isAuth() && (get(user_profile).data.isAdmin == true) ;
+      return isAuth() && (get(user_profile).data.admin == true) ;
     }
 
     function isOwner(owner) {
@@ -54,6 +54,10 @@ service cloud.firestore {
     }
 
 
+    match /{path=**}/products/{document} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
     
     match /product_categories/{document=**} {
     	allow read: if isAuth();
