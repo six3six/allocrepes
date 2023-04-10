@@ -95,7 +95,7 @@ class User extends Equatable {
     return User(
       email: data.containsKey('email') ? data['email'] : '',
       id: document.id,
-      admin: false,
+      admin: data['admin'] ?? false,
       name: data['name'] ?? '',
       surname: data['surname'] ?? '',
       classe: data['classe'] ?? '',

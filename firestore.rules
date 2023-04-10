@@ -25,43 +25,35 @@ service cloud.firestore {
     	allow read: if isAuth();
     }
 
-    match /roles/{document=**} {
-      allow read: if isAuth();
-      allow write: if isAdmin();
-    }
-
     match /rules/{document=**} {
-      allow read: if isAuth();
+      allow get: if isAuth();
       allow write: if isAdmin();
     }
 
     match /users/{userId} {
-      allow read : if isAuth();
+      allow get : if isAuth();
       // Allows the current user to change their account information but they cannot change admin role
-      allow write : if isOwner(userId) && (request.resource.data.isAdmin == false);
+      allow write : if isOwner(userId) || (request.resource.data.isAdmin == false);
 
       // Admin has full access
       allow read, write : if isAdmin();
     }
-    
+
     match /orders/{order} {
       allow read : if isOwner(get(/databases/$(database)/documents/orders/$(order)).data.owner);
-      allow list, create : if isAuth();
-      
+      allow create : if isAuth();
+
       match /articles/{article} {
       	allow read : if isOwner(get(/databases/$(database)/documents/orders/$(order)).data.owner);
       	allow create : if isAuth();
-        
+
         allow read, write : if isAdmin();
       }
-      
+
       allow read, write : if isAdmin();
     }
-    
-    match /{path=**}/products/{document} {
-      allow read: if isAuth();
-      allow write: if isAdmin();
-    }
+
+
     
     match /product_categories/{document=**} {
     	allow read: if isAuth();
