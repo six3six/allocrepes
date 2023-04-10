@@ -35,6 +35,12 @@ class AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
 
+  final usersCollection =
+      FirebaseFirestore.instance.collection('users').withConverter<User>(
+            fromFirestore: (snapshot, _) => User.fromDocument(snapshot),
+            toFirestore: (user, _) => user.toDocument(),
+          );
+
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
   ///
@@ -136,134 +142,39 @@ class AuthenticationRepository {
     await _firebaseAuth.currentUser!.updatePassword(newPassword);
   }
 
-  Future<bool> getUserRole(String uid) async {
-    var admin = false;
-    try {
-      final admins = await FirebaseFirestore.instance
-          .collection('roles')
-          .doc('admins')
-          .get();
-      admins.data()!.keys.contains(uid);
-      admin = true;
-    } on StateError {
-      admin = false;
-    }
-
-    return admin;
-  }
-
-  Future<User> getUserFromUid(String uid) async {
-    final snapshot = await _firestore.collection('users').doc(uid).get();
-
-    if (!snapshot.exists) return User.empty.copyWith(id: uid, name: uid);
-
-    return User.fromDocument(snapshot);
-  }
-
-  Stream<Map<String, User>> getUsers({
-    String? username,
+  Query<User> getUsersQuery({
+    String? usernameSearch,
     SortUser sort = SortUser.Name,
-  }) async* {
-    final adminCollection = FirebaseFirestore.instance.collection('roles');
-    final userCollection = FirebaseFirestore.instance.collection('users');
-    Query userQuery = userCollection;
+  }) {
+    Query<User> usersQuery = usersCollection;
+
     switch (sort) {
       case SortUser.Name:
-        userQuery.orderBy('name', descending: true);
+        usersQuery = usersQuery.orderBy('name', descending: false);
         break;
       case SortUser.Point:
-        userQuery = userQuery.orderBy('point', descending: true);
+        usersQuery = usersQuery.orderBy('point', descending: true);
         break;
     }
 
-    userQuery = userQuery.limit(50);
-
-    if (username != null && sort == SortUser.Name) {
-      userQuery = userQuery.where('name', isGreaterThanOrEqualTo: username);
+    if (usernameSearch != null && sort == SortUser.Name) {
+      usersQuery = usersQuery.where('name', isGreaterThanOrEqualTo: usernameSearch);
     }
 
-    var users = <String, User>{};
-    var isAdmin = <String, bool>{};
+    return usersQuery;
+  }
 
-    var mStream = userQuery.snapshots().merge(adminCollection.snapshots());
-    await for (var snap in mStream) {
-      if (snap.docs.first.reference.parent == userCollection) {
-        users = {};
-      }
-      for (var doc in snap.docs) {
-        if (doc.reference.parent == adminCollection) {
-          if (doc.reference == adminCollection.doc('admins')) {
-            isAdmin = (doc as DocumentSnapshot<Map<String, dynamic>>)
-                    .data()
-                    ?.map((key, value) => MapEntry(key, true)) ??
-                {};
-          }
-        } else if (doc.reference.parent == userCollection) {
-          users[doc.id] = User.fromDocument(doc);
-        }
-      }
-
-      users = users.map((id, user) =>
-          MapEntry(id, user.copyWith(admin: isAdmin.containsKey(id))));
-
-      yield users;
-    }
+  Future<User?> getUserFromID(String id) async {
+    final doc = await usersCollection.doc(id).get();
+    return doc.data();
   }
 
   void updateUser(User user) {
-    setUserInfo(user.id, user.surname, user.name, user.email, user.point);
-    setUserAdmin(user.id, user.admin);
+    usersCollection.doc(user.id).set(user);
   }
 
   void removeUser(String uid) {
-    final adminCollection =
-        FirebaseFirestore.instance.collection('roles').doc('admins');
-    final userCollection =
-        FirebaseFirestore.instance.collection('users').doc(uid);
-
-    userCollection.delete();
-    adminCollection.update({
-      '$uid': FieldValue.delete(),
-    });
-  }
-
-  void setUserInfo(
-    String uid,
-    String surname,
-    String name,
-    String email,
-    int point,
-  ) {
-    final userCollection =
-        FirebaseFirestore.instance.collection('users').doc(uid);
-
-    userCollection.update(
-      User(
-        id: uid,
-        surname: surname,
-        name: name,
-        email: email,
-        point: point,
-        classe: '',
-        photo: '',
-        admin: false,
-        student: false,
-      ).toDocument(),
-    );
-  }
-
-  void setUserAdmin(String uid, bool admin) {
-    final adminCollection =
-        FirebaseFirestore.instance.collection('roles').doc('admins');
-    if (admin) {
-      adminCollection.update({
-        '$uid': true,
-      });
-    } else {
-      adminCollection.update({
-        '$uid': FieldValue.delete(),
-      });
-    }
+    usersCollection.doc(uid).delete();
   }
 }
 
@@ -314,7 +225,7 @@ extension on firebase_auth.User {
           surname: surname,
           photo: photoURL,
           point: point,
-          student: name != null ? true : false,
+          student: name != null,
         );
       }
       yield user;

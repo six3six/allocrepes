@@ -80,9 +80,11 @@ class User extends Equatable {
   Map<String, Object?> toDocument() {
     return {
       'surname': surname,
+      'admin': admin,
       'name': name,
       'email': email,
       'point': point,
+      'classe': classe,
     };
   }
 

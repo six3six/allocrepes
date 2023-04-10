@@ -29,7 +29,7 @@ class LobbyView extends StatelessWidget {
         BlocBuilder<AuthenticationBloc, AuthenticationState>(
           buildWhen: (prev, next) => prev.user.student != next.user.student,
           builder: (context, state) {
-            return !state.user.student
+            return state.user.student
                 ? _LobbyMenu()
                 : SliverToBoxAdapter(
                     child: Column(

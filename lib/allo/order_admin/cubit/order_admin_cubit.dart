@@ -27,6 +27,7 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
         ) {
     getOrders();
   }
+
   final bool fast;
   final OrderRepository _orderRepository;
   final AuthenticationRepository _authenticationRepository;
@@ -60,8 +61,10 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
     });
   }
 
-  Future<User> getUser(String user) {
-    return _authenticationRepository.getUserFromUid(user.toLowerCase());
+  Future<User> getUser(String user) async {
+    return (await _authenticationRepository
+            .getUserFromID(user.toLowerCase())) ??
+        User.empty;
   }
 
   void updateOrderStatus(Order order, OrderStatus status) {
