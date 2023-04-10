@@ -1,6 +1,9 @@
+import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
 import 'package:allocrepes/allo/order_list/cubit/order_list_cubit.dart';
 import 'package:allocrepes/allo/order_list/cubit/order_list_state.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
+import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
+import 'package:allocrepes/lobby/cubit/lobby_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -23,8 +26,26 @@ class OrderListPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mes commandes'),
+      floatingActionButton: BlocBuilder<LobbyCubit, LobbyState>(
+        buildWhen: (prev, next) => prev.showOrder != next.showOrder,
+        builder: (context, state) {
+          if (!state.showOrder) {
+            return FloatingActionButton.extended(
+              label: const Text('Commandes indisponibles'),
+              icon: const Icon(Icons.remove_shopping_cart_outlined),
+              backgroundColor: Colors.grey,
+              foregroundColor: Colors.black,
+              onPressed: null,
+            );
+          }
+          return FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.of(context).push(OrderNewPage.route());
+            },
+            label: const Text('Commander'),
+            icon: const Icon(Icons.add_shopping_cart),
+          );
+        },
       ),
       body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (BuildContext context, AuthenticationState state) {

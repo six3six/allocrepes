@@ -75,14 +75,15 @@ class _LobbyCls extends StatelessWidget {
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) return SizedBox();
                           var list = snapshot.data;
+                          var i = 1;
                           return Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 13, vertical: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: list?.data
-                                      .map((e) => Text(
-                                            e,
+                                      .map((name) => Text(
+                                            '${i++}. $name',
                                             style: textTheme.bodyLarge,
                                           ))
                                       .toList() ??
@@ -138,23 +139,6 @@ class _LobbyMenu extends StatelessWidget {
                         : SizedBox();
                   },
                 ),
-                BlocBuilder<LobbyCubit, LobbyState>(
-                  buildWhen: (prev, next) => prev.showOrder != next.showOrder,
-                  builder: (context, state) {
-                    return MenuCard(
-                      title: 'Passer commande',
-                      onTap: () =>
-                          Navigator.push(context, OrderNewPage.route()),
-                      icon: Icons.shopping_cart_outlined,
-                      enable: state.showOrder,
-                    );
-                  },
-                ),
-                MenuCard(
-                  title: 'Mes commandes',
-                  onTap: () => Navigator.push(context, OrderListPage.route()),
-                  icon: Icons.shopping_basket_outlined,
-                ),
                 MenuCard(
                   title: 'En savoir +',
                   onTap: BlocProvider.of<LobbyCubit>(context).knowMore,
@@ -170,14 +154,6 @@ class _LobbyMenu extends StatelessWidget {
                     );
                   },
                 ),
-                if (state.user.admin)
-                  MenuCard(
-                    title: 'Admin',
-                    onTap: () {
-                      Navigator.push(context, AdminMainPage.route());
-                    },
-                    icon: Icons.settings,
-                  ),
                 if (state.user.id == 'lefevret')
                   Column(
                     children: [
@@ -185,7 +161,6 @@ class _LobbyMenu extends StatelessWidget {
                         'Sexe.',
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
-                      Text('Signé Louis <3'),
                     ],
                   ),
               ],
