@@ -35,7 +35,7 @@ class AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
 
-  final usersCollection =
+  static final usersCollection =
       FirebaseFirestore.instance.collection('users').withConverter<User>(
             fromFirestore: (snapshot, _) => User.fromDocument(snapshot),
             toFirestore: (user, _) => user.toDocument(),
@@ -158,7 +158,8 @@ class AuthenticationRepository {
     }
 
     if (usernameSearch != null && sort == SortUser.Name) {
-      usersQuery = usersQuery.where('name', isGreaterThanOrEqualTo: usernameSearch);
+      usersQuery =
+          usersQuery.where('name', isGreaterThanOrEqualTo: usernameSearch);
     }
 
     return usersQuery;
@@ -185,50 +186,9 @@ enum SortUser {
 
 extension on firebase_auth.User {
   Stream<User> get toUserStream async* {
-    final adminCollection =
-        FirebaseFirestore.instance.collection('roles').doc('admins');
-    final userCollection =
-        FirebaseFirestore.instance.collection('users').doc(uid);
-    var user = User.empty.copyWith(
-      id: uid,
-    );
-    var mStream = userCollection.snapshots().merge(adminCollection.snapshots());
-
-    await for (DocumentSnapshot<Map<String, dynamic>> snap in mStream) {
-      if (snap.reference == adminCollection) {
-        print('admin ' + (snap.data()?.keys.contains(uid) ?? false).toString());
-        user = user.copyWith(admin: snap.data()?.keys.contains(uid) ?? false);
-      } else {
-        String? email;
-        String? name;
-        String? surname;
-        int? point;
-
-        try {
-          email = snap['email'];
-        } catch (e) {}
-
-        try {
-          name = snap['name'];
-        } catch (e) {}
-        try {
-          surname = snap['surname'];
-        } catch (e) {}
-
-        try {
-          point = snap['point'];
-        } catch (e) {}
-
-        user = user.copyWith(
-          email: email,
-          name: name,
-          surname: surname,
-          photo: photoURL,
-          point: point,
-          student: name != null,
-        );
-      }
-      yield user;
+    await for (DocumentSnapshot<User> snap
+        in AuthenticationRepository.usersCollection.doc(uid).snapshots()) {
+      yield snap.data() ?? User.empty;
     }
   }
 }
