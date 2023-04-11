@@ -26,6 +26,9 @@ class OrderListPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Commandes'),
+      ),
       floatingActionButton: BlocBuilder<LobbyCubit, LobbyState>(
         buildWhen: (prev, next) => prev.showOrder != next.showOrder,
         builder: (context, state) {

@@ -58,15 +58,4 @@ class LobbyCubit extends Cubit<LobbyState> {
       emit(state.copyWith(news: news, isLoading: false));
     });
   }
-
-  void knowMore() {
-    try {
-      launchUrl(
-        Uri.parse('https://www.esiee.fr'),
-        mode: LaunchMode.externalApplication,
-      );
-    } catch (e) {
-      return;
-    }
-  }
 }

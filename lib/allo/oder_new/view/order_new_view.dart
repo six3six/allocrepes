@@ -183,6 +183,11 @@ class _OrderNewItem extends StatelessWidget {
               "Ce produit n'est pas disponible à l'ESIEE",
               style: textTheme.bodySmall,
             ),
+          if (!product.available)
+            Text(
+              "Ce produit n'est pas disponible en résidence",
+              style: textTheme.bodySmall,
+            ),
           if (product.oneOrder)
             Text(
               "Ce produit n'est commandable qu'une fois",

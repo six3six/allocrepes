@@ -53,7 +53,7 @@ class _LobbyPageState extends State<LobbyPage> {
     }
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) => Scaffold(
-        appBar: AppBar(
+        /* appBar: AppBar(
           title: const Text('XANTHOS'),
           actions: [
             IconButton(
@@ -75,7 +75,7 @@ class _LobbyPageState extends State<LobbyPage> {
               },
             ),
           ],
-        ),
+        ),*/
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _barIndex,
           items: [

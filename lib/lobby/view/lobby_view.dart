@@ -4,7 +4,6 @@ import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
 import 'package:allocrepes/lobby/cubit/lobby_state.dart';
-import 'package:allocrepes/program/view/program_page.dart';
 import 'package:allocrepes/widget/menu_card.dart';
 import 'package:allocrepes/widget/news_card.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -139,21 +138,6 @@ class _LobbyMenu extends StatelessWidget {
                         : SizedBox();
                   },
                 ),
-                MenuCard(
-                  title: 'En savoir +',
-                  onTap: BlocProvider.of<LobbyCubit>(context).knowMore,
-                  icon: Icons.mood_rounded,
-                ),
-                BlocBuilder<LobbyCubit, LobbyState>(
-                  builder: (context, state) {
-                    return MenuCard(
-                      title: 'Notre Programme ! ',
-                      onTap: () => Navigator.push(context, ProgramPage.route()),
-                      icon: Icons.book,
-                      enable: state.showProgram,
-                    );
-                  },
-                ),
                 if (state.user.id == 'lefevret')
                   Column(
                     children: [
@@ -180,15 +164,8 @@ class _LobbyTwitchMenu extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
-            child: Text(
-              'Suivre Xanthos sur Twitch',
-              style: textTheme.headlineSmall,
-            ),
-          ),
           SizedBox(
-            height: 300,
+            height: 250,
             width: double.infinity,
             child: LobbyTwitchViewer(),
           ),

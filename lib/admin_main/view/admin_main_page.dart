@@ -14,6 +14,11 @@ class AdminMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AdminMainView();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Administration'),
+      ),
+      body: const AdminMainView(),
+    );
   }
 }
