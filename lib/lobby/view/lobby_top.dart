@@ -1,5 +1,6 @@
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
+import 'package:allocrepes/lobby/view/lobby_menu_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +14,7 @@ class LobbyTop extends StatelessWidget {
 
     final bubbleColor = Theme.of(context).primaryColorDark;
 
-
+    final borderRadius = BorderRadius.all(Radius.circular(50));
 
     return SafeArea(
       child: Column(
@@ -41,57 +42,67 @@ class LobbyTop extends StatelessWidget {
               Expanded(
                 child: Container(
                   alignment: AlignmentDirectional.centerEnd,
-                  child: Container(
-                    padding: EdgeInsets.only(left: 10, right: 41 - pointRoundSize),
-                    height: 45,
-                    decoration: BoxDecoration(
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(context: context, builder: (context) {
+                        return LobbyMenuPopup();
+                      });
+                    },
+                    borderRadius: borderRadius,
+                    child: Container(
+                      padding:
+                          EdgeInsets.only(left: 10, right: 41 - pointRoundSize),
+                      height: 45,
+                      decoration: BoxDecoration(
                         color: bubbleColor,
                         border: Border.all(color: bubbleColor),
-                        borderRadius: BorderRadius.all(Radius.circular(50))),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: 90,
-                          ),
-                          child: Text(
-                            user.surname,
-                            overflow: TextOverflow.fade,
-                            maxLines: 1,
-                            softWrap: false,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                        borderRadius: borderRadius,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: 90,
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                          padding: EdgeInsets.all(3),
-                          width: pointRoundSize,
-                          height: pointRoundSize,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: bubbleColor,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(pointRoundSize),
-                            ),
-                          ),
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
                             child: Text(
-                              user.point.toString(),
+                              user.surname,
+                              overflow: TextOverflow.fade,
+                              maxLines: 1,
+                              softWrap: false,
                               style: TextStyle(
-                                color: bubbleColor,
                                 fontWeight: FontWeight.w600,
+                                color: Colors.white,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 10),
+                          Container(
+                            padding: EdgeInsets.all(3),
+                            width: pointRoundSize,
+                            height: pointRoundSize,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: bubbleColor,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(pointRoundSize),
+                              ),
+                            ),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                user.point.toString(),
+                                style: TextStyle(
+                                  color: bubbleColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

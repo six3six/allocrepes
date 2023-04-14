@@ -1,11 +1,8 @@
 import 'package:allocrepes/admin_main/view/admin_main_page.dart';
 import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
-import 'package:allocrepes/allo/order_list/view/order_list_view.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
-import 'package:allocrepes/lobby/view/lobby_about.dart';
 import 'package:allocrepes/lobby/view/lobby_view.dart';
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:setting_repository/setting_repository_firestore.dart';
@@ -53,29 +50,7 @@ class _LobbyPageState extends State<LobbyPage> {
     }
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) => Scaffold(
-        /* appBar: AppBar(
-          title: const Text('XANTHOS'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.run_circle_outlined),
-              tooltip: 'Se deconnecter',
-              onPressed: () =>
-                  RepositoryProvider.of<AuthenticationRepository>(context)
-                      .logOut(),
-            ),
-            IconButton(
-              icon: const Icon(Icons.info_outline),
-              tooltip: 'A propos',
-              onPressed: () {
-                showDialog<void>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) => LobbyAbout(),
-                );
-              },
-            ),
-          ],
-        ),*/
+
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _barIndex,
           items: [

@@ -24,7 +24,7 @@ class LobbyAboutState extends State<LobbyAbout> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Fait avec le ❤'),
+                  Text('Fait en 2021 avec le ❤'),
                   Text('pour le BDE Xanthos'),
                 ],
               ),
@@ -32,17 +32,30 @@ class LobbyAboutState extends State<LobbyAbout> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Fait avec le cul'),
-                  Text('par Louis DESPLANCHE'),
+                  FutureBuilder(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (conext, snapshot) {
+                      if (snapshot.hasData) {
+                        final info = snapshot.data!;
+                        return Text('${info.appName} les gros losers');
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                  Text('même pas foutu de faire une app eux-mêmes.'),
+                  Text(
+                      'De toute facon tout le monde sait que Xanthos est le meilleurs BDE de l\'histoire de l\'école !'),
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => _LobbyXanthosPhoto(),
+                      fullscreenDialog: true,
+                    )),
+                    child: Image.asset('assets/this_is_xanthos.jpg'),
+                  ),
                 ],
               ),
             SizedBox(
               height: 20,
-            ),
-            Text("Aucun test n'a été dev pour ce projet"),
-            Text(
-              "Tester c'est douter",
-              style: Theme.of(context).textTheme.bodyLarge,
             ),
             SizedBox(
               height: 20,
@@ -55,10 +68,10 @@ class LobbyAboutState extends State<LobbyAbout> {
               future: PackageInfo.fromPlatform(),
               builder: (conext, snapshot) {
                 if (snapshot.hasData) {
-                  var infos = snapshot.data!;
+                  final info = snapshot.data!;
 
                   return Text(
-                    'Version : ${infos.version} build ${infos.buildNumber}',
+                    'Version : ${info.version} build ${info.buildNumber}',
                     style: textTheme.bodySmall,
                   );
                 } else {
@@ -82,4 +95,15 @@ class LobbyAboutState extends State<LobbyAbout> {
       ],
     );
   }
+}
+
+class _LobbyXanthosPhoto extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(),
+        body: Container(
+          alignment: AlignmentDirectional.center,
+          child: Image.asset('assets/this_is_xanthos.jpg'),
+        ),
+      );
 }

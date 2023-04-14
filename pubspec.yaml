@@ -78,8 +78,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo.png
-    - assets/programRecto.jpg
-    - assets/programVerso.jpg
+    - assets/this_is_xanthos.jpg
   fonts:
     - family: Oswald
       fonts:
