@@ -1,34 +1,15 @@
+import 'package:allocrepes/news/news_page.dart';
 import 'package:flutter/material.dart';
+import 'package:news_repository/model/news.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsCard extends StatelessWidget {
-  final String image;
-  final String title;
-  final GestureTapCallback? onTap;
+  final News news;
 
   const NewsCard({
     Key? key,
-    required this.image,
-    required this.title,
-    this.onTap,
+    required this.news,
   }) : super(key: key);
-
-  static NewsCard tapUrl({
-    Key? key,
-    required String image,
-    required String title,
-    required Uri url,
-  }) {
-    return NewsCard(
-      image: image,
-      title: title,
-      onTap: () async {
-        await canLaunchUrl(url)
-            ? await launchUrl(url, mode: LaunchMode.externalApplication)
-            : throw 'Could not launch $url';
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +26,15 @@ class NewsCard extends StatelessWidget {
         semanticContainer: true,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: InkWell(
-          onTap: onTap,
+          onTap: () => Navigator.of(context).push(NewsPage.route(news)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
                 height: 200,
-                child: image.isNotEmpty
+                child: news.media.isNotEmpty
                     ? Image.network(
-                        image,
+                        news.media,
                         fit: BoxFit.fill,
                         height: double.infinity,
                         width: double.infinity,
@@ -64,7 +45,7 @@ class NewsCard extends StatelessWidget {
                 title: Container(
                   padding: EdgeInsets.only(right: 20, bottom: 20, top: 10),
                   child: Text(
-                    title,
+                    news.title,
                     style: headStyle,
                   ),
                 ),

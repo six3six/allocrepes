@@ -1,10 +1,6 @@
-import 'package:allocrepes/admin_main/view/admin_main_page.dart';
-import 'package:allocrepes/allo/oder_new/view/order_new_page.dart';
-import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
 import 'package:allocrepes/lobby/cubit/lobby_state.dart';
-import 'package:allocrepes/widget/menu_card.dart';
 import 'package:allocrepes/widget/news_card.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
@@ -44,7 +40,7 @@ class LobbyView extends StatelessWidget {
         ),
         if (!kIsWeb) _LobbyTwitchMenu(),
         _LobbyCls(),
-        _LobbyActuMenu(),
+        _LobbyNewsMenu(),
       ],
     );
   }
@@ -182,7 +178,7 @@ class _LobbyTwitchMenu extends StatelessWidget {
   }
 }
 
-class _LobbyActuMenu extends StatelessWidget {
+class _LobbyNewsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -216,11 +212,7 @@ class _LobbyActuMenu extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: state.news
-                        .map((_new) => NewsCard.tapUrl(
-                              title: _new.title,
-                              image: _new.media,
-                              url: Uri.parse(_new.url),
-                            ))
+                        .map((_news) => NewsCard(news: _news))
                         .toList(),
                   ),
                 );

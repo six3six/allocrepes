@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:news_repository/model/new.dart';
+import 'package:news_repository/model/news.dart';
 import 'package:news_repository/news_repository.dart';
 import 'package:news_repository/rss_news_repository.dart';
 import 'package:setting_repository/setting_repository.dart';
@@ -15,7 +15,7 @@ class LobbyCubit extends Cubit<LobbyState> {
   LobbyCubit({
     required SettingRepository settingRepository,
     NewsRepository newsRepository =
-        const RssNewsRepository(targetUrl: 'https://xanthos.fr/feed/'),
+        const RssNewsRepository(targetUrl: 'https://lfpn.fr/feed/'),
   })  : _newsRepository = newsRepository,
         _settingRepository = settingRepository,
         super(LobbyState()) {
@@ -53,7 +53,7 @@ class LobbyCubit extends Cubit<LobbyState> {
 
   void updateNews() {
     emit(state.copyWith(isLoading: true));
-    _newsRepository.getNews().forEach((List<New> news) {
+    _newsRepository.getNews().then((List<News> news) {
       print(news);
       emit(state.copyWith(news: news, isLoading: false));
     });

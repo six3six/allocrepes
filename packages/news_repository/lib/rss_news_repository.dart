@@ -1,25 +1,23 @@
-/*import 'package:dart_rss/domain/rss_feed.dart';
-import 'package:dart_rss/domain/rss_item.dart';*/
 import 'package:http/http.dart' as http;
 
-import 'model/new.dart';
+import 'model/news.dart';
 import 'news_repository.dart';
+import 'package:xml/xml.dart';
 
 class RssNewsRepository extends NewsRepository {
   final String targetUrl;
 
   const RssNewsRepository({required this.targetUrl}) : super();
 
-  /*Future<RssFeed> _getFeed() =>
+  Future<XmlDocument> _getFeed() =>
       http.read(Uri.parse(targetUrl)).then((xmlString) {
-        return RssFeed.parse(xmlString);
+        return XmlDocument.parse(xmlString.replaceAll('https://xanthos.fr', 'https://lfpn.fr'));
       });
-*/
+
   @override
-  Stream<List<New>> getNews() async* {
-    /* RssFeed feed = await _getFeed();
-    yield feed.items.map<New>((RssItem item) => New.fromRss(item)).toList();
-    */
-     yield [];
+  Future<List<News>> getNews() async {
+    XmlDocument feed = await _getFeed();
+
+    return feed.findAllElements('item').map((item) => News.fromRss(item)).toList();
   }
 }

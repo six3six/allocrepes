@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:news_repository/model/new.dart';
+import 'package:news_repository/model/news.dart';
 
 class LobbyState extends Equatable {
-  final List<New> news;
+  final List<News> news;
   final bool isLoading;
   final bool showOrder;
   final bool showProgram;
@@ -11,7 +11,7 @@ class LobbyState extends Equatable {
   final String headlineURL;
 
   LobbyState({
-    this.news = const <New>[],
+    this.news = const <News>[],
     this.isLoading = false,
     this.showOrder = false,
     this.showProgram = false,
@@ -21,7 +21,7 @@ class LobbyState extends Equatable {
   });
 
   LobbyState copyWith({
-    List<New>? news,
+    List<News>? news,
     bool? isLoading,
     bool? showOrder,
     bool? showProgram,

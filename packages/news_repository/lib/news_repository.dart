@@ -1,6 +1,6 @@
-import 'model/new.dart';
+import 'model/news.dart';
 
 abstract class NewsRepository {
   const NewsRepository();
-  Stream<List<New>> getNews();
+  Future<List<News>> getNews();
 }
