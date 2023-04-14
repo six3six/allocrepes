@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'lobby_leaderboard.dart';
 import 'lobby_top.dart';
 import 'lobby_twitch.dart';
 
@@ -39,60 +40,9 @@ class LobbyView extends StatelessWidget {
           },
         ),
         if (!kIsWeb) _LobbyTwitchMenu(),
-        _LobbyCls(),
+        LobbyLeaderboard(),
         _LobbyNewsMenu(),
       ],
-    );
-  }
-}
-
-class _LobbyCls extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final getList = FirebaseFunctions.instance.httpsCallable('getPointsCls');
-
-    return SliverToBoxAdapter(
-      child: BlocBuilder<LobbyCubit, LobbyState>(
-        builder: (context, state) {
-          return state.showCls
-              ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Classement des meilleurs athlètes',
-                        style: textTheme.headlineSmall,
-                      ),
-                      FutureBuilder<HttpsCallableResult<List<dynamic>>>(
-                        future: getList(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) return SizedBox();
-                          var list = snapshot.data;
-                          var i = 1;
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 13, vertical: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: list?.data
-                                      .map((name) => Text(
-                                            '${i++}. $name',
-                                            style: textTheme.bodyLarge,
-                                          ))
-                                      .toList() ??
-                                  [],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                )
-              : SizedBox();
-        },
-      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:news_repository/model/news.dart';
 import 'package:news_repository/news_repository.dart';
@@ -12,6 +13,9 @@ class LobbyCubit extends Cubit<LobbyState> {
   final NewsRepository _newsRepository;
   final SettingRepository _settingRepository;
 
+  final _getLeaderboard =
+      FirebaseFunctions.instance.httpsCallable('getPointsCls');
+
   LobbyCubit({
     required SettingRepository settingRepository,
     NewsRepository newsRepository =
@@ -24,12 +28,14 @@ class LobbyCubit extends Cubit<LobbyState> {
         case ConnectivityResult.wifi:
         case ConnectivityResult.mobile:
           updateNews();
+          updateLeaderboard();
           break;
         case ConnectivityResult.none:
           break;
       }
     });
     updateNews();
+    updateLeaderboard();
 
     _settingRepository.showOrderPages().forEach((enable) {
       emit(state.copyWith(showOrder: enable));
@@ -49,6 +55,16 @@ class LobbyCubit extends Cubit<LobbyState> {
     _settingRepository.headlineURL().forEach((headlineURL) {
       emit(state.copyWith(headlineURL: headlineURL));
     });
+  }
+
+  void updateLeaderboard() async {
+    final leaderboardResult = await _getLeaderboard();
+
+    var res = <String>[];
+    for (final row in leaderboardResult.data) {
+      res.add(row);
+    }
+    emit(state.copyWith(leaderboard: res));
   }
 
   void updateNews() {

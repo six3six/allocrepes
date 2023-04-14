@@ -2,7 +2,6 @@ import 'package:allocrepes/admin_user/cubit/admin_user_cubit.dart';
 import 'package:allocrepes/admin_user/cubit/admin_user_state.dart';
 import 'package:allocrepes/admin_user/view/admin_user_edit.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:flexible_scrollbar/flexible_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

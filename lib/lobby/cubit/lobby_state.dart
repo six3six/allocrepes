@@ -9,9 +9,11 @@ class LobbyState extends Equatable {
   final bool showCls;
   final String headline;
   final String headlineURL;
+  final List<String> leaderboard;
 
   LobbyState({
-    this.news = const <News>[],
+    this.news = const [],
+    this.leaderboard = const [],
     this.isLoading = false,
     this.showOrder = false,
     this.showProgram = false,
@@ -22,6 +24,7 @@ class LobbyState extends Equatable {
 
   LobbyState copyWith({
     List<News>? news,
+    List<String>? leaderboard,
     bool? isLoading,
     bool? showOrder,
     bool? showProgram,
@@ -31,6 +34,7 @@ class LobbyState extends Equatable {
   }) {
     return LobbyState(
       news: news ?? this.news,
+      leaderboard: leaderboard ?? this.leaderboard,
       isLoading: isLoading ?? this.isLoading,
       showOrder: showOrder ?? this.showOrder,
       showCls: showCls ?? this.showCls,
@@ -42,13 +46,13 @@ class LobbyState extends Equatable {
 
   @override
   List<Object> get props => [
-        news,
+        ...news,
+        ...leaderboard,
         isLoading,
         showOrder,
         showProgram,
         headline,
         headlineURL,
         showCls,
-        ...news,
       ];
 }
