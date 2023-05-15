@@ -8,7 +8,7 @@
         android:name="${applicationName}"
         android:allowBackup="false"
         android:icon="@mipmap/launcher_icon"
-        android:label="Xanthos"
+        android:label="Selva"
         android:supportsRtl="true">
 
         <activity

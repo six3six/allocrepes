@@ -30,7 +30,7 @@ class LoginWelcome extends StatelessWidget {
               height: 20,
             ),
             Text(
-              "Bienvenue sur l'application Xanthos !",
+              "Bienvenue sur l'application Selva !",
               style: textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),

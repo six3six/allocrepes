@@ -36,7 +36,7 @@ class LobbyTop extends StatelessWidget {
                 width: 5,
               ),
               Text(
-                'Xanthos',
+                'Selva',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               Expanded(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html_iframe/flutter_html_iframe.dart';
 import 'package:news_repository/model/news.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -53,7 +54,7 @@ class NewsView extends StatelessWidget {
             width: 100,
             height: 100,
             child: Html(
-              onLinkTap: (url, context, attributes, element) {
+              onLinkTap: (url, attributes, element) {
                 launchUrl(
                   Uri.parse(url ?? ''),
                   mode: LaunchMode.externalApplication,
@@ -61,40 +62,13 @@ class NewsView extends StatelessWidget {
               },
               data:
                   '<html><body style="width: 100%">${article.content}</body></html>',
-              customRenders: {
-                iframeYT():
-                    CustomRender.widget(widget: (context, buildChildren) {
-                  final controller = WebViewController()
-                    ..loadRequest(
-                        Uri.parse(context.tree.attributes['src'] ?? ''))
-                    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                    ..setNavigationDelegate(
-                      NavigationDelegate(
-                        onNavigationRequest: (NavigationRequest request) async {
-                          await launchUrl(
-                            Uri.parse(request.url),
-                            mode: LaunchMode.externalApplication,
-                          );
-                          return NavigationDecision.prevent;
-                        },
-                      ),
-                    );
-
-                  return SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: WebViewWidget(controller: controller),
-                  );
-                })
-              },
+              extensions: [
+                IframeHtmlExtension(),
+              ],
             ),
           ),
         ),
       ],
     );
   }
-
-  CustomRenderMatcher iframeYT() => (context) =>
-      context.tree.element?.attributes['src']?.contains('youtube.com/embed') ??
-      false;
 }
