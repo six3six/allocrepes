@@ -19,7 +19,7 @@ class LobbyCubit extends Cubit<LobbyState> {
   LobbyCubit({
     required SettingRepository settingRepository,
     NewsRepository newsRepository =
-        const RssNewsRepository(targetUrl: 'https://lfpn.fr/feed/'),
+        const RssNewsRepository(targetUrl: 'https://selva.lfpn.fr/rss/'),
   })  : _newsRepository = newsRepository,
         _settingRepository = settingRepository,
         super(LobbyState()) {
