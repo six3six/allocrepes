@@ -311,6 +311,9 @@ class _UserLabel extends Text {
   const _UserLabel({
     this.classe = false,
     required this.userId,
+    this.surname = true,
+    this.name = true,
+    this.id = false,
   }) : super(userId);
 
   @override

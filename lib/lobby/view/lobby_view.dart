@@ -140,7 +140,7 @@ class _LobbyNewsMenu extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Suivre les actus Xanthos',
+              'Suivre les actus',
               style: textTheme.headlineSmall,
             ),
             const SizedBox(

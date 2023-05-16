@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.bde2021.allocrepes">
+    package="fr.lfpn.selva">
 
     <queries>
         <package android:name="com.android.chrome" />
@@ -25,7 +25,7 @@
                 android:resource="@mipmap/launcher_icon" />
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_color"
-                android:resource="@color/xanthos_blue" />
+                android:resource="@color/selva_brown" />
 
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html_iframe/flutter_html_iframe.dart';
-import 'package:flutter_html_video/flutter_html_video.dart';
 import 'package:news_repository/model/news.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,14 +25,16 @@ class NewsView extends StatelessWidget {
           pinned: true,
           snap: false,
           floating: false,
-          expandedHeight: 200.0,
-          flexibleSpace: FlexibleSpaceBar(
-              background: article.media == '' ? null : Image.network(
-              article.media,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
+          expandedHeight: article.media == '' ? null : 200.0,
+          flexibleSpace: article.media == ''
+              ? null
+              : FlexibleSpaceBar(
+                  background: Image.network(
+                    article.media,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
         ),
         SliverPadding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -66,7 +67,6 @@ class NewsView extends StatelessWidget {
               data: data,
               extensions: const [
                 IframeHtmlExtension(),
-                VideoHtmlExtension(),
               ],
               style: {
                 '.kg-card': Style(

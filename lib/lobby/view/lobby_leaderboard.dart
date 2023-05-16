@@ -35,7 +35,7 @@ class _LobbyLeaderboardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Classement des meilleurs athlètes',
+                'Classement des meilleurs aventuriers',
                 style: textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),
