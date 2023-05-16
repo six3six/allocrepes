@@ -29,6 +29,7 @@ class OrderAdminView extends StatelessWidget {
             child: Center(
               child: Text(
                 Order.statusToString(status),
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ),
@@ -73,34 +74,31 @@ class _StatusList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          BlocBuilder<OrderAdminCubit, OrderAdminState>(
-            buildWhen: (prev, next) => !IterableEquality().equals(
-              prev.getOrders()[status],
-              next.getOrders()[status],
-            ),
-            builder: (context, state) {
-              final orders =
-                  BlocProvider.of<OrderAdminCubit>(context).state.getOrders();
-
-              return Column(
-                children: orders[status]
-                        ?.map((order) => _OrderTile(order))
-                        .toList() ??
-                    [],
-              );
+    return BlocBuilder<OrderAdminCubit, OrderAdminState>(
+      buildWhen: (prev, next) => !IterableEquality().equals(
+        prev.getOrders()[status],
+        next.getOrders()[status],
+      ),
+      builder: (context, state) {
+        final orders = state.getOrders()[status] ?? [];
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return _OrderTile(orders[index]);
+            },
+            childCount: orders.length,
+            findChildIndexCallback: (key) {
+              return orders.indexWhere((order) => order.id == (key as ValueKey<String>).value);
             },
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
 class _OrderTile extends StatelessWidget {
-  _OrderTile(this.order);
+  _OrderTile(this.order) : super(key: Key(order.id ?? ''));
 
   final Order order;
 

@@ -109,12 +109,12 @@ class _LobbyTwitchMenu extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: [/*
           SizedBox(
             height: 250,
             width: double.infinity,
             child: LobbyTwitchViewer(),
-          ),
+          ),*/
           SizedBox(height: 10),
           BlocBuilder<LobbyCubit, LobbyState>(
             buildWhen: (prev, next) => prev.headlineURL != next.headlineURL,

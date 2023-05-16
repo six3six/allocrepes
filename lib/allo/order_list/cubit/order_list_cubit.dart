@@ -8,7 +8,18 @@ import 'package:order_repository/order_repository.dart';
 import 'order_list_state.dart';
 
 class OrderListCubit extends Cubit<OrderListState> {
-  OrderListCubit(this._orderRepository) : super(const OrderListState()) {
+  OrderListCubit(this._orderRepository)
+      : _previousOrderStream = _orderRepository.userOrders(orderStatus: [
+          OrderStatus.DELIVERED,
+          OrderStatus.CANCELED,
+        ]),
+        _currentOrderStream = _orderRepository.userOrders(orderStatus: [
+          OrderStatus.UNKNOWN,
+          OrderStatus.VALIDATING,
+          OrderStatus.PENDING,
+          OrderStatus.DELIVERING,
+        ]),
+        super(const OrderListState()) {
     getOrders();
     Connectivity().checkConnectivity().then(checkConnectivity);
     Connectivity().onConnectivityChanged.listen(checkConnectivity);
@@ -16,28 +27,28 @@ class OrderListCubit extends Cubit<OrderListState> {
 
   final OrderRepository _orderRepository;
 
+  final _previousOrderStream;
+  final _currentOrderStream;
+
   void getOrders() {
-    _orderRepository.userOrders(orderStatus: [
-      OrderStatus.DELIVERED,
-      OrderStatus.CANCELED,
-    ]).forEach(
-      (orders) => emit(
-        state.copyWith(
-          previousOrders: orders,
-          isLoading: false,
-        ),
-      ),
+    _previousOrderStream.forEach(
+      (orders) {
+        if (!isClosed) {
+          emit(
+            state.copyWith(previousOrders: orders, isLoading: false),
+          );
+        }
+      },
     );
 
-    _orderRepository.userOrders(orderStatus: [
-      OrderStatus.UNKNOWN,
-      OrderStatus.VALIDATING,
-      OrderStatus.PENDING,
-      OrderStatus.DELIVERING,
-    ]).forEach(
-      (orders) => emit(
-        state.copyWith(currentOrders: orders, isLoading: false),
-      ),
+    _currentOrderStream.forEach(
+      (orders) {
+        if (!isClosed) {
+          emit(
+            state.copyWith(currentOrders: orders, isLoading: false),
+          );
+        }
+      },
     );
   }
 
@@ -46,6 +57,7 @@ class OrderListCubit extends Cubit<OrderListState> {
   }
 
   void checkConnectivity(ConnectivityResult result) {
+    if (isClosed) return;
     switch (result) {
       case ConnectivityResult.wifi:
       case ConnectivityResult.mobile:

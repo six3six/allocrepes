@@ -202,7 +202,7 @@ exports.onCommandStatusChange = functions.firestore
 
       const user = nextData["owner"].toLowerCase();
 
-      await admin.messaging().sendToTopic(
+      admin.messaging().sendToTopic(
           "/topics/user" + user,
           {
             data: {"type": "order"},

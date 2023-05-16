@@ -1,6 +1,5 @@
 import 'package:allocrepes/allo/oder_new/cubit/order_new_cubit.dart';
 import 'package:allocrepes/allo/oder_new/cubit/order_new_state.dart';
-import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +33,7 @@ class OrderNewView extends StatelessWidget {
                       .checkout(context)
                       .then((ok) {
                     if (ok) {
-                      Navigator.pushReplacement(context, OrderListPage.route());
+                      Navigator.pop(context);
                     }
                   });
                 },
