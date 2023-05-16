@@ -1,4 +1,5 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -25,7 +26,9 @@ class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            print(request.url);
+            if (kDebugMode) {
+              print(request.url);
+            }
             if (request.url.startsWith('https://player.twitch.tv')) {
               return NavigationDecision.navigate;
             } else {

@@ -48,10 +48,10 @@ class AppView extends StatefulWidget {
   const AppView({super.key});
 
   @override
-  _AppViewState createState() => _AppViewState();
+  AppViewState createState() => AppViewState();
 }
 
-class _AppViewState extends State<AppView> {
+class AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   NavigatorState get _navigator => _navigatorKey.currentState!;
@@ -81,6 +81,7 @@ class _AppViewState extends State<AppView> {
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((initialMessage) => getNotif(initialMessage));
+
     FirebaseMessaging.onMessageOpenedApp.listen((initialMessage) {
       getNotif(initialMessage);
     });
@@ -103,7 +104,9 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                print('authenticated');
+                if (kDebugMode) {
+                  print('authenticated');
+                }
                 if (!kIsWeb) {
                   try {
                     if (state.user.student) {
@@ -117,7 +120,9 @@ class _AppViewState extends State<AppView> {
                       }
                     }
 
-                    print('subscribeToTopic(user${state.user.id})');
+                    if (kDebugMode) {
+                      print('subscribeToTopic(user${state.user.id})');
+                    }
                     FirebaseMessaging.instance
                         .subscribeToTopic('user${state.user.id}');
                   } catch (exception, stack) {

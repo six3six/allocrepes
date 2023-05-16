@@ -49,7 +49,9 @@ class AdminNotifCubit extends Cubit<AdminNotifState> {
         'user': state.userId,
       });
       emit(state.copyWith(isSending: false));
-      Navigator.pop(context);
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
     } on Exception catch (e, stacktrace) {
       emit(state.copyWith(isSending: false));
       ScaffoldMessenger.of(context).showSnackBar(

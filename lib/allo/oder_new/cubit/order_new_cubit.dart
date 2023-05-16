@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/category.dart';
@@ -165,8 +166,12 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         context,
         'Erreur du système : ${e.toString()}\n\n${stacktrace.toString()}',
       );
-      print('Checkout error $e');
-      print('Checkout stacktrace $stacktrace');
+      if (foundation.kDebugMode) {
+        print('Checkout error $e');
+      }
+      if (foundation.kDebugMode) {
+        print('Checkout stacktrace $stacktrace');
+      }
       emit(state.copyWith(loading: false));
 
       return false;

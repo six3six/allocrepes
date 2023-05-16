@@ -20,7 +20,9 @@ Future<void> _firebaseMessagingBackgroundHandler(
     ) async {
   await Firebase.initializeApp();
 
-  print('Handling a background message: ${message.messageId}');
+  if (kDebugMode) {
+    print('Handling a background message: ${message.messageId}');
+  }
 }
 
 void main() async {
@@ -55,7 +57,9 @@ void main() async {
   try {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   } catch (e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
   }
 
   if (!kIsWeb) {

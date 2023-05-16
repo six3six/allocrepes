@@ -1,5 +1,6 @@
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
@@ -16,7 +17,9 @@ class LoginCubit extends Cubit<LoginState> {
   });
 
   Future<void> showLoginForm() async {
-    print(ssoUrl.toString());
+    if (kDebugMode) {
+      print(ssoUrl.toString());
+    }
 
     final result = await FlutterWebAuth.authenticate(
         url: ssoUrl.toString(), callbackUrlScheme: "allocrepes-auth");
