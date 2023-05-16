@@ -13,7 +13,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   static final ssoUrl = Uri.https('sso.esiee.fr', '/cas/login', {
     'service':
-        'https://us-central1-allocrepes-4f992.cloudfunctions.net/ssoLogin/'
+        'https://us-central1-selva-e38bc.cloudfunctions.net/ssoLogin/'
   });
 
   Future<void> showLoginForm() async {
@@ -22,7 +22,7 @@ class LoginCubit extends Cubit<LoginState> {
     }
 
     final result = await FlutterWebAuth.authenticate(
-        url: ssoUrl.toString(), callbackUrlScheme: "allocrepes-auth");
+        url: ssoUrl.toString(), callbackUrlScheme: "selva-auth");
 
     final token = Uri.parse(result).queryParameters['token'];
 

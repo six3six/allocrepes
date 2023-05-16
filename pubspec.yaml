@@ -27,7 +27,7 @@ dependencies:
 
   setting_repository:
     path: packages/setting_repository
-  collection: ^1.17.2
+  collection: ^1.17.1
 
   firebase_core: ^2.13.0
   firebase_analytics: ^10.4.1

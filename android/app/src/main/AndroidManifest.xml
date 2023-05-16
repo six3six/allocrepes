@@ -22,7 +22,7 @@
 
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
-                android:resource="@drawable/launcher_icon" />
+                android:resource="@mipmap/launcher_icon" />
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_color"
                 android:resource="@color/selva_brown" />
@@ -46,11 +46,11 @@
         </activity>
 
         <activity android:name="com.linusu.flutter_web_auth.CallbackActivity" android:exported="true">
-            <intent-filter android:label="flutter_web_auth">
+            <intent-filter android:label="Connexion ESIEE">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="allocrepes-auth" />
+                <data android:scheme="selva-auth" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

@@ -88,7 +88,7 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
     console.log(req.query);
   }
 
-  res.redirect(`allocrepes-auth://?token=${token.token}&user=${token.user}`);
+  res.redirect(`selva-auth://?token=${token.token}&user=${token.user}`);
 });
 
 exports.ssoLoginToken = functions.https.onRequest(async (req, res) => {

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:news_repository/model/news.dart';
 import 'package:news_repository/news_repository.dart';
 import 'package:news_repository/rss_news_repository.dart';
@@ -63,14 +64,22 @@ class LobbyCubit extends Cubit<LobbyState> {
     for (final row in leaderboardResult.data) {
       res.add(row);
     }
-    emit(state.copyWith(leaderboard: res));
+    if (!isClosed) {
+      emit(state.copyWith(leaderboard: res));
+    }
   }
 
   void updateNews() {
-    emit(state.copyWith(isLoading: true));
+    if (!isClosed) {
+      emit(state.copyWith(isLoading: true));
+    }
     _newsRepository.getNews().then((List<News> news) {
-      print(news);
-      emit(state.copyWith(news: news, isLoading: false));
+      if (kDebugMode) {
+        print(news);
+      }
+      if (!isClosed) {
+        emit(state.copyWith(news: news, isLoading: false));
+      }
     });
   }
 }

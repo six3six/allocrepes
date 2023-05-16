@@ -16,8 +16,8 @@ import 'app_observer.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(
-    RemoteMessage message,
-    ) async {
+  RemoteMessage message,
+) async {
   await Firebase.initializeApp();
 
   if (kDebugMode) {
@@ -31,17 +31,18 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (!kIsWeb) {
-    // Force enable crashlytics collection enabled if we're testing it.
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-    // Pass all uncaught errors to Crashlytics.
-    Function? originalOnError = FlutterError.onError;
-    FlutterError.onError = (FlutterErrorDetails errorDetails) async {
-      await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
-      // Forward to original handler.
-      originalOnError!(errorDetails);
+  if (!kDebugMode) {
+    FlutterError.onError = (errorDetails) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
     };
 
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
+
+  if (!kIsWeb) {
     var messaging = FirebaseMessaging.instance;
     try {
       await messaging.requestPermission(
@@ -51,8 +52,6 @@ void main() async {
       await FirebaseCrashlytics.instance.recordError(exception, stack);
     }
   }
-
-
 
   try {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -79,13 +78,5 @@ void main() async {
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = AppObserver();
 
-  if (!kIsWeb) {
-    runZonedGuarded(
-      () => runApp(App(authenticationRepository: AuthenticationRepository())),
-      (error, stackTrace) =>
-          FirebaseCrashlytics.instance.recordError(error, stackTrace),
-    );
-  } else {
-    runApp(App(authenticationRepository: AuthenticationRepository()));
-  }
+  runApp(App(authenticationRepository: AuthenticationRepository()));
 }

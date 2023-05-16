@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "allocrepes-4f992"
+    "default": "allocrepes-4f992",
+    "selva": "selva-e38bc"
   }
 }
