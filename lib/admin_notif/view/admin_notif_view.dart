@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdminNotifView extends StatelessWidget {
-  AdminNotifView() : super();
+  const AdminNotifView({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -41,7 +41,7 @@ class AdminNotifView extends StatelessWidget {
                           ? null
                           : () => BlocProvider.of<AdminNotifCubit>(context)
                               .readyToSend(),
-                      child: Text('Je parle en sah'),
+                      child: const Text('Je parle en sah'),
                     ),
                   ),
                   const SizedBox(
@@ -108,15 +108,15 @@ class _ActionBlock extends StatelessWidget {
         BlocBuilder<AdminNotifCubit, AdminNotifState>(
           buildWhen: (prev, next) => prev.action != next.action,
           builder: (context, state) => Column(children: [
-            _ActionCheckBox(
+            const _ActionCheckBox(
               text: 'Envoyer sur la page principal',
               action: AdminNotifAction.MainPage,
             ),
-            _ActionCheckBox(
+            const _ActionCheckBox(
               text: 'Envoyer la page de commandes',
               action: AdminNotifAction.OrderPage,
             ),
-            _ActionCheckBox(
+            const _ActionCheckBox(
               text: 'Envoyer sur un lien',
               action: AdminNotifAction.LinkPage,
             ),
@@ -186,19 +186,19 @@ class _RecipientBlock extends StatelessWidget {
     return Column(
       children: [
         const Text('Destinataire :'),
-        _RecipientCheckBox(
+        const _RecipientCheckBox(
           text: 'Tout le monde',
           recipient: AdminNotifRecipient.Everybody,
         ),
-        _RecipientCheckBox(
+        const _RecipientCheckBox(
           text: 'Les bougs sous Android',
           recipient: AdminNotifRecipient.Android,
         ),
-        _RecipientCheckBox(
+        const _RecipientCheckBox(
           text: 'Les bougs sous iOS',
           recipient: AdminNotifRecipient.Ios,
         ),
-        _RecipientCheckBox(
+        const _RecipientCheckBox(
           text: 'Un boug en particulier',
           recipient: AdminNotifRecipient.User,
         ),

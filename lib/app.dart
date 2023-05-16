@@ -36,7 +36,7 @@ class App extends StatelessWidget {
           create: (BuildContext context) => SettingRepositoryFirestore(),
           child: RepositoryProvider(
             create: (BuildContext context) => OrderRepositoryFirestore(),
-            child: AppView(),
+            child: const AppView(),
           ),
         ),
       ),
@@ -45,6 +45,8 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatefulWidget {
+  const AppView({super.key});
+
   @override
   _AppViewState createState() => _AppViewState();
 }

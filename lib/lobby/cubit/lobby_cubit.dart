@@ -21,7 +21,7 @@ class LobbyCubit extends Cubit<LobbyState> {
         const RssNewsRepository(targetUrl: 'https://selva.lfpn.fr/rss/'),
   })  : _newsRepository = newsRepository,
         _settingRepository = settingRepository,
-        super(LobbyState()) {
+        super(const LobbyState()) {
     Connectivity().onConnectivityChanged.forEach((result) {
       switch (result) {
         case ConnectivityResult.wifi:

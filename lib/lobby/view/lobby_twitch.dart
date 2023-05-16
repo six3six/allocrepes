@@ -4,6 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class LobbyTwitchViewer extends StatefulWidget {
+  const LobbyTwitchViewer({super.key});
+
   @override
   LobbyTwitchViewerState createState() => LobbyTwitchViewerState();
 }
@@ -83,6 +85,6 @@ class LobbyHeadlineViewerState extends State<LobbyHeadlineViewer> {
             width: double.infinity,
             child: WebViewWidget(controller: controller),
           )
-        : SizedBox();
+        : const SizedBox();
   }
 }

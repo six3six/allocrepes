@@ -11,8 +11,8 @@ import 'order_new_view.dart';
 class OrderNewPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => OrderNewPage(),
-      settings: RouteSettings(name: 'OrderNew'),
+      builder: (_) => const OrderNewPage(),
+      settings: const RouteSettings(name: 'OrderNew'),
     );
   }
 
@@ -47,7 +47,7 @@ class OrderNewPage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: OrderNewView(),
+              child: const OrderNewView(),
             ),
           ),
         );

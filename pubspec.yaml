@@ -9,7 +9,7 @@ version: 0.2.14+32
 
 
 environment:
-  sdk: ">=2.18.2 <4.0.0"
+  sdk: ">=2.19.6 <4.0.0"
 
 dependencies:
   flutter:
@@ -29,11 +29,11 @@ dependencies:
     path: packages/setting_repository
 
 
-  firebase_core: ^2.12.0
-  firebase_analytics: ^10.4.0
-  firebase_crashlytics: ^3.3.0
-  firebase_messaging: ^14.6.0
-  cloud_functions: ^4.3.0
+  firebase_core: ^2.13.0
+  firebase_analytics: ^10.4.1
+  firebase_crashlytics: ^3.3.1
+  firebase_messaging: ^14.6.1
+  cloud_functions: ^4.3.1
   intl: ^0.17.0
 
   connectivity: ^3.0.6
@@ -59,11 +59,13 @@ dependencies:
 
   app_tracking_transparency: ^2.0.4
   flutter_web_auth: ^0.5.0
+
   flutter_html_iframe: ^3.0.0-beta.1
-  
+
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^2.0.1
 
 flutter_launcher_icons:
   android: "launcher_icon"

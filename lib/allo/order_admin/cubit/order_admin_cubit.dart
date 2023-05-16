@@ -35,9 +35,9 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
   void getOrders() {
     _orderRepository.products().forEach((products) {
       var productsMap = <String, Product>{};
-      products.forEach((product) {
+      for (var product in products) {
         productsMap[product.id ?? ''] = product;
-      });
+      }
       emit(state.copyWith(products: productsMap));
     });
 
@@ -50,12 +50,12 @@ class OrderAdminCubit extends Cubit<OrderAdminState> {
               ))
         .forEach((orders) {
       var ordersMap = <OrderStatus, List<Order>>{};
-      orders.forEach((order) {
+      for (var order in orders) {
         if (!ordersMap.containsKey(order.status)) {
           ordersMap[order.status] = [];
         }
         ordersMap[order.status]?.add(order);
-      });
+      }
 
       emit(state.copyWith(orders: ordersMap));
     });

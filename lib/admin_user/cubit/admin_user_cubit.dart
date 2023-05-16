@@ -7,7 +7,7 @@ class AdminUserCubit extends Cubit<AdminUserState> {
   AdminUserCubit(
     this._authenticationRepository,
     this._settingRepository,
-  ) : super(AdminUserState()) {
+  ) : super(const AdminUserState()) {
     getUser();
   }
 

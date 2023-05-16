@@ -17,13 +17,13 @@ class StockCubit extends Cubit<StockState> {
     orderRepository.categories().forEach((cats) {
       var categories = <Category, List<Product>>{};
 
-      cats.forEach((cat) {
+      for (var cat in cats) {
         categories[cat] = [];
         orderRepository.productsFromCategory(cat).forEach((prods) {
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });
-      });
+      }
 
       emit(state.copyWith(categories: categories));
     });
@@ -32,12 +32,12 @@ class StockCubit extends Cubit<StockState> {
         .orders(orderStatus: [OrderStatus.DELIVERED]).forEach((orders) {
       var count = <String, int>{};
 
-      orders.forEach((order) {
-        order.articles.forEach((article) {
+      for (var order in orders) {
+        for (var article in order.articles) {
           count[article.productId] =
               (count[article.productId] ?? 0) + article.amount;
-        });
-      });
+        }
+      }
 
       emit(state.copyWith(count: count));
     });

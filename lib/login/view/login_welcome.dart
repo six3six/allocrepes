@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginWelcome extends StatelessWidget {
+  const LoginWelcome({super.key});
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
     return ListView(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       children: <Widget>[
         const SizedBox(height: 40.0),
         Center(
@@ -26,7 +28,7 @@ class LoginWelcome extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text(
@@ -34,7 +36,7 @@ class LoginWelcome extends StatelessWidget {
               style: textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Text(
@@ -47,11 +49,11 @@ class LoginWelcome extends StatelessWidget {
               style: textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
             SizedBox.fromSize(
-              size: Size(80, 80), // button width and height
+              size: const Size(80, 80), // button width and height
               child: ClipOval(
                 child: Material(
                   color: theme.primaryColor,
@@ -60,7 +62,7 @@ class LoginWelcome extends StatelessWidget {
                     splashColor: theme.primaryColorDark, // splash color
                     onTap: () => BlocProvider.of<LoginCubit>(context)
                         .showLoginForm(), // button pressed
-                    child: Icon(
+                    child: const Icon(
                       Icons.navigate_next,
                       size: 50,
                     ),

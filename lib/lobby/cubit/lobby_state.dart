@@ -11,7 +11,7 @@ class LobbyState extends Equatable {
   final String headlineURL;
   final List<String> leaderboard;
 
-  LobbyState({
+  const LobbyState({
     this.news = const [],
     this.leaderboard = const [],
     this.isLoading = false,

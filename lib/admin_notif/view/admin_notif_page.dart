@@ -9,12 +9,12 @@ import 'admin_notif_view.dart';
 class AdminNotifPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => AdminNotifPage(),
-      settings: RouteSettings(name: 'AdminNotif'),
+      builder: (_) => const AdminNotifPage(),
+      settings: const RouteSettings(name: 'AdminNotif'),
     );
   }
 
-  AdminNotifPage({Key? key}) : super(key: key);
+  const AdminNotifPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class AdminNotifPage extends StatelessWidget {
         buildWhen: (prev, next) => prev.isSending != next.isSending,
         builder: (context, state) => LoadingOverlay(
           isLoading: state.isSending,
-          child: AdminNotifView(),
+          child: const AdminNotifView(),
         ),
       ),
     );

@@ -12,7 +12,7 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headStyle = Theme.of(context).textTheme.bodyLarge!.merge(TextStyle(
+    final headStyle = Theme.of(context).textTheme.bodyLarge!.merge(const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ));
@@ -42,7 +42,7 @@ class NewsCard extends StatelessWidget {
               ),
               ListTile(
                 title: Container(
-                  padding: EdgeInsets.only(right: 20, bottom: 20, top: 10),
+                  padding: const EdgeInsets.only(right: 20, bottom: 20, top: 10),
                   child: Text(
                     news.title,
                     style: headStyle,

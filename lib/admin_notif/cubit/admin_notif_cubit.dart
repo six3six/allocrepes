@@ -4,7 +4,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 
 class AdminNotifCubit extends Cubit<AdminNotifState> {
-  AdminNotifCubit() : super(AdminNotifState());
+  AdminNotifCubit() : super(const AdminNotifState());
 
   final HttpsCallable funcSendNotif =
       FirebaseFunctions.instance.httpsCallable('sendNotif');
@@ -54,8 +54,8 @@ class AdminNotifCubit extends Cubit<AdminNotifState> {
       emit(state.copyWith(isSending: false));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          duration: Duration(seconds: 30),
-          content: Text(e.toString() + '\n' + stacktrace.toString()),
+          duration: const Duration(seconds: 30),
+          content: Text('$e\n$stacktrace'),
         ),
       );
     }

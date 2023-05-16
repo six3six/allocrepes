@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html_iframe/flutter_html_iframe.dart';
+import 'package:flutter_html_video/flutter_html_video.dart';
 import 'package:news_repository/model/news.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,7 +15,11 @@ class NewsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(article.content);
+    final data = article.content
+        .replaceFirst(RegExp(r'^<img.*?>'), '')
+        .replaceAll(RegExp(r'width=".*?"'), '');
+    print(data);
+
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
@@ -23,7 +28,7 @@ class NewsView extends StatelessWidget {
           floating: false,
           expandedHeight: 200.0,
           flexibleSpace: FlexibleSpaceBar(
-            background: Image.network(
+              background: article.media == '' ? null : Image.network(
               article.media,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -31,14 +36,14 @@ class NewsView extends StatelessWidget {
           ),
         ),
         SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           sliver: SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   article.title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 25,
                     fontFamily: 'Lato',
@@ -49,9 +54,8 @@ class NewsView extends StatelessWidget {
           ),
         ),
         SliverToBoxAdapter(
-          child: Container(
-            width: 100,
-            height: 100,
+          child: SizedBox(
+            width: double.infinity,
             child: Html(
               onLinkTap: (url, attributes, element) {
                 launchUrl(
@@ -59,11 +63,20 @@ class NewsView extends StatelessWidget {
                   mode: LaunchMode.externalApplication,
                 );
               },
-              data:
-                  '<html><body style="width: 100%">${article.content}</body></html>',
-              extensions: [
+              data: data,
+              extensions: const [
                 IframeHtmlExtension(),
+                VideoHtmlExtension(),
               ],
+              style: {
+                '.kg-card': Style(
+                  width: Width(100, Unit.percent),
+                ),
+                'iframe': Style(
+                  width: Width(300, Unit.px),
+                  height: Height(300, Unit.px),
+                ),
+              },
             ),
           ),
         ),

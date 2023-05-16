@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LobbyTop extends StatelessWidget {
-  static final pointRoundSize = 37.0;
+  static const pointRoundSize = 37.0;
+
+  const LobbyTop({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class LobbyTop extends StatelessWidget {
 
     final bubbleColor = Theme.of(context).primaryColorDark;
 
-    final borderRadius = BorderRadius.all(Radius.circular(50));
+    const borderRadius = BorderRadius.all(Radius.circular(50));
 
     return SafeArea(
       child: Column(
@@ -22,7 +24,7 @@ class LobbyTop extends StatelessWidget {
           Row(
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: 40),
+                constraints: const BoxConstraints(maxHeight: 40),
                 child: Hero(
                   tag: 'logo',
                   child: Image.asset(
@@ -30,10 +32,10 @@ class LobbyTop extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
-              Text(
+              const Text(
                 'Selva',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
@@ -43,13 +45,13 @@ class LobbyTop extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       showDialog(context: context, builder: (context) {
-                        return LobbyMenuPopup();
+                        return const LobbyMenuPopup();
                       });
                     },
                     borderRadius: borderRadius,
                     child: Container(
                       padding:
-                          EdgeInsets.only(left: 10, right: 41 - pointRoundSize),
+                          const EdgeInsets.only(left: 10, right: 41 - pointRoundSize),
                       height: 45,
                       decoration: BoxDecoration(
                         color: bubbleColor,
@@ -60,7 +62,7 @@ class LobbyTop extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ConstrainedBox(
-                            constraints: BoxConstraints(
+                            constraints: const BoxConstraints(
                               maxWidth: 90,
                             ),
                             child: Text(
@@ -68,15 +70,15 @@ class LobbyTop extends StatelessWidget {
                               overflow: TextOverflow.fade,
                               maxLines: 1,
                               softWrap: false,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Container(
-                            padding: EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(3),
                             width: pointRoundSize,
                             height: pointRoundSize,
                             decoration: BoxDecoration(
@@ -84,7 +86,7 @@ class LobbyTop extends StatelessWidget {
                               border: Border.all(
                                 color: bubbleColor,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(pointRoundSize),
                               ),
                             ),

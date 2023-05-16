@@ -8,6 +8,8 @@ import 'lobby_about.dart';
 class LobbyMenuPopup extends StatelessWidget {
   static double popupRadius = 15;
 
+  const LobbyMenuPopup({super.key});
+
   @override
   Widget build(BuildContext context) {
     final user = BlocProvider.of<AuthenticationBloc>(context).state.user;
@@ -23,36 +25,36 @@ class LobbyMenuPopup extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Vous êtes connecté en tant que :'),
+              const Text('Vous êtes connecté en tant que :'),
               Text(
                 '${user.surname} ${user.name.toUpperCase()}',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
             ],
           ),
           ListTile(
-            leading: Icon(Icons.run_circle_outlined),
-            title: Text('Se deconnecter'),
+            leading: const Icon(Icons.run_circle_outlined),
+            title: const Text('Se deconnecter'),
             onTap: () =>
                 RepositoryProvider.of<AuthenticationRepository>(context)
                     .logOut(),
           ),
           ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text('A propos'),
+            leading: const Icon(Icons.info_outline),
+            title: const Text('A propos'),
             onTap: () => showDialog<void>(
               context: context,
               barrierDismissible: true,
-              builder: (BuildContext context) => LobbyAbout(),
+              builder: (BuildContext context) => const LobbyAbout(),
             ),
           ),
           ListTile(
-            leading: Icon(Icons.flutter_dash),
-            title: Text('Afficher les Licences'),
+            leading: const Icon(Icons.flutter_dash),
+            title: const Text('Afficher les Licences'),
             onTap: () => showLicensePage(
               context: context,
               applicationIcon: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: 200),
+                constraints: const BoxConstraints(maxHeight: 200),
                 child: Hero(
                   tag: 'logo',
                   child: Image.asset(
@@ -69,7 +71,7 @@ class LobbyMenuPopup extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Annuler"),
+          child: const Text("Annuler"),
         ),
       ],
     );

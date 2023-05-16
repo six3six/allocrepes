@@ -11,7 +11,7 @@ class AdminNotifState extends Equatable {
   final String body;
   final bool isSending;
 
-  AdminNotifState({
+  const AdminNotifState({
     this.action = AdminNotifAction.MainPage,
     this.recipient = AdminNotifRecipient.Everybody,
     this.readyToSend = false,

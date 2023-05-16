@@ -15,9 +15,9 @@ class LobbyPage extends StatefulWidget {
           settingRepository:
               RepositoryProvider.of<SettingRepositoryFirestore>(context),
         ),
-        child: LobbyPage(),
+        child: const LobbyPage(),
       ),
-      settings: RouteSettings(name: 'Main'),
+      settings: const RouteSettings(name: 'Main'),
     );
   }
 
@@ -36,16 +36,16 @@ class _LobbyPageState extends State<LobbyPage> {
 
     switch (_barIndex) {
       case 0:
-        selectedView = LobbyView();
+        selectedView = const LobbyView();
         break;
       case 1:
-        selectedView = OrderListPage();
+        selectedView = const OrderListPage();
         break;
       case 2:
-        selectedView = AdminMainPage();
+        selectedView = const AdminMainPage();
         break;
       default:
-        selectedView = LobbyView();
+        selectedView = const LobbyView();
         break;
     }
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -54,16 +54,16 @@ class _LobbyPageState extends State<LobbyPage> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _barIndex,
           items: [
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.other_houses_rounded),
               label: 'Accueil',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
               label: 'Commandes',
             ),
             if (state.user.admin)
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.settings),
                 label: 'Admin',
               ),

@@ -18,7 +18,7 @@ class MenuCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 400),
+        constraints: const BoxConstraints(maxWidth: 400),
         child: ListTile(
           enabled: enable,
           onTap: onTap,

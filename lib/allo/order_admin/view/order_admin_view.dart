@@ -10,7 +10,7 @@ import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/place.dart';
 
 class OrderAdminView extends StatelessWidget {
-  OrderAdminView({Key? key}) : super(key: key);
+  const OrderAdminView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class OrderAdminView extends StatelessWidget {
 
     var slivers = [];
 
-    OrderStatus.values.forEach((status) {
+    for (var status in OrderStatus.values) {
       slivers.add(SliverPersistentHeader(
         floating: true,
         delegate: _SliverAppBarDelegate(
@@ -29,7 +29,7 @@ class OrderAdminView extends StatelessWidget {
             child: Center(
               child: Text(
                 Order.statusToString(status),
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
@@ -41,7 +41,7 @@ class OrderAdminView extends StatelessWidget {
           status: status,
         ),
       );
-    });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(BlocProvider.of<OrderAdminCubit>(context).fast
@@ -51,11 +51,11 @@ class OrderAdminView extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           BlocBuilder<OrderAdminCubit, OrderAdminState>(
-            buildWhen: (prev, next) => !IterableEquality().equals(
+            buildWhen: (prev, next) => !const IterableEquality().equals(
               prev.selectedPlaces.keys,
               next.selectedPlaces.keys,
             ),
-            builder: (context, state) => _FilterView(),
+            builder: (context, state) => const _FilterView(),
           ),
           ...slivers,
         ],
@@ -75,7 +75,7 @@ class _StatusList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OrderAdminCubit, OrderAdminState>(
-      buildWhen: (prev, next) => !IterableEquality().equals(
+      buildWhen: (prev, next) => !const IterableEquality().equals(
         prev.getOrders()[status],
         next.getOrders()[status],
       ),
@@ -111,7 +111,7 @@ class _OrderTile extends StatelessWidget {
       backgroundColor: PlaceUtils.placeToColor(order.place),
       collapsedBackgroundColor: PlaceUtils.placeToColor(order.place),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+      childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: order.articles
@@ -138,7 +138,7 @@ class _OrderTile extends StatelessWidget {
           userId: order.owner,
           classe: true,
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Text(
@@ -148,7 +148,7 @@ class _OrderTile extends StatelessWidget {
         Text(
           '${PlaceUtils.placeToString(order.place)}  -  ${order.room}',
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Text(
@@ -156,9 +156,9 @@ class _OrderTile extends StatelessWidget {
           style: theme.textTheme.bodySmall,
         ),
         Text(
-          '${order.phone}',
+          order.phone,
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Text(
@@ -178,7 +178,7 @@ class _OrderTile extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               'Commentaire :',
               style: theme.textTheme.bodySmall,
@@ -205,8 +205,8 @@ class _FilterView extends StatelessWidget {
 
     return SliverToBoxAdapter(
       child: ExpansionTile(
-        title: Text('Filtres'),
-        childrenPadding: EdgeInsets.symmetric(horizontal: 10),
+        title: const Text('Filtres'),
+        childrenPadding: const EdgeInsets.symmetric(horizontal: 10),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -214,13 +214,13 @@ class _FilterView extends StatelessWidget {
             style: theme.textTheme.bodySmall,
           ),
           BlocBuilder<OrderAdminCubit, OrderAdminState>(
-            buildWhen: (prev, next) => !IterableEquality().equals(
+            buildWhen: (prev, next) => !const IterableEquality().equals(
               prev.selectedPlaces.values,
               next.selectedPlaces.values,
             ),
             builder: (context, state) {
               return ExpansionTile(
-                title: Text(
+                title: const Text(
                   'Batiment',
                   overflow: TextOverflow.clip,
                 ),
@@ -242,13 +242,13 @@ class _FilterView extends StatelessWidget {
             style: theme.textTheme.bodySmall,
           ),
           BlocBuilder<OrderAdminCubit, OrderAdminState>(
-            buildWhen: (prev, next) => !IterableEquality().equals(
+            buildWhen: (prev, next) => !const IterableEquality().equals(
               prev.selectedStatus.values,
               next.selectedStatus.values,
             ),
             builder: (context, state) {
               return ExpansionTile(
-                title: Text('Etat'),
+                title: const Text('Etat'),
                 children: OrderStatus.values
                     .map(
                       (status) => CheckboxListTile(
@@ -309,10 +309,7 @@ class _UserLabel extends Text {
   final bool id;
 
   const _UserLabel({
-    this.surname = true,
-    this.name = true,
     this.classe = false,
-    this.id = false,
     required this.userId,
   }) : super(userId);
 
@@ -323,14 +320,14 @@ class _UserLabel extends Text {
       builder: (context, snap) {
         if (snap.hasData) {
           var res = '';
-          if (id) res += (snap.data?.id ?? '') + ' ';
-          if (surname) res += (snap.data?.surname ?? '') + ' ';
-          if (name) res += (snap.data?.name ?? '') + ' ';
-          if (classe) res += (snap.data?.classe ?? '') + ' ';
+          if (id) res += '${snap.data?.id ?? ''} ';
+          if (surname) res += '${snap.data?.surname ?? ''} ';
+          if (name) res += '${snap.data?.name ?? ''} ';
+          if (classe) res += '${snap.data?.classe ?? ''} ';
 
           return Text(res);
         } else {
-          return Text('$userId');
+          return Text(userId);
         }
       },
     );

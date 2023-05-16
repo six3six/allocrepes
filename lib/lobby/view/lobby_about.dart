@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class LobbyAbout extends StatefulWidget {
+  const LobbyAbout({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return LobbyAboutState();
@@ -16,12 +18,12 @@ class LobbyAboutState extends State<LobbyAbout> {
     final textTheme = Theme.of(context).textTheme;
 
     return AlertDialog(
-      title: Text('A propos'),
+      title: const Text('A propos'),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
             if (!easter)
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Fait en 2021 avec le ❤'),
@@ -42,8 +44,8 @@ class LobbyAboutState extends State<LobbyAbout> {
                       return const SizedBox();
                     },
                   ),
-                  Text('même pas foutu de faire une app eux-mêmes.'),
-                  Text(
+                  const Text('même pas foutu de faire une app eux-mêmes.'),
+                  const Text(
                       'De toute facon tout le monde sait que Xanthos est le meilleurs BDE de l\'histoire de l\'école !'),
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -54,14 +56,14 @@ class LobbyAboutState extends State<LobbyAbout> {
                   ),
                 ],
               ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Text('© Louis DESPLANCHE 2021-2023'),
-            SizedBox(
+            const Text('© Louis DESPLANCHE 2021-2023'),
+            const SizedBox(
               height: 20,
             ),
             FutureBuilder(
@@ -75,7 +77,7 @@ class LobbyAboutState extends State<LobbyAbout> {
                     style: textTheme.bodySmall,
                   );
                 } else {
-                  return SizedBox();
+                  return const SizedBox();
                 }
               },
             ),
@@ -90,7 +92,7 @@ class LobbyAboutState extends State<LobbyAbout> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Ok, je m'en fiche"),
+          child: const Text("Ok, je m'en fiche"),
         ),
       ],
     );

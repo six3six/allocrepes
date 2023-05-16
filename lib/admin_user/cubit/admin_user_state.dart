@@ -8,7 +8,7 @@ class AdminUserState extends Equatable {
   final String usernameQuery;
   final SortUser sortUser;
 
-  AdminUserState({
+  const AdminUserState({
     this.isLoading = false,
     this.showCls = false,
     this.usernameQuery = '',

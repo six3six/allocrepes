@@ -23,7 +23,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     orderRepository.categories().forEach((cats) {
       var categories = <Category, List<Product>>{};
 
-      cats.forEach((cat) {
+      for (var cat in cats) {
         categories[cat] = [];
         emit(state.copyWith(categories: categories));
 
@@ -33,7 +33,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });
-      });
+      }
 
       emit(state.copyWith(
         categories: categories,
@@ -48,11 +48,11 @@ class OrderNewCubit extends Cubit<OrderNewState> {
       OrderStatus.VALIDATING,
     ]).forEach((orders) {
       var alreadyOrdered = <String>[];
-      orders.forEach((order) {
-        order.articles.forEach((article) {
-          alreadyOrdered.add(article.categoryId + ';' + article.productId);
-        });
-      });
+      for (var order in orders) {
+        for (var article in order.articles) {
+          alreadyOrdered.add('${article.categoryId};${article.productId}');
+        }
+      }
 
       emit(state.copyWith(alreadyOrdered: alreadyOrdered));
     });
@@ -165,8 +165,8 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         context,
         'Erreur du système : ${e.toString()}\n\n${stacktrace.toString()}',
       );
-      print('Checkout error ' + e.toString());
-      print('Checkout stacktrace ' + stacktrace.toString());
+      print('Checkout error $e');
+      print('Checkout stacktrace $stacktrace');
       emit(state.copyWith(loading: false));
 
       return false;
@@ -178,7 +178,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) => AlertDialog(
-          title: Text('Erreur'),
+          title: const Text('Erreur'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -191,7 +191,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Confirmer'),
+              child: const Text('Confirmer'),
             ),
           ],
         ),
