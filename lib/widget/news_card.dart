@@ -1,7 +1,6 @@
 import 'package:allocrepes/news/news_page.dart';
 import 'package:flutter/material.dart';
 import 'package:news_repository/model/news.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class NewsCard extends StatelessWidget {
   final News news;

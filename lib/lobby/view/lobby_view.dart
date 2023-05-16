@@ -2,7 +2,6 @@ import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
 import 'package:allocrepes/lobby/cubit/lobby_state.dart';
 import 'package:allocrepes/widget/news_card.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,7 +104,6 @@ class _LobbyMenu extends StatelessWidget {
 class _LobbyTwitchMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     return SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

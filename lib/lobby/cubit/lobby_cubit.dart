@@ -5,7 +5,6 @@ import 'package:news_repository/model/news.dart';
 import 'package:news_repository/news_repository.dart';
 import 'package:news_repository/rss_news_repository.dart';
 import 'package:setting_repository/setting_repository.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'lobby_state.dart';
 

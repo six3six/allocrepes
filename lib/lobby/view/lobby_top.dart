@@ -1,5 +1,4 @@
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
-import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
 import 'package:allocrepes/lobby/view/lobby_menu_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +8,6 @@ class LobbyTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final user = BlocProvider.of<AuthenticationBloc>(context).state.user;
 
     final bubbleColor = Theme.of(context).primaryColorDark;
