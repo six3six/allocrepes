@@ -114,7 +114,7 @@ class _UserList extends StatelessWidget {
         builder: (context, state) {
           final query = RepositoryProvider.of<AuthenticationRepository>(context)
               .getUsersQuery(
-            usernameSearch: state.usernameQuery,
+            usernameSearch: state.usernameQuery.toUpperCase(),
             sort: state.sortUser,
           );
 

@@ -93,7 +93,7 @@ class User extends Equatable {
     final data = document.data() as Map<String, dynamic>? ?? {};
 
     return User(
-      email: data.containsKey('email') ? data['email'] : '',
+      email: data['email'] ?? '',
       id: document.id,
       admin: data['admin'] ?? false,
       name: data['name'] ?? '',
@@ -104,7 +104,7 @@ class User extends Equatable {
     );
   }
 
-  bool isNotEmpty(){
+  bool isNotEmpty() {
     return id != '';
   }
 

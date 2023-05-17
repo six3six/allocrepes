@@ -8,21 +8,15 @@ class AdminUserCubit extends Cubit<AdminUserState> {
     this._authenticationRepository,
     this._settingRepository,
   ) : super(const AdminUserState()) {
-    getUser();
+    _settingRepository.showCls().listen((event) {
+      emit(state.copyWith(showCls: event));
+    });
   }
 
   final AuthenticationRepository _authenticationRepository;
   final SettingRepository _settingRepository;
   Stream<Map<String, User>>? userStream;
 
-  void getUser({
-    String? username,
-    SortUser? sortUser,
-  }) {
-    _settingRepository.showCls().listen((event) {
-      emit(state.copyWith(showCls: event));
-    });
-  }
 
   void changeClsView(bool show) {
     _settingRepository.changeClsView(show);
@@ -41,9 +35,5 @@ class AdminUserCubit extends Cubit<AdminUserState> {
     SortUser? sortUser,
   }) {
     emit(state.copyWith(usernameQuery: username, sortUser: sortUser));
-    getUser(
-      username: username ?? state.usernameQuery,
-      sortUser: sortUser ?? state.sortUser,
-    );
   }
 }
