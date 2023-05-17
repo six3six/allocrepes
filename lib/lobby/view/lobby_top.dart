@@ -12,7 +12,7 @@ class LobbyTop extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = BlocProvider.of<AuthenticationBloc>(context).state.user;
 
-    final bubbleColor = Theme.of(context).primaryColorDark;
+    final bubbleColor = Theme.of(context).primaryColor;
 
     const borderRadius = BorderRadius.all(Radius.circular(50));
 

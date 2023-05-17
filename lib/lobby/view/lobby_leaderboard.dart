@@ -65,7 +65,7 @@ class _LobbyLeaderboardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const borderRadius = BorderRadius.all(Radius.circular(50));
-    final bubbleColor = Theme.of(context).primaryColorDark;
+    final bubbleColor = Theme.of(context).primaryColor;
 
     return Container(
       alignment: AlignmentDirectional.centerEnd,
