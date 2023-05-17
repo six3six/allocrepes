@@ -185,7 +185,6 @@ enum SortUser {
 
 extension on firebase_auth.User {
   Stream<User> get toUserStream async* {
-
     await for (DocumentSnapshot<User> snap
         in AuthenticationRepository.usersCollection.doc(uid).snapshots()) {
       yield snap.data() ?? User.empty.copyWith(id: this.uid);

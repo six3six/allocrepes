@@ -6,6 +6,8 @@ import * as sxml from "sxml";
 admin.initializeApp();
 const db = admin.firestore();
 
+
+
 interface Token {
     user: string;
     token: string;
