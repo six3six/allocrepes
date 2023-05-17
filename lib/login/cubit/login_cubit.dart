@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class LoginCubit extends Cubit<LoginState> {
   static final ssoUrl = Uri.https('sso.esiee.fr', '/cas/login', {
     'service': 'https://us-central1-selva-e38bc.cloudfunctions.net/ssoLogin/'
   });
+
+  final sendEmail = FirebaseFunctions.instance.httpsCallable('sendEmail');
 
   Future<void> showLoginForm() async {
     if (kDebugMode) {
@@ -36,8 +39,19 @@ class LoginCubit extends Cubit<LoginState> {
     showDialog(
       context: context,
       builder: (context) {
-        return LoginESIPEDialog();
+        return BlocProvider.value(
+          value: this,
+          child: LoginESIPEDialog(),
+        );
       },
     );
+  }
+
+  Future<void> sendESIPEEmail(String email) async {
+    sendEmail(email);
+  }
+
+  Future<void> sendESIPEToken(String token) async {
+    await _authenticationRepository.logInWithToken(token: token);
   }
 }
