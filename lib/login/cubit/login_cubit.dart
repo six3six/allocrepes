@@ -1,9 +1,11 @@
-
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
+import '../view/login_esipe_dialog.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -12,8 +14,7 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthenticationRepository _authenticationRepository;
 
   static final ssoUrl = Uri.https('sso.esiee.fr', '/cas/login', {
-    'service':
-        'https://us-central1-selva-e38bc.cloudfunctions.net/ssoLogin/'
+    'service': 'https://us-central1-selva-e38bc.cloudfunctions.net/ssoLogin/'
   });
 
   Future<void> showLoginForm() async {
@@ -29,5 +30,14 @@ class LoginCubit extends Cubit<LoginState> {
     if (token != null) {
       await _authenticationRepository.logInWithToken(token: token);
     }
+  }
+
+  Future<void> showESIPEForm(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LoginESIPEDialog();
+      },
+    );
   }
 }

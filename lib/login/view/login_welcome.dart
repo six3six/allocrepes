@@ -52,21 +52,28 @@ class LoginWelcome extends StatelessWidget {
             const SizedBox(
               height: 60,
             ),
-            SizedBox.fromSize(
-              size: const Size(80, 80), // button width and height
-              child: ClipOval(
-                child: Material(
-                  color: theme.primaryColor,
-                  elevation: 100,
-                  child: InkWell(
-                    splashColor: theme.primaryColorDark, // splash color
-                    onTap: () => BlocProvider.of<LoginCubit>(context)
-                        .showLoginForm(), // button pressed
-                    child: const Icon(
-                      Icons.navigate_next,
-                      size: 50,
-                    ),
-                  ),
+            FilledButton(
+              onPressed: () =>
+                  BlocProvider.of<LoginCubit>(context)
+                      .showLoginForm(),
+              child: const Text(
+                'Je suis de l\'ESIEE',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text('ou', style: textTheme.headlineLarge,),
+            const SizedBox(height: 10),
+            FilledButton(
+              onPressed: () =>
+                  BlocProvider.of<LoginCubit>(context)
+                      .showESIPEForm(context),
+              child: const Text(
+                'Je suis de l\'ex-ESIPE',
+                style: TextStyle(
+                  fontSize: 20,
                 ),
               ),
             ),
