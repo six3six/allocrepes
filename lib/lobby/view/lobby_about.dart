@@ -28,6 +28,7 @@ class LobbyAboutState extends State<LobbyAbout> {
                 children: [
                   Text('Fait en 2021 avec le ❤'),
                   Text('pour le BDE Xanthos'),
+                  Text('cette année avec l\'aide de Corentin POUPRY 🏳️‍🌈 + Théo LEFEVRE'),
                 ],
               ),
             if (easter)

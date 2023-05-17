@@ -9,6 +9,7 @@ final theme = ThemeData(
   brightness: Brightness.light,
   colorSchemeSeed: primaryColor,
   useMaterial3: true,
+  scaffoldBackgroundColor: primaryColorLight,
 
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );
