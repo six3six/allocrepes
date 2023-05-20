@@ -34,7 +34,7 @@ class NewsCard extends StatelessWidget {
                 child: news.media.isNotEmpty
                     ? Image.network(
                         news.media,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                         height: double.infinity,
                         width: double.infinity,
                       )
