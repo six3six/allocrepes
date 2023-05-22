@@ -237,8 +237,11 @@ enum OrderStatus {
 }
 
 exports.getPointsCls = functions.https.onCall(async (requestData, context) => {
-  const users = await db.collection("users").orderBy("point", "desc")
-      .limit(5).get();
+  const users = await db.collection("users")
+      .where("point", ">", 0)
+      .orderBy("point", "desc")
+      .limit(5)
+      .get();
   return users.docs.map((doc) =>
     doc.get("surname") + " " + doc.get("name") + " : " + doc.get("point"),
   );
