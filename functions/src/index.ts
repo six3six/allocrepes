@@ -15,9 +15,9 @@ interface Token {
 
 const isAdmin = async (user: string | undefined): Promise<boolean> => {
   if (user == undefined) return false;
-  const adminRef = db.collection("roles").doc("admins");
-  const adminVal = await adminRef.get();
-  return adminVal.get(user) != undefined;
+  const userRef = db.collection("users").doc(user);
+  const userVal = await userRef.get();
+  return userVal.get("admin") ?? false;
 };
 
 const getSSOToken = async (fncUrl: string, ticket: string): Promise<Token> => {
