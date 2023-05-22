@@ -35,7 +35,7 @@ class NewsView extends StatelessWidget {
                   background: Image.network(
                     article.media,
                     width: double.infinity,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
         ),
