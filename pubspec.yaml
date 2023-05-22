@@ -36,7 +36,6 @@ dependencies:
   cloud_functions: ^4.3.1
   intl: ^0.17.0
 
-  connectivity: ^3.0.6
   package_info_plus: ^4.0.0
 
   font_awesome_flutter: ^10.4.0
@@ -77,6 +76,9 @@ flutter_launcher_icons:
   image_path_ios: "assets/logo_ios.png"
   adaptive_icon_background: "assets/back.png"
   adaptive_icon_foreground: "assets/tete.png"
+  web:
+    generate: true
+    image_path: "assets/logo.png"
 
 
 

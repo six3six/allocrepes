@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:news_repository/model/news.dart';
 import 'package:news_repository/news_repository.dart';
@@ -23,17 +22,6 @@ class LobbyCubit extends Cubit<LobbyState> {
   })  : _newsRepository = newsRepository,
         _settingRepository = settingRepository,
         super(const LobbyState()) {
-    Connectivity().onConnectivityChanged.forEach((result) {
-      switch (result) {
-        case ConnectivityResult.wifi:
-        case ConnectivityResult.mobile:
-          updateNews();
-          updateLeaderboard();
-          break;
-        case ConnectivityResult.none:
-          break;
-      }
-    });
     updateNews();
     updateLeaderboard();
 

@@ -18,15 +18,21 @@ class LoginCubit extends Cubit<LoginState> {
     'service': 'https://us-central1-selva-e38bc.cloudfunctions.net/ssoLogin/'
   });
 
+  static final ssoUrlWeb = Uri.https('sso.esiee.fr', '/cas/login', {
+    'service': 'https://us-central1-selva-e38bc.cloudfunctions.net/ssoWebLogin/'
+  });
+
   final sendEmail = FirebaseFunctions.instance.httpsCallable('sendEmail');
 
   Future<void> showLoginForm() async {
+    final sso = kIsWeb ? ssoUrlWeb : ssoUrl;
+
     if (kDebugMode) {
-      print(ssoUrl.toString());
+      print(sso.toString());
     }
 
     final result = await FlutterWebAuth.authenticate(
-        url: ssoUrl.toString(), callbackUrlScheme: "selva-auth");
+        url: sso.toString(), callbackUrlScheme: "selva-auth");
 
     final token = Uri.parse(result).queryParameters['token'];
 

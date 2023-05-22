@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/order.dart';
 import 'package:order_repository/models/product.dart';
@@ -21,8 +20,7 @@ class OrderListCubit extends Cubit<OrderListState> {
         ]),
         super(const OrderListState()) {
     getOrders();
-    Connectivity().checkConnectivity().then(checkConnectivity);
-    Connectivity().onConnectivityChanged.listen(checkConnectivity);
+    emit(state.copyWith(isConnected: true));
   }
 
   final OrderRepository _orderRepository;
@@ -54,18 +52,5 @@ class OrderListCubit extends Cubit<OrderListState> {
 
   Future<Product> getProduct(Article article) {
     return _orderRepository.getProduct(article.categoryId, article.productId);
-  }
-
-  void checkConnectivity(ConnectivityResult result) {
-    if (isClosed) return;
-    switch (result) {
-      case ConnectivityResult.wifi:
-      case ConnectivityResult.mobile:
-        emit(state.copyWith(isConnected: true));
-        break;
-      case ConnectivityResult.none:
-        emit(state.copyWith(isConnected: false));
-        break;
-    }
   }
 }

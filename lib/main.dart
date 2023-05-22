@@ -42,15 +42,13 @@ void main() async {
     };
   }
 
-  if (!kIsWeb) {
-    var messaging = FirebaseMessaging.instance;
-    try {
-      await messaging.requestPermission(
-        provisional: true,
-      );
-    } catch (exception, stack) {
-      await FirebaseCrashlytics.instance.recordError(exception, stack);
-    }
+  var messaging = FirebaseMessaging.instance;
+  try {
+    await messaging.requestPermission(
+      provisional: true,
+    );
+  } catch (exception, stack) {
+    await FirebaseCrashlytics.instance.recordError(exception, stack);
   }
 
   try {

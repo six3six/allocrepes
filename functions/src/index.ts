@@ -93,6 +93,22 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
   res.redirect(`selva-auth://?token=${token.token}&user=${token.user}`);
 });
 
+exports.ssoWebLogin = functions.https.onRequest(async (req, res) => {
+  const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
+  const ticket = typeof req.query.ticket === "string" ? req.query.ticket : "";
+
+  const token = await getSSOToken(fncUrl, ticket);
+
+
+  if (ticket == "") {
+    console.log("No ticket returned. Query :");
+    console.log(req.query);
+  }
+
+  res.redirect(`https://app.selva.lfpn.fr/auth.html?token=${token.token}&user=${token.user}`);
+});
+
+
 exports.ssoLoginToken = functions.https.onRequest(async (req, res) => {
   const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
   const ticket = typeof req.query.ticket === "string" ? req.query.ticket : "";
@@ -319,13 +335,24 @@ exports.sendNotif = functions.https.onCall(async (requestData, context) => {
 });
 
 exports.sendEmail = functions.https.onCall(async (requestData, context) => {
+  if (requestData == undefined) return;
+  const userRef = db.collection("users").doc(requestData);
+  const userVal = await userRef.get();
+  if (!userVal.exists) {
+    console.log(`User ${requestData} doesn't exist`);
+    return;
+  }
+
   sgMail.setApiKey(process.env.SENDGRID_API_KEY ?? "");
-  const token = admin.auth().createCustomToken(requestData);
+
+  const token = await admin.auth().createCustomToken(requestData);
+
+  console.log("Token generated from the email");
   const msg = {
     to: requestData, // Change to your recipient
     from: "esieelistebde2023@gmail.com", // Change to your verified sender
     subject: "Votre token",
-    text: "Votre token a copier dans l'application est : \n" + token,
+    text: "Votre token a copier dans l'application est : \n\n" + token,
   };
 
   await sgMail.send(msg);
