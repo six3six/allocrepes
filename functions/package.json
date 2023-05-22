@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "eslint --ext .js,.ts .",
+    "lint": "eslint --fix --ext .js,.ts .",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "serve": "npm run build && firebase emulators:start --only functions",
@@ -15,8 +15,9 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "firebase-admin": "^10.0.2",
-    "firebase-functions": "^4.2.1",
+    "firebase-functions": "^4.4.0",
     "sxml": "^1.0.4"
   },
   "devDependencies": {

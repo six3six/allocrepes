@@ -2,11 +2,11 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as https from "https";
 import * as sxml from "sxml";
+import * as sgMail from "@sendgrid/mail";
+
 
 admin.initializeApp();
 const db = admin.firestore();
-
-
 
 interface Token {
     user: string;
@@ -313,6 +313,19 @@ exports.sendNotif = functions.https.onCall(async (requestData, context) => {
 
 
   return "ok";
+});
+
+exports.sendEmail = functions.https.onCall(async (requestData, context) => {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY ?? "");
+  const token = admin.auth().createCustomToken(requestData);
+  const msg = {
+    to: requestData, // Change to your recipient
+    from: "esieelistebde2023@gmail.com", // Change to your verified sender
+    subject: "Votre token",
+    text: "Votre token a copier dans l'application est : \n" + token,
+  };
+
+  await sgMail.send(msg);
 });
 
 enum NotifRecipient {
