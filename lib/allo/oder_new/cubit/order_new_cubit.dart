@@ -87,7 +87,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
   void updateRoom(String? room) {
     emit(state.copyWith(room: room));
-    if ((room == null || room == '') && state.place != Place.ESIEE) {
+    if ((room == null || room == '')) {
       emit(state.copyWith(roomError: 'Salle non définie'));
     } else {
       emit(state.copyWith(roomError: ''));
@@ -146,7 +146,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     try {
       emit(state.copyWith(loading: true));
       if (state.place == null) throw Exception('Il manque le batiment');
-      if (state.room == null && state.place != Place.ESIEE) {
+      if (state.room == null) {
         throw Exception('Il manque la piece');
       }
       await orderRepository.createOrder(Order(

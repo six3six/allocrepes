@@ -249,13 +249,7 @@ class _OrderNewAddressInfo extends StatelessWidget {
             ),
           ),
           _OrderNewBatimentSelector(),
-          BlocBuilder<OrderNewCubit, OrderNewState>(
-            builder: (context, state) {
-              return state.place == Place.ESIEE
-                  ? const Text('Rendez-vous au stand extérieur')
-                  : _OrderNewAppartSelector();
-            },
-          ),
+          _OrderNewAppartSelector(),
         ],
       ),
     );
@@ -280,7 +274,7 @@ class _OrderNewBatimentSelector extends StatelessWidget {
           child: BlocBuilder<OrderNewCubit, OrderNewState>(
             buildWhen: (prev, next) => prev.place != next.place,
             builder: (context, state) => DropdownButton<Place>(
-              value: state.place ?? Place.values[1],
+              value: state.place ?? Place.values[0],
               onChanged: (Place? place) =>
                   BlocProvider.of<OrderNewCubit>(context).updatePlace(place),
               items: Place.values

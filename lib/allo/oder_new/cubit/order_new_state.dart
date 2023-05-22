@@ -8,7 +8,7 @@ class OrderNewState extends Equatable {
     this.categories = const {},
     this.quantities = const {},
     this.alreadyOrdered = const [],
-    this.place = Place.Ampere_A,
+    this.place = Place.ESIEE,
     this.room,
     this.placeError = '',
     this.loading = true,
