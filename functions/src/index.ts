@@ -146,7 +146,7 @@ exports.onPointChange = functions.firestore
               notification: {
                 title: "Tu as gagné des points !",
                 body: `Tu as gagné ${diff} points !\n` +
-                            "Zeus est très impressionné !",
+                            "Tu es digne des meilleurs aventuriers",
                 sound: "default",
                 // badge: '1'
               },

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -49,10 +50,13 @@ class LobbyAboutState extends State<LobbyAbout> {
                   const Text(
                       'De toute facon tout le monde sait que Xanthos est le meilleurs BDE de l\'histoire de l\'école !'),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => _LobbyXanthosPhoto(),
-                      fullscreenDialog: true,
-                    )),
+                    onTap: () {
+                      FirebaseAnalytics.instance.logScreenView(screenName: 'easter_xanthos');
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => _LobbyXanthosPhoto(),
+                        fullscreenDialog: true,
+                      ));
+                    },
                     child: Image.asset('assets/this_is_xanthos.jpg'),
                   ),
                 ],

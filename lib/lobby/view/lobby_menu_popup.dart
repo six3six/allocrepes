@@ -1,5 +1,6 @@
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,11 +43,14 @@ class LobbyMenuPopup extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text('A propos'),
-            onTap: () => showDialog<void>(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) => const LobbyAbout(),
-            ),
+            onTap: () {
+              FirebaseAnalytics.instance.logScreenView(screenName: 'about');
+              showDialog<void>(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) => const LobbyAbout(),
+              );
+            }
           ),
           ListTile(
             leading: const Icon(Icons.flutter_dash),

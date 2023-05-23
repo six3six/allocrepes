@@ -4,6 +4,7 @@ import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -105,6 +106,7 @@ class AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
+                FirebaseAnalytics.instance.logLogin();
                 if (kDebugMode) {
                   print('authenticated');
                 }
@@ -126,6 +128,7 @@ class AppViewState extends State<AppView> {
                     }
                     FirebaseMessaging.instance
                         .subscribeToTopic('user${state.user.id}');
+
                   } catch (exception, stack) {
                     FirebaseCrashlytics.instance.recordError(exception, stack);
                   }
