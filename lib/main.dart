@@ -42,14 +42,13 @@ void main() async {
     };
   }
 
-  var messaging = FirebaseMessaging.instance;
-  try {
-    await messaging.requestPermission(
-      provisional: true,
-    );
-  } catch (exception, stack) {
+  FirebaseMessaging.instance
+      .requestPermission(
+    provisional: true,
+  )
+      .catchError((exception, stack) async {
     await FirebaseCrashlytics.instance.recordError(exception, stack);
-  }
+  });
 
   try {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

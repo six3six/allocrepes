@@ -33,7 +33,7 @@ class LoginESIPEDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    'Entrez votre mail ESIPE (@univ-eiffel.fr)',
+                    'Entrez votre mail ESIPE (@edu.univ-eiffel.fr)',
                     style: textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 10),
