@@ -17,7 +17,8 @@ class NewsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final data = article.content
         .replaceFirst(RegExp(r'^<img.*?>'), '')
-        .replaceAll(RegExp(r'width=".*?"'), '');
+        .replaceAll(RegExp(r'width=".*?"'), '')
+        .replaceAll(RegExp(r'height=".*?"'), '');
     if (kDebugMode) {
       print(data);
     }
@@ -74,6 +75,9 @@ class NewsView extends StatelessWidget {
               style: {
                 '.kg-card': Style(
                   width: Width(100, Unit.percent),
+                ),
+                'image': Style(
+                  width: Width(400, Unit.px),
                 ),
                 'iframe': Style(
                   width: Width(300, Unit.px),

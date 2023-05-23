@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> sendESIPEToken(String token) async {
+    FirebaseAnalytics.instance.logLogin(loginMethod: 'ESIPE');
     await _authenticationRepository.logInWithToken(token: token);
   }
 }

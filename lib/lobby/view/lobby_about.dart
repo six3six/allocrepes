@@ -41,7 +41,7 @@ class LobbyAboutState extends State<LobbyAbout> {
                     builder: (conext, snapshot) {
                       if (snapshot.hasData) {
                         final info = snapshot.data!;
-                        return Text('${info.appName} les gros losers');
+                        return Text('Selva les gros losers');
                       }
                       return const SizedBox();
                     },
