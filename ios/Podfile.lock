@@ -613,9 +613,6 @@ PODS:
     - Firebase/Functions (= 10.9.0)
     - firebase_core
     - Flutter
-  - connectivity (0.0.1):
-    - Flutter
-    - Reachability
   - Firebase/Analytics (10.9.0):
     - Firebase/Core
   - Firebase/Auth (10.9.0):
@@ -861,7 +858,6 @@ PODS:
   - PromisesObjC (2.2.0)
   - PromisesSwift (2.2.0):
     - PromisesObjC (= 2.2.0)
-  - Reachability (3.2)
   - url_launcher_ios (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
@@ -871,7 +867,6 @@ DEPENDENCIES:
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
-  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -915,7 +910,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - PromisesSwift
-    - Reachability
 
 EXTERNAL SOURCES:
   app_tracking_transparency:
@@ -924,8 +918,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
     :path: ".symlinks/plugins/cloud_functions/ios"
-  connectivity:
-    :path: ".symlinks/plugins/connectivity/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_auth:
@@ -955,7 +947,6 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: f9951b7475ab483af80514228921edbef7109fff
   cloud_functions: 2fd58452a1f640ccd5f9b5df1d5f42342f403efd
-  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   Firebase: bd152f0f3d278c4060c5c71359db08ebcfd5a3e2
   firebase_analytics: 24c9089f960ea2255654488d219cb15a913adf8e
   firebase_auth: 202fb0b14e267d2a91d83b75d0ce064ef2063383
@@ -992,7 +983,6 @@ SPEC CHECKSUMS:
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   PromisesSwift: cf9eb58666a43bbe007302226e510b16c1e10959
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 

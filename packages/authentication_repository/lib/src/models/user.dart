@@ -90,6 +90,7 @@ class User extends Equatable {
       'email': email,
       'point': point,
       'classe': classe,
+      'phone': phone,
     };
   }
 
@@ -123,6 +124,7 @@ class User extends Equatable {
         photo,
         point,
         surname,
+        phone,
         student,
       ];
 }
