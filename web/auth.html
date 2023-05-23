@@ -18,6 +18,8 @@
     dans la page Selva</p>
   <p>Authentication is complete. If this does not happen automatically, please
     close the window.</p>
+
+  <button onclick="window.close();">Si la page ne se ferme pas toute seule cliquez ici</button>
   <script>
     window.opener.postMessage({
       'flutter-web-auth': window.location.href
