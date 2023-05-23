@@ -3,6 +3,8 @@ import 'package:allocrepes/lobby/view/lobby_menu_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../theme.dart';
+
 class LobbyTop extends StatelessWidget {
   static const pointRoundSize = 37.0;
 
@@ -16,6 +18,8 @@ class LobbyTop extends StatelessWidget {
 
     const borderRadius = BorderRadius.all(Radius.circular(50));
 
+    final bigWindow = isBigScreen(context);
+
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -23,35 +27,40 @@ class LobbyTop extends StatelessWidget {
         children: [
           Row(
             children: [
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 40),
-                child: Hero(
-                  tag: 'logo',
-                  child: Image.asset(
-                    'assets/logo.png',
+              if (!bigWindow)
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 40),
+                  child: Hero(
+                    tag: 'logo',
+                    child: Image.asset(
+                      'assets/logo.png',
+                    ),
                   ),
                 ),
-              ),
               const SizedBox(
                 width: 5,
               ),
-              const Text(
+              Text(
                 'Selva',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                style: bigWindow
+                    ? TextStyle(fontSize: 30, fontWeight: FontWeight.w700)
+                    : TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               Expanded(
                 child: Container(
                   alignment: AlignmentDirectional.centerEnd,
                   child: InkWell(
                     onTap: () {
-                      showDialog(context: context, builder: (context) {
-                        return const LobbyMenuPopup();
-                      });
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const LobbyMenuPopup();
+                          });
                     },
                     borderRadius: borderRadius,
                     child: Container(
-                      padding:
-                          const EdgeInsets.only(left: 10, right: 41 - pointRoundSize),
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 41 - pointRoundSize),
                       height: 45,
                       decoration: BoxDecoration(
                         color: bubbleColor,

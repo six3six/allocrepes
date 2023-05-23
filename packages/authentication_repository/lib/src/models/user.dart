@@ -17,6 +17,7 @@ class User extends Equatable {
     required this.classe,
     required this.point,
     required this.student,
+    required this.phone,
     this.photo,
   });
 
@@ -35,6 +36,7 @@ class User extends Equatable {
   final String surname;
 
   final String classe;
+  final String phone;
 
   /// Url for the current user's photo.
   final String? photo;
@@ -51,6 +53,7 @@ class User extends Equatable {
     classe: '',
     point: 0,
     photo: null,
+    phone: '',
     student: false,
   );
 
@@ -62,6 +65,7 @@ class User extends Equatable {
     String? surname,
     String? classe,
     String? photo,
+    String? phone,
     int? point,
     bool? student,
   }) =>
@@ -74,6 +78,7 @@ class User extends Equatable {
         classe: classe ?? this.classe,
         photo: photo ?? this.photo,
         point: point ?? this.point,
+        phone: phone ?? this.phone,
         student: student ?? this.student,
       );
 
@@ -99,6 +104,7 @@ class User extends Equatable {
       name: data['name'] ?? '',
       surname: data['surname'] ?? '',
       classe: data['classe'] ?? '',
+      phone: data['phone'] ?? '',
       point: data['point'] ?? 0,
       student: data.containsKey('name') ? true : false,
     );

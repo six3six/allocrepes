@@ -13,3 +13,7 @@ final theme = ThemeData(
 
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );
+
+bool isBigScreen(BuildContext context){
+  return MediaQuery.of(context).size.width >= 700;
+}

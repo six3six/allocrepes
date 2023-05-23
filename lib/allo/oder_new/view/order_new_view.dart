@@ -16,32 +16,40 @@ class OrderNewView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Nouvelle commandes'),
       ),
-      body: ListView(
-        children: [
-          _OrderNewAddressInfo(),
-          const SizedBox(height: 10),
-          _OrderNewCategories(),
-          const SizedBox(height: 10),
-          _AdditionalInformation(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<OrderNewCubit>(context)
-                      .checkout(context)
-                      .then((ok) {
-                    if (ok) {
-                      Navigator.pop(context);
-                    }
-                  });
-                },
-                child: const Text('Commander'),
-              ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 700),
+            child: Column(
+              children: [
+                _OrderNewAddressInfo(),
+                const SizedBox(height: 10),
+                _OrderNewCategories(),
+                const SizedBox(height: 10),
+                _AdditionalInformation(),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        BlocProvider.of<OrderNewCubit>(context)
+                            .checkout(context)
+                            .then((ok) {
+                          if (ok) {
+                            Navigator.pop(context);
+                          }
+                        });
+                      },
+                      child: const Text('Commander'),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

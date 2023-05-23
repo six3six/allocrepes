@@ -74,7 +74,8 @@ class _LobbyMenu extends StatelessWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleLarge!
-                                      .merge(const TextStyle(color: Colors.red)),
+                                      .merge(
+                                          const TextStyle(color: Colors.red)),
                                 ),
                                 const SizedBox(
                                   height: 20,
@@ -109,7 +110,8 @@ class _LobbyTwitchMenu extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [/*
+        children: [
+          /*
           SizedBox(
             height: 250,
             width: double.infinity,
@@ -161,9 +163,8 @@ class _LobbyNewsMenu extends StatelessWidget {
                   width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: state.news
-                        .map((news) => NewsCard(news: news))
-                        .toList(),
+                    children:
+                        state.news.map((news) => NewsCard(news: news)).toList(),
                   ),
                 );
               },
