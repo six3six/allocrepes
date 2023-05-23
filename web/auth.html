@@ -1,11 +1,38 @@
 <!DOCTYPE html>
-<title>Authentication complete</title>
-<p>Authentication is complete. If this does not happen automatically, please
-    close the window.
-    <script>
-  window.opener.postMessage({
-    'flutter-web-auth': window.location.href
-  }, window.location.origin);
-  window.close();
+<html>
 
-    </script>
+<head>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+  <title>Authentication complete</title>
+  <style>
+    html {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <img src="icons/Icon-maskable-512.png" style="width: 100px">
+  <p>L'authentication est complète. Si cela ne se fait pas automatiquement, vous pouvez fermer cette page et retourner
+    dans la page Selva</p>
+  <p>Authentication is complete. If this does not happen automatically, please
+    close the window.</p>
+  <script>
+    window.opener.postMessage({
+      'flutter-web-auth': window.location.href
+    }, window.location.origin);
+
+    var isiPad = navigator.userAgent.match(/iPad/i) != null;
+    var isiPhone = navigator.userAgent.match(/iPhone/i) != null;
+
+    if (isiPad || isiPhone) {
+      setTimeout(() => window.close(), 301);
+    }
+    else {
+      window.close();
+    }
+  </script>
+</body>
+
+</html>
