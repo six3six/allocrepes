@@ -15,5 +15,5 @@ final theme = ThemeData(
 );
 
 bool isBigScreen(BuildContext context){
-  return MediaQuery.of(context).size.width >= 700;
+  return MediaQuery.of(context).size.width >= 900;
 }

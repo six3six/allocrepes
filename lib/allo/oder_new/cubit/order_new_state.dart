@@ -11,10 +11,11 @@ class OrderNewState extends Equatable {
     this.place = Place.ESIEE,
     this.room,
     this.placeError = '',
+    this.phoneError = '',
     this.loading = true,
     this.roomError = '',
     this.message = '',
-    this.phone = '',
+    this.phone,
   });
 
   final Map<Category, List<Product>> categories;
@@ -23,16 +24,18 @@ class OrderNewState extends Equatable {
   final Place? place;
   final String? room;
   final String placeError;
+  final String phoneError;
   final String roomError;
   final bool loading;
   final String message;
-  final String phone;
+  final String? phone;
 
   @override
   List<Object?> get props => [
         place,
         room,
         placeError,
+        phoneError,
         roomError,
         loading,
         message,
@@ -60,6 +63,7 @@ class OrderNewState extends Equatable {
     String? room,
     String? placeError,
     String? roomError,
+    String? phoneError,
     bool? loading,
     String? message,
     String? phone,
@@ -72,6 +76,7 @@ class OrderNewState extends Equatable {
       room: room ?? this.room,
       placeError: placeError ?? this.placeError,
       roomError: roomError ?? this.roomError,
+      phoneError: phoneError ?? this.phoneError,
       loading: loading ?? this.loading,
       message: message ?? this.message,
       alreadyOrdered: alreadyOrdered ?? this.alreadyOrdered,

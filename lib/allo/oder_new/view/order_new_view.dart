@@ -1,5 +1,7 @@
 import 'package:allocrepes/allo/oder_new/cubit/order_new_cubit.dart';
 import 'package:allocrepes/allo/oder_new/cubit/order_new_state.dart';
+import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -312,10 +314,10 @@ class _AdditionalInformationState extends State<_AdditionalInformation> {
 
   @override
   void initState() {
-    _phoneController.text = BlocProvider.of<OrderNewCubit>(context).state.phone;
     _messageController.text =
         BlocProvider.of<OrderNewCubit>(context).state.message;
-
+    _phoneController.text =
+        BlocProvider.of<AuthenticationBloc>(context).state.user.phone;
     super.initState();
   }
 
@@ -335,7 +337,7 @@ class _AdditionalInformationState extends State<_AdditionalInformation> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Numéro de tél (facultatif) :'),
+          const Text('Numéro de tél :'),
           TextField(
             controller: _phoneController,
             keyboardType: TextInputType.phone,
