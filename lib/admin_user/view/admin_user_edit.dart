@@ -7,7 +7,7 @@ import '../cubit/admin_user_cubit.dart';
 class AdminUserEdit extends StatefulWidget {
   final User user;
 
-  AdminUserEdit({super.key, required this.user});
+  const AdminUserEdit({super.key, required this.user});
 
   static Route route(User user, AdminUserCubit adminUserCubit) {
     return MaterialPageRoute<void>(
@@ -15,10 +15,9 @@ class AdminUserEdit extends StatefulWidget {
         create: (context) => adminUserCubit,
         child: AdminUserEdit(user: user),
       ),
-      settings: RouteSettings(name: 'AdminUserEdit'),
+      settings: const RouteSettings(name: 'AdminUserEdit'),
     );
   }
-
 
   @override
   State<AdminUserEdit> createState() => AdminUserEditState();
@@ -31,7 +30,6 @@ class AdminUserEditState extends State<AdminUserEdit> {
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pointsController = TextEditingController();
-
 
   @override
   void initState() {
@@ -50,10 +48,10 @@ class AdminUserEditState extends State<AdminUserEdit> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editer un utilisateur'),
+        title: const Text('Editer un utilisateur'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -64,9 +62,7 @@ class AdminUserEditState extends State<AdminUserEdit> {
             TextField(
               controller: _surnameController,
             ),
-            SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             Text(
               'Nom:',
               style: theme.textTheme.bodySmall,
@@ -74,9 +70,7 @@ class AdminUserEditState extends State<AdminUserEdit> {
             TextField(
               controller: _nameController,
             ),
-            SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             Text(
               'Email:',
               style: theme.textTheme.bodySmall,
@@ -84,9 +78,7 @@ class AdminUserEditState extends State<AdminUserEdit> {
             TextField(
               controller: _emailController,
             ),
-            SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             Text(
               'Points:',
               style: theme.textTheme.bodySmall,
@@ -95,11 +87,9 @@ class AdminUserEditState extends State<AdminUserEdit> {
               controller: _pointsController,
               keyboardType: TextInputType.number,
             ),
-            SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             CheckboxListTile(
-              title: Text('Admin'),
+              title: const Text('Admin'),
               value: _admin,
               onChanged: (va) => setState(() {
                 _admin = va ?? false;
@@ -111,23 +101,22 @@ class AdminUserEditState extends State<AdminUserEdit> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        final _user = widget.user.copyWith(
+                        final user = widget.user.copyWith(
                           surname: _surnameController.text,
                           name: _nameController.text,
                           email: _emailController.text,
-                          point:
-                              int.tryParse(_pointsController.text) ?? 0,
+                          point: int.tryParse(_pointsController.text) ?? 0,
                           admin: _admin,
                         );
                         BlocProvider.of<AdminUserCubit>(context)
-                            .updateUser(_user);
+                            .updateUser(user);
                         Navigator.of(context).pop();
                       },
-                      child: Text('Valider'),
+                      child: const Text('Valider'),
                     ),
                   ),
-                  SizedBox(
-                    width: 10,
+                  const SizedBox(
+                    width: 10
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
@@ -138,7 +127,7 @@ class AdminUserEditState extends State<AdminUserEdit> {
                           .removeUser(widget.user.id);
                       Navigator.of(context).pop();
                     },
-                    child: Text('Supprimer'),
+                    child: const Text('Supprimer'),
                   ),
                 ],
               ),

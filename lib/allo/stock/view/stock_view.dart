@@ -7,7 +7,7 @@ import 'package:order_repository/models/category.dart';
 import 'package:order_repository/models/product.dart';
 
 class StockView extends StatelessWidget {
-  const StockView() : super();
+  const StockView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +16,10 @@ class StockView extends StatelessWidget {
         title: const Text('Stocks'),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: BlocBuilder<StockCubit, StockState>(
               builder: (context, state) {
                 var count = 0;
@@ -31,7 +31,7 @@ class StockView extends StatelessWidget {
             ),
           ),
           BlocBuilder<StockCubit, StockState>(
-            buildWhen: (prev, next) => !IterableEquality().equals(
+            buildWhen: (prev, next) => !const IterableEquality().equals(
               prev.categories.keys,
               next.categories.keys,
             ),
@@ -49,15 +49,15 @@ class StockView extends StatelessWidget {
               );
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: ElevatedButton(
               onPressed: () =>
                   BlocProvider.of<StockCubit>(context).removeOrders(),
-              child: Text('Supprimer TOUTES les commandes'),
+              child: const Text('Supprimer TOUTES les commandes'),
             ),
           ),
         ],
@@ -82,8 +82,8 @@ class _ProductCategory extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20)
-              .add(EdgeInsets.only(top: 20)),
+          padding: const EdgeInsets.symmetric(horizontal: 20)
+              .add(const EdgeInsets.only(top: 20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -116,7 +116,7 @@ class _ProductCategory extends StatelessWidget {
             ],
           ),
         ),
-        Divider(),
+        const Divider(),
       ],
     );
   }
@@ -126,7 +126,7 @@ class _StockEntry extends StatelessWidget {
   final int rank;
   final Category category;
 
-  _StockEntry({
+  const _StockEntry({
     Key? key,
     required this.rank,
     required this.category,
@@ -138,13 +138,13 @@ class _StockEntry extends StatelessWidget {
     final textTheme = theme.textTheme;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Column(
         children: [
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               BlocBuilder<StockCubit, StockState>(
@@ -165,14 +165,14 @@ class _StockEntry extends StatelessWidget {
             rank: rank,
             category: category,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           _ProductConsumedStock(
             rank: rank,
             category: category,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           _ProductRemainingStock(
@@ -205,10 +205,10 @@ class _ProductInitialStock extends StatelessWidget {
       builder: (context, state) => Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
-          Expanded(
+          const Expanded(
             flex: 7,
             child: Text(
               'Stock initial',
@@ -240,7 +240,7 @@ class _ProductRemainingStock extends StatelessWidget {
   final int rank;
   final Category category;
 
-  _ProductRemainingStock({
+  const _ProductRemainingStock({
     Key? key,
     required this.rank,
     required this.category,
@@ -251,10 +251,10 @@ class _ProductRemainingStock extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
-        Expanded(
+        const Expanded(
           flex: 7,
           child: Text(
             'Restant',
@@ -290,7 +290,7 @@ class _ProductConsumedStock extends StatelessWidget {
   final int rank;
   final Category category;
 
-  _ProductConsumedStock({
+  const _ProductConsumedStock({
     Key? key,
     required this.rank,
     required this.category,
@@ -301,10 +301,10 @@ class _ProductConsumedStock extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
-        Expanded(
+        const Expanded(
           flex: 7,
           child: Text(
             'Consommé',

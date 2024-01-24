@@ -8,12 +8,12 @@ import 'package:order_repository/order_repository_firestore.dart';
 class StockPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => StockPage(),
-      settings: RouteSettings(name: 'AdminStock'),
+      builder: (_) => const StockPage(),
+      settings: const RouteSettings(name: 'AdminStock'),
     );
   }
 
-  StockPage({Key? key}) : super(key: key);
+  const StockPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

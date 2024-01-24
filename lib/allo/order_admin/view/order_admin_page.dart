@@ -15,7 +15,7 @@ class OrderAdminPage extends StatelessWidget {
       builder: (_) => OrderAdminPage(
         fast: fast ?? false,
       ),
-      settings: RouteSettings(name: 'OrderAdmin'),
+      settings: const RouteSettings(name: 'OrderAdmin'),
     );
   }
 
@@ -35,7 +35,7 @@ class OrderAdminPage extends StatelessWidget {
             RepositoryProvider.of<OrderRepositoryFirestore>(context),
             fast,
           ),
-          child: OrderAdminView(),
+          child: const OrderAdminView(),
         );
       },
     );

@@ -1,7 +1,6 @@
 import 'package:allocrepes/news/news_page.dart';
 import 'package:flutter/material.dart';
 import 'package:news_repository/model/news.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class NewsCard extends StatelessWidget {
   final News news;
@@ -13,10 +12,11 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headStyle = Theme.of(context).textTheme.bodyLarge!.merge(TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ));
+    final headStyle =
+        Theme.of(context).textTheme.bodyLarge!.merge(const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ));
 
     return ConstrainedBox(
       constraints: const BoxConstraints(
@@ -35,7 +35,7 @@ class NewsCard extends StatelessWidget {
                 child: news.media.isNotEmpty
                     ? Image.network(
                         news.media,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.fitHeight,
                         height: double.infinity,
                         width: double.infinity,
                       )
@@ -43,7 +43,8 @@ class NewsCard extends StatelessWidget {
               ),
               ListTile(
                 title: Container(
-                  padding: EdgeInsets.only(right: 20, bottom: 20, top: 10),
+                  padding:
+                      const EdgeInsets.only(right: 20, bottom: 20, top: 10),
                   child: Text(
                     news.title,
                     style: headStyle,

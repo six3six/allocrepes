@@ -26,7 +26,7 @@ class ProductListCubit extends Cubit<ProductListState> {
     _orderRepository.categories().forEach((cats) {
       var categories = <Category, List<Product>>{};
 
-      cats.forEach((cat) {
+      for (var cat in cats) {
         categories[cat] = [];
         emit(state.copyWith(categories: categories));
 
@@ -36,7 +36,7 @@ class ProductListCubit extends Cubit<ProductListState> {
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });
-      });
+      }
 
       emit(state.copyWith(categories: categories));
     });
@@ -102,14 +102,14 @@ class ProductListCubit extends Cubit<ProductListState> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Ajouter une catégorie'),
+          title: const Text('Ajouter une catégorie'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Quel nom voulez vous donner à votre catégorie ?'),
+                const Text('Quel nom voulez vous donner à votre catégorie ?'),
                 TextField(
                   controller: controller,
-                  decoration: InputDecoration(hintText: 'Nom'),
+                  decoration: const InputDecoration(hintText: 'Nom'),
                 ),
               ],
             ),
@@ -119,14 +119,14 @@ class ProductListCubit extends Cubit<ProductListState> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Annuler'),
+              child: const Text('Annuler'),
             ),
             TextButton(
               onPressed: () {
                 _orderRepository.addCategory(Category(name: controller.text));
                 Navigator.of(context).pop();
               },
-              child: Text('Confirmer'),
+              child: const Text('Confirmer'),
             ),
           ],
         );
@@ -142,20 +142,20 @@ class ProductListCubit extends Cubit<ProductListState> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Ajouter une un produit'),
+          title: const Text('Ajouter une un produit'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
                   'Vous vous apprêtez à ajouter un produit dans la catégorie ${category.name}',
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text('Quel nom voulez-vous donner à votre produit ?'),
+                const Text('Quel nom voulez-vous donner à votre produit ?'),
                 TextField(
                   controller: controller,
-                  decoration: InputDecoration(hintText: 'Nom'),
+                  decoration: const InputDecoration(hintText: 'Nom'),
                 ),
               ],
             ),
@@ -165,7 +165,7 @@ class ProductListCubit extends Cubit<ProductListState> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Annuler'),
+              child: const Text('Annuler'),
             ),
             TextButton(
               onPressed: () {
@@ -175,7 +175,7 @@ class ProductListCubit extends Cubit<ProductListState> {
                 );
                 Navigator.of(context).pop();
               },
-              child: Text('Confirmer'),
+              child: const Text('Confirmer'),
             ),
           ],
         );
@@ -191,14 +191,14 @@ class ProductListCubit extends Cubit<ProductListState> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Modifier une catégorie'),
+          title: const Text('Modifier une catégorie'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Quel nom voulez vous donner à votre catégorie ?'),
+                const Text('Quel nom voulez vous donner à votre catégorie ?'),
                 TextField(
                   controller: controller,
-                  decoration: InputDecoration(hintText: 'Nom'),
+                  decoration: const InputDecoration(hintText: 'Nom'),
                 ),
               ],
             ),
@@ -208,7 +208,7 @@ class ProductListCubit extends Cubit<ProductListState> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Annuler'),
+              child: const Text('Annuler'),
             ),
             TextButton(
               onPressed: () {
@@ -217,7 +217,7 @@ class ProductListCubit extends Cubit<ProductListState> {
                 ));
                 Navigator.of(context).pop();
               },
-              child: Text('Confirmer'),
+              child: const Text('Confirmer'),
             ),
           ],
         );
@@ -231,7 +231,7 @@ class ProductListCubit extends Cubit<ProductListState> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Supprimer une catégorie'),
+          title: const Text('Supprimer une catégorie'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -244,7 +244,7 @@ class ProductListCubit extends Cubit<ProductListState> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'Annuler',
                 style: TextStyle(color: Colors.redAccent),
               ),
@@ -254,7 +254,7 @@ class ProductListCubit extends Cubit<ProductListState> {
                 _orderRepository.deleteCategory(category);
                 Navigator.of(context).pop();
               },
-              child: Text('Confirmer'),
+              child: const Text('Confirmer'),
             ),
           ],
         );
@@ -272,8 +272,8 @@ class ProductListCubit extends Cubit<ProductListState> {
           barrierDismissible: true,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Supprimer un produit'),
-              content: SingleChildScrollView(
+              title: const Text('Supprimer un produit'),
+              content: const SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
                     Text('Voulez-vous supprimer cet article ?'),
@@ -285,7 +285,7 @@ class ProductListCubit extends Cubit<ProductListState> {
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
-                  child: Text(
+                  child: const Text(
                     'Annuler',
                     style: TextStyle(color: Colors.redAccent),
                   ),
@@ -295,7 +295,7 @@ class ProductListCubit extends Cubit<ProductListState> {
                     _orderRepository.removeProduct(category, productId);
                     Navigator.of(context).pop(true);
                   },
-                  child: Text('Confirmer'),
+                  child: const Text('Confirmer'),
                 ),
               ],
             );

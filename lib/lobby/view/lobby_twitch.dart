@@ -1,9 +1,12 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class LobbyTwitchViewer extends StatefulWidget {
+  const LobbyTwitchViewer({super.key});
+
   @override
   LobbyTwitchViewerState createState() => LobbyTwitchViewerState();
 }
@@ -23,7 +26,9 @@ class LobbyTwitchViewerState extends State<LobbyTwitchViewer> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            print(request.url);
+            if (kDebugMode) {
+              print(request.url);
+            }
             if (request.url.startsWith('https://player.twitch.tv')) {
               return NavigationDecision.navigate;
             } else {
@@ -83,6 +88,6 @@ class LobbyHeadlineViewerState extends State<LobbyHeadlineViewer> {
             width: double.infinity,
             child: WebViewWidget(controller: controller),
           )
-        : SizedBox();
+        : const SizedBox();
   }
 }

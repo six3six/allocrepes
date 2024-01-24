@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html_iframe/flutter_html_iframe.dart';
 import 'package:news_repository/model/news.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsView extends StatelessWidget {
   final News article;
@@ -14,31 +15,40 @@ class NewsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(article.content);
+    final data = article.content
+        .replaceFirst(RegExp(r'^<img.*?>'), '')
+        .replaceAll(RegExp(r'width=".*?"'), '')
+        .replaceAll(RegExp(r'height=".*?"'), '');
+    if (kDebugMode) {
+      print(data);
+    }
+
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
           pinned: true,
           snap: false,
           floating: false,
-          expandedHeight: 200.0,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Image.network(
-              article.media,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
+          expandedHeight: article.media == '' ? null : 200.0,
+          flexibleSpace: article.media == ''
+              ? null
+              : FlexibleSpaceBar(
+                  background: Image.network(
+                    article.media,
+                    width: double.infinity,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
         ),
         SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           sliver: SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   article.title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 25,
                     fontFamily: 'Lato',
@@ -49,43 +59,30 @@ class NewsView extends StatelessWidget {
           ),
         ),
         SliverToBoxAdapter(
-          child: Container(
-            width: 100,
-            height: 100,
+          child: SizedBox(
+            width: double.infinity,
             child: Html(
-              onLinkTap: (url, context, attributes, element) {
+              onLinkTap: (url, attributes, element) {
                 launchUrl(
                   Uri.parse(url ?? ''),
                   mode: LaunchMode.externalApplication,
                 );
               },
-              data:
-                  '<html><body style="width: 100%">${article.content}</body></html>',
-              customRenders: {
-                iframeYT():
-                    CustomRender.widget(widget: (context, buildChildren) {
-                  final controller = WebViewController()
-                    ..loadRequest(
-                        Uri.parse(context.tree.attributes['src'] ?? ''))
-                    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                    ..setNavigationDelegate(
-                      NavigationDelegate(
-                        onNavigationRequest: (NavigationRequest request) async {
-                          await launchUrl(
-                            Uri.parse(request.url),
-                            mode: LaunchMode.externalApplication,
-                          );
-                          return NavigationDecision.prevent;
-                        },
-                      ),
-                    );
-
-                  return SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: WebViewWidget(controller: controller),
-                  );
-                })
+              data: data,
+              extensions: const [
+                IframeHtmlExtension(),
+              ],
+              style: {
+                '.kg-card': Style(
+                  width: Width(100, Unit.percent),
+                ),
+                'image': Style(
+                  width: Width(400, Unit.px),
+                ),
+                'iframe': Style(
+                  width: Width(300, Unit.px),
+                  height: Height(300, Unit.px),
+                ),
               },
             ),
           ),
@@ -93,8 +90,4 @@ class NewsView extends StatelessWidget {
       ],
     );
   }
-
-  CustomRenderMatcher iframeYT() => (context) =>
-      context.tree.element?.attributes['src']?.contains('youtube.com/embed') ??
-      false;
 }

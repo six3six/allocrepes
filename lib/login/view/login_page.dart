@@ -7,10 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
   static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => LoginPage(),
-      settings: RouteSettings(name: 'Login'),
+      builder: (_) => const LoginPage(),
+      settings: const RouteSettings(name: 'Login'),
     );
   }
 
@@ -41,7 +43,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ],
             ),
-            child: LoginWelcome(),
+            child: const LoginWelcome(),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:allocrepes/allo/oder_new/cubit/order_new_cubit.dart';
 import 'package:allocrepes/allo/oder_new/cubit/order_new_state.dart';
-import 'package:allocrepes/allo/order_list/view/order_list_page.dart';
+import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,7 @@ import 'package:order_repository/models/place.dart';
 import 'package:order_repository/models/product.dart';
 
 class OrderNewView extends StatelessWidget {
-  OrderNewView({Key? key}) : super(key: key);
+  const OrderNewView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,32 +18,40 @@ class OrderNewView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Nouvelle commandes'),
       ),
-      body: ListView(
-        children: [
-          _OrderNewAddressInfo(),
-          SizedBox(height: 10),
-          _OrderNewCategories(),
-          SizedBox(height: 10),
-          _AdditionalInformation(),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<OrderNewCubit>(context)
-                      .checkout(context)
-                      .then((ok) {
-                    if (ok) {
-                      Navigator.pushReplacement(context, OrderListPage.route());
-                    }
-                  });
-                },
-                child: Text('Commander'),
-              ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 700),
+            child: Column(
+              children: [
+                _OrderNewAddressInfo(),
+                const SizedBox(height: 10),
+                _OrderNewCategories(),
+                const SizedBox(height: 10),
+                _AdditionalInformation(),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        BlocProvider.of<OrderNewCubit>(context)
+                            .checkout(context)
+                            .then((ok) {
+                          if (ok) {
+                            Navigator.pop(context);
+                          }
+                        });
+                      },
+                      child: const Text('Commander'),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -55,11 +64,11 @@ class _OrderNewCategories extends StatelessWidget {
       children: [
         BlocBuilder<OrderNewCubit, OrderNewState>(
           buildWhen: (prev, next) =>
-              !IterableEquality().equals(
+              !const IterableEquality().equals(
                 prev.categories.keys,
                 next.categories.keys,
               ) ||
-              !IterableEquality().equals(
+              !const IterableEquality().equals(
                 prev.categories.values,
                 next.categories.values,
               ) ||
@@ -102,14 +111,14 @@ class _OrderNewCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    if (products.isEmpty) return SizedBox();
+    if (products.isEmpty) return const SizedBox();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20)
-              .add(EdgeInsets.only(top: 20)),
+          padding: const EdgeInsets.symmetric(horizontal: 20)
+              .add(const EdgeInsets.only(top: 20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -130,7 +139,7 @@ class _OrderNewCategory extends StatelessWidget {
             ],
           ),
         ),
-        Divider(),
+        const Divider(),
       ],
     );
   }
@@ -148,7 +157,7 @@ class _OrderNewItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 10,
         horizontal: 10,
       ),
@@ -167,7 +176,7 @@ class _OrderNewItem extends StatelessWidget {
                   child: Text(
                     product.name,
                     style: state.isAlreadyOrdered(category, product)
-                        ? textTheme.titleLarge?.merge(TextStyle(
+                        ? textTheme.titleLarge?.merge(const TextStyle(
                             decoration: TextDecoration.lineThrough,
                             color: Colors.grey,
                           ))
@@ -205,7 +214,7 @@ class _OrderNewItem extends StatelessWidget {
         builder: (context, state) => DropdownButton<int>(
           value: BlocProvider.of<OrderNewCubit>(context)
               .getQuantity(category, product),
-          icon: Icon(Icons.arrow_drop_down_circle_outlined),
+          icon: const Icon(Icons.arrow_drop_down_circle_outlined),
           iconSize: 24,
           elevation: 16,
           onChanged: (int? val) => BlocProvider.of<OrderNewCubit>(context)
@@ -216,7 +225,7 @@ class _OrderNewItem extends StatelessWidget {
           ).map<DropdownMenuItem<int>>((int value) {
             return DropdownMenuItem<int>(
               value: value,
-              child: Text(' ' + value.toString() + ' '),
+              child: Text(' $value '),
             );
           }).toList(),
         ),
@@ -229,7 +238,7 @@ class _OrderNewAddressInfo extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -238,7 +247,7 @@ class _OrderNewAddressInfo extends StatelessWidget {
             builder: (context, state) => Text(
               state.placeError,
               style: theme.textTheme.bodyMedium!
-                  .merge(TextStyle(color: Colors.red)),
+                  .merge(const TextStyle(color: Colors.red)),
             ),
           ),
           BlocBuilder<OrderNewCubit, OrderNewState>(
@@ -246,17 +255,11 @@ class _OrderNewAddressInfo extends StatelessWidget {
             builder: (context, state) => Text(
               state.roomError,
               style: theme.textTheme.bodyMedium!
-                  .merge(TextStyle(color: Colors.red)),
+                  .merge(const TextStyle(color: Colors.red)),
             ),
           ),
           _OrderNewBatimentSelector(),
-          BlocBuilder<OrderNewCubit, OrderNewState>(
-            builder: (context, state) {
-              return state.place == Place.ESIEE
-                  ? Text('Rendez-vous au stand extérieur')
-                  : _OrderNewAppartSelector();
-            },
-          ),
+          _OrderNewAppartSelector(),
         ],
       ),
     );
@@ -281,7 +284,7 @@ class _OrderNewBatimentSelector extends StatelessWidget {
           child: BlocBuilder<OrderNewCubit, OrderNewState>(
             buildWhen: (prev, next) => prev.place != next.place,
             builder: (context, state) => DropdownButton<Place>(
-              value: state.place ?? Place.values[1],
+              value: state.place ?? Place.values[0],
               onChanged: (Place? place) =>
                   BlocProvider.of<OrderNewCubit>(context).updatePlace(place),
               items: Place.values
@@ -311,10 +314,10 @@ class _AdditionalInformationState extends State<_AdditionalInformation> {
 
   @override
   void initState() {
-    _phoneController.text = BlocProvider.of<OrderNewCubit>(context).state.phone;
     _messageController.text =
         BlocProvider.of<OrderNewCubit>(context).state.message;
-
+    _phoneController.text =
+        BlocProvider.of<AuthenticationBloc>(context).state.user.phone;
     super.initState();
   }
 
@@ -330,21 +333,21 @@ class _AdditionalInformationState extends State<_AdditionalInformation> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Numéro de tél (facultatif) :'),
+          const Text('Numéro de tél :'),
           TextField(
             controller: _phoneController,
             keyboardType: TextInputType.phone,
             onChanged: (phone) =>
                 BlocProvider.of<OrderNewCubit>(context).updatePhone(phone),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Text('Commentaire :'),
+          const Text('Commentaire :'),
           Text(
             '(un anniversaire, un message à nous passer...)',
             style: theme.textTheme.bodySmall,
@@ -390,12 +393,12 @@ class _OrderNewAppartSelectorState extends State<_OrderNewAppartSelector> {
       onChanged: (val) =>
           BlocProvider.of<OrderNewCubit>(context).updateRoom(val),
       autocorrect: false,
-      keyboardType: TextInputType.numberWithOptions(
+      keyboardType: const TextInputType.numberWithOptions(
         signed: false,
         decimal: false,
       ),
       maxLength: 4,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Appart/Salle n°',
         helperText: '',
       ),

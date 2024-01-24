@@ -1,7 +1,10 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class LobbyAbout extends StatefulWidget {
+  const LobbyAbout({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return LobbyAboutState();
@@ -16,16 +19,17 @@ class LobbyAboutState extends State<LobbyAbout> {
     final textTheme = Theme.of(context).textTheme;
 
     return AlertDialog(
-      title: Text('A propos'),
+      title: const Text('A propos'),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
             if (!easter)
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Fait en 2021 avec le ❤'),
                   Text('pour le BDE Xanthos'),
+                  Text('cette année avec l\'aide de Corentin POUPRY 🏳️‍🌈 + Théo LEFEVRE'),
                 ],
               ),
             if (easter)
@@ -37,31 +41,34 @@ class LobbyAboutState extends State<LobbyAbout> {
                     builder: (conext, snapshot) {
                       if (snapshot.hasData) {
                         final info = snapshot.data!;
-                        return Text('${info.appName} les gros losers');
+                        return Text('Selva les gros losers');
                       }
                       return const SizedBox();
                     },
                   ),
-                  Text('même pas foutu de faire une app eux-mêmes.'),
-                  Text(
+                  const Text('même pas foutu de faire une app eux-mêmes.'),
+                  const Text(
                       'De toute facon tout le monde sait que Xanthos est le meilleurs BDE de l\'histoire de l\'école !'),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => _LobbyXanthosPhoto(),
-                      fullscreenDialog: true,
-                    )),
+                    onTap: () {
+                      FirebaseAnalytics.instance.logScreenView(screenName: 'easter_xanthos');
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => _LobbyXanthosPhoto(),
+                        fullscreenDialog: true,
+                      ));
+                    },
                     child: Image.asset('assets/this_is_xanthos.jpg'),
                   ),
                 ],
               ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Text('© Louis DESPLANCHE 2021-2023'),
-            SizedBox(
+            const Text('© Louis DESPLANCHE 2021-2023'),
+            const SizedBox(
               height: 20,
             ),
             FutureBuilder(
@@ -75,7 +82,7 @@ class LobbyAboutState extends State<LobbyAbout> {
                     style: textTheme.bodySmall,
                   );
                 } else {
-                  return SizedBox();
+                  return const SizedBox();
                 }
               },
             ),
@@ -90,7 +97,7 @@ class LobbyAboutState extends State<LobbyAbout> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Ok, je m'en fiche"),
+          child: const Text("Ok, je m'en fiche"),
         ),
       ],
     );

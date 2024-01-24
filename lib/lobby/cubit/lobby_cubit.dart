@@ -1,11 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:news_repository/model/news.dart';
 import 'package:news_repository/news_repository.dart';
 import 'package:news_repository/rss_news_repository.dart';
 import 'package:setting_repository/setting_repository.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'lobby_state.dart';
 
@@ -19,21 +18,10 @@ class LobbyCubit extends Cubit<LobbyState> {
   LobbyCubit({
     required SettingRepository settingRepository,
     NewsRepository newsRepository =
-        const RssNewsRepository(targetUrl: 'https://lfpn.fr/feed/'),
+        const RssNewsRepository(targetUrl: 'https://selva.lfpn.fr/rss/'),
   })  : _newsRepository = newsRepository,
         _settingRepository = settingRepository,
-        super(LobbyState()) {
-    Connectivity().onConnectivityChanged.forEach((result) {
-      switch (result) {
-        case ConnectivityResult.wifi:
-        case ConnectivityResult.mobile:
-          updateNews();
-          updateLeaderboard();
-          break;
-        case ConnectivityResult.none:
-          break;
-      }
-    });
+        super(const LobbyState()) {
     updateNews();
     updateLeaderboard();
 
@@ -64,14 +52,22 @@ class LobbyCubit extends Cubit<LobbyState> {
     for (final row in leaderboardResult.data) {
       res.add(row);
     }
-    emit(state.copyWith(leaderboard: res));
+    if (!isClosed) {
+      emit(state.copyWith(leaderboard: res));
+    }
   }
 
   void updateNews() {
-    emit(state.copyWith(isLoading: true));
+    if (!isClosed) {
+      emit(state.copyWith(isLoading: true));
+    }
     _newsRepository.getNews().then((List<News> news) {
-      print(news);
-      emit(state.copyWith(news: news, isLoading: false));
+      if (kDebugMode) {
+        print(news);
+      }
+      if (!isClosed) {
+        emit(state.copyWith(news: news, isLoading: false));
+      }
     });
   }
 }

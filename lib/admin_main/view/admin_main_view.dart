@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AdminMainView extends StatelessWidget {
-  const AdminMainView() : super();
+  const AdminMainView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class AdminMainView extends StatelessWidget {
       primary: false,
       slivers: [
         SliverPadding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 20,
             horizontal: 20,
           ),

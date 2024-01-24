@@ -4,11 +4,13 @@ import 'package:flutter/foundation.dart';
 
 class AppObserver extends BlocObserver {
   @override
-  void onChange(BlocBase cubit, Change change) {
-    print('${cubit.runtimeType} $change');
-    if (!kIsWeb) {
-      FirebaseCrashlytics.instance.log('${cubit.runtimeType} $change');
+  void onChange(BlocBase bloc, Change change) {
+    if (kDebugMode) {
+      print('${bloc.runtimeType} $change');
     }
-    super.onChange(cubit, change);
+    if (!kIsWeb) {
+      FirebaseCrashlytics.instance.log('${bloc.runtimeType} $change');
+    }
+    super.onChange(bloc, change);
   }
 }

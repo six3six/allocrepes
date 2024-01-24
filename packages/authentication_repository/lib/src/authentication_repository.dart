@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:stream_transform/stream_transform.dart';
 
 import 'models/models.dart';
 
@@ -188,7 +187,7 @@ extension on firebase_auth.User {
   Stream<User> get toUserStream async* {
     await for (DocumentSnapshot<User> snap
         in AuthenticationRepository.usersCollection.doc(uid).snapshots()) {
-      yield snap.data() ?? User.empty;
+      yield snap.data() ?? User.empty.copyWith(id: this.uid);
     }
   }
 }

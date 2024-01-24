@@ -26,7 +26,7 @@ class OrderListView extends StatelessWidget {
           ),
         ),
         BlocBuilder<OrderListCubit, OrderListState>(
-          buildWhen: (prev, next) => !IterableEquality()
+          buildWhen: (prev, next) => !const IterableEquality()
               .equals(prev.currentOrders, next.currentOrders),
           builder: (BuildContext context, OrderListState state) {
             if (state.currentOrders.isEmpty) {
@@ -35,18 +35,18 @@ class OrderListView extends StatelessWidget {
                 child: RichText(
                   text: TextSpan(
                     style: Theme.of(context).textTheme.bodyLarge,
-                    children: [
-                      const TextSpan(
+                    children: const [
+                      TextSpan(
                         text:
                             "Commandez dès maintenant en appuyant sur l'icone ",
                       ),
-                      const WidgetSpan(
+                      WidgetSpan(
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.0),
                           child: Icon(Icons.shopping_cart),
                         ),
                       ),
-                      const TextSpan(text: 'en bas à droite'),
+                      TextSpan(text: 'en bas à droite'),
                     ],
                   ),
                 ),
@@ -69,7 +69,7 @@ class OrderListView extends StatelessWidget {
           ),
         ),
         BlocBuilder<OrderListCubit, OrderListState>(
-          buildWhen: (prev, next) => !IterableEquality()
+          buildWhen: (prev, next) => !const IterableEquality()
               .equals(prev.previousOrders, next.previousOrders),
           builder: (BuildContext context, OrderListState state) {
             return Column(
@@ -96,12 +96,12 @@ class _OrderSummary extends StatelessWidget {
 
     return InkWell(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${order.createdAt.toLocal().toString().split(".")[0].substring(0, 16)}",
+              order.createdAt.toLocal().toString().split(".")[0].substring(0, 16),
               style: theme.textTheme.titleLarge,
             ),
             Text(
@@ -109,7 +109,7 @@ class _OrderSummary extends StatelessWidget {
             ),
             _OrderSummaryStatus(order.status),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: order.articles
@@ -162,32 +162,32 @@ class _OrderSummaryStatus extends StatelessWidget {
       case OrderStatus.CANCELED:
         return Text(
           Order.statusToString(status),
-          style: textTheme!.merge(TextStyle(color: Colors.red)),
+          style: textTheme!.merge(const TextStyle(color: Colors.red)),
         );
       case OrderStatus.VALIDATING:
         return Text(
           Order.statusToString(status),
-          style: textTheme!.merge(TextStyle(color: Colors.grey)),
+          style: textTheme!.merge(const TextStyle(color: Colors.grey)),
         );
       case OrderStatus.PENDING:
         return Text(
           Order.statusToString(status),
-          style: textTheme!.merge(TextStyle(color: Colors.amber)),
+          style: textTheme!.merge(const TextStyle(color: Colors.amber)),
         );
       case OrderStatus.DELIVERING:
         return Text(
           Order.statusToString(status),
-          style: textTheme!.merge(TextStyle(color: Colors.amber)),
+          style: textTheme!.merge(const TextStyle(color: Colors.amber)),
         );
       case OrderStatus.DELIVERED:
         return Text(
           Order.statusToString(status),
-          style: textTheme!.merge(TextStyle(color: Colors.green)),
+          style: textTheme!.merge(const TextStyle(color: Colors.green)),
         );
       default:
         return Text(
           Order.statusToString(status),
-          style: textTheme!.merge(TextStyle(color: Colors.grey)),
+          style: textTheme!.merge(const TextStyle(color: Colors.grey)),
         );
     }
   }

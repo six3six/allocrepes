@@ -10,49 +10,49 @@ service cloud.firestore {
     	let user_profile = /databases/$(database)/documents/users/$(request.auth.uid);
       return isAuth() && (get(user_profile).data.admin == true) ;
     }
-
+    
     function isOwner(owner) {
     	return isAuth() && request.auth.uid == owner;
     }
-
+    
     // Default rule
     match /{document=**} {
       allow read, write: if false;
     }
-
+    
     // Config rule
     match /configs/{config} {
     	allow read: if isAuth();
     }
-
+    
     match /rules/{document=**} {
       allow get: if isAuth();
       allow write: if isAdmin();
     }
-
+    
     match /users/{userId} {
       allow get : if isAuth();
       // Allows the current user to change their account information but they cannot change admin role
       allow write : if isOwner(userId) || (request.resource.data.isAdmin == false);
-
+      
       // Admin has full access
       allow read, write : if isAdmin();
     }
-
+    
     match /orders/{order} {
+    	allow list : if isAuth();
       allow read : if isOwner(get(/databases/$(database)/documents/orders/$(order)).data.owner);
-      allow create : if isAuth();
-
+      allow create : if isOwner(request.resource.data.owner);
+      
       match /articles/{article} {
-      	allow read : if isOwner(get(/databases/$(database)/documents/orders/$(order)).data.owner);
-      	allow create : if isAuth();
-
+      	allow read, list, create : if isOwner(get(/databases/$(database)/documents/orders/$(order)).data.owner);
+        
         allow read, write : if isAdmin();
       }
-
+      
       allow read, write : if isAdmin();
     }
-
+    
 
     match /{path=**}/products/{document} {
       allow read: if isAuth();

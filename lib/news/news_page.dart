@@ -17,7 +17,7 @@ class NewsPage extends StatelessWidget {
         article: article,
       ),
       settings:
-      RouteSettings(name: '/article/' + article.title.replaceAll(' ', '_')),
+      RouteSettings(name: '/article/${article.title.replaceAll(' ', '_')}'),
     );
   }
 

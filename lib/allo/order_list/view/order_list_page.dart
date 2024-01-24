@@ -14,8 +14,8 @@ import 'order_list_view.dart';
 class OrderListPage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(
-      builder: (_) => OrderListPage(),
-      settings: RouteSettings(name: 'OrderList'),
+      builder: (_) => const OrderListPage(),
+      settings: const RouteSettings(name: 'OrderList'),
     );
   }
 
@@ -33,9 +33,9 @@ class OrderListPage extends StatelessWidget {
         buildWhen: (prev, next) => prev.showOrder != next.showOrder,
         builder: (context, state) {
           if (!state.showOrder) {
-            return FloatingActionButton.extended(
-              label: const Text('Commandes indisponibles'),
-              icon: const Icon(Icons.remove_shopping_cart_outlined),
+            return const FloatingActionButton.extended(
+              label: Text('Commandes indisponibles'),
+              icon: Icon(Icons.remove_shopping_cart_outlined),
               backgroundColor: Colors.grey,
               foregroundColor: Colors.black,
               onPressed: null,

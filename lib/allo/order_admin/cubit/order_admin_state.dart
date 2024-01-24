@@ -49,15 +49,13 @@ class OrderAdminState extends Equatable {
       (status) => selectedStatus[status] ?? false,
     );
 
-    status.forEach(
-      (s) {
+    for (var s in status) {
         orders[s] = this
                 .orders[s]
                 ?.where((order) => selectedPlaces[order.place] ?? false)
                 .toList() ??
             [];
-      },
-    );
+      }
     return orders;
   }
 }

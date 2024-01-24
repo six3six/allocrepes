@@ -40,19 +40,19 @@ class PlaceUtils {
       case Place.ESIEE:
         return 'ESIEE';
       case Place.Ampere_A:
-        return 'Olympère (Ampère) A';
+        return 'Ampère A';
       case Place.Ampere_B:
-        return 'Olympère (Ampère) B';
+        return 'Ampère B';
       case Place.Ampere_C:
-        return 'Olympère (Ampère) C';
+        return 'Ampère C';
       case Place.Arago:
-        return 'Sparago (Arago)';
+        return 'Arago';
       case Place.Campusea:
         return 'Campusea';
       case Place.Kley:
-        return 'Akleytide (Kley)';
+        return 'Kley';
       case Place.Kley_2:
-        return 'Akleytide (Kley) 2';
+        return 'Kley 2';
       case Place.UNKNOWN:
         return 'UNKNOWN';
     }

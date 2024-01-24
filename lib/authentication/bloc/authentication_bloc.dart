@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 
 part 'authentication_event.dart';
 
@@ -25,7 +26,9 @@ class AuthenticationBloc
           });
         } catch (e, stack) {
           await FirebaseCrashlytics.instance.recordError(e, stack);
-          print(e);
+          if (kDebugMode) {
+            print(e);
+          }
         }
       },
     );

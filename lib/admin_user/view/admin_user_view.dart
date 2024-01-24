@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AdminUserView extends StatelessWidget {
+  const AdminUserView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +17,7 @@ class AdminUserView extends StatelessWidget {
       ),
       body: Column(
         children: [
-          _FilterView(),
+          const _FilterView(),
           _UserList(),
         ],
       ),
@@ -24,7 +26,7 @@ class AdminUserView extends StatelessWidget {
 }
 
 class _FilterView extends StatelessWidget {
-  _FilterView({
+  const _FilterView({
     Key? key,
   }) : super(key: key);
 
@@ -35,8 +37,8 @@ class _FilterView extends StatelessWidget {
     return Material(
       elevation: 5,
       child: ExpansionTile(
-        title: Text('Filtres'),
-        childrenPadding: EdgeInsets.symmetric(horizontal: 10),
+        title: const Text('Filtres'),
+        childrenPadding: const EdgeInsets.symmetric(horizontal: 10),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -49,8 +51,8 @@ class _FilterView extends StatelessWidget {
                   .updateUserQuery(username: value);
             },
           ),
-          SizedBox(
-            height: 3,
+          const SizedBox(
+            height: 3
           ),
           Text(
             'Trié par :',
@@ -60,12 +62,12 @@ class _FilterView extends StatelessWidget {
             buildWhen: (prev, next) => prev.sortUser != next.sortUser,
             builder: (context, state) {
               return ExpansionTile(
-                title: Text(
+                title: const Text(
                   'Trié par : ',
                 ),
                 children: [
                   ListTile(
-                    title: Text('Par identifiant'),
+                    title: const Text('Par identifiant'),
                     leading: Radio<SortUser>(
                       value: SortUser.Name,
                       groupValue: state.sortUser,
@@ -75,7 +77,7 @@ class _FilterView extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    title: Text('Par points'),
+                    title: const Text('Par points'),
                     leading: Radio<SortUser>(
                       value: SortUser.Point,
                       groupValue: state.sortUser,
@@ -89,7 +91,7 @@ class _FilterView extends StatelessWidget {
             },
           ),
           _ClsSelector(),
-          SizedBox(height: 10)
+          const SizedBox(height: 10)
         ],
       ),
     );
@@ -112,16 +114,16 @@ class _UserList extends StatelessWidget {
         builder: (context, state) {
           final query = RepositoryProvider.of<AuthenticationRepository>(context)
               .getUsersQuery(
-            usernameSearch: state.usernameQuery,
+            usernameSearch: state.usernameQuery.toUpperCase(),
             sort: state.sortUser,
           );
 
           return StreamBuilder(
             stream: query.snapshots(),
             builder: (context, streamSnapshot) {
-              if (!streamSnapshot.hasData) return CircularProgressIndicator();
+              if (!streamSnapshot.hasData) return const CircularProgressIndicator();
               if ((streamSnapshot.data?.docs.length ?? 0) == 0) {
-                return Text('No data');
+                return const Text('No data');
               }
 
               return Scrollbar(
@@ -136,7 +138,7 @@ class _UserList extends StatelessWidget {
                         children: [
                           Text('${user.name.toUpperCase()} ${user.surname}'),
                           if (user.admin)
-                            Icon(
+                            const Icon(
                               FontAwesomeIcons.crown,
                               size: 15,
                             )
@@ -165,14 +167,14 @@ class _ClsSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded(
+              const Expanded(
                 flex: 7,
                 child: Text(
                   'Activer l\'affichage des classements sur la page principal (à utiliser avec précaution)',

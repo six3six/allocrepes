@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 /// Splashscreen class
 class SplashPage extends StatelessWidget {
+  const SplashPage({super.key});
+
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => SplashPage());
+    return MaterialPageRoute<void>(builder: (_) => const SplashPage());
   }
 
   @override
@@ -11,7 +13,7 @@ class SplashPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Center(
             child: Hero(
               tag: 'logo',

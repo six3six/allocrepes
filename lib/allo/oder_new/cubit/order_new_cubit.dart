@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:order_repository/models/article.dart';
 import 'package:order_repository/models/category.dart';
@@ -11,19 +12,23 @@ import 'package:order_repository/order_repository.dart';
 import 'order_new_state.dart';
 
 class OrderNewCubit extends Cubit<OrderNewState> {
-  OrderNewCubit(this.orderRepository, this.user)
-      : super(const OrderNewState()) {
+  OrderNewCubit(
+    this.orderRepository,
+    this.authenticationRepository,
+    this.user,
+  ) : super(const OrderNewState()) {
     getProducts();
   }
 
   final OrderRepository orderRepository;
+  final AuthenticationRepository authenticationRepository;
   final User user;
 
   void getProducts() {
     orderRepository.categories().forEach((cats) {
       var categories = <Category, List<Product>>{};
 
-      cats.forEach((cat) {
+      for (var cat in cats) {
         categories[cat] = [];
         emit(state.copyWith(categories: categories));
 
@@ -33,7 +38,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
           categories[cat] = prods;
           emit(state.copyWith(categories: categories));
         });
-      });
+      }
 
       emit(state.copyWith(
         categories: categories,
@@ -48,11 +53,11 @@ class OrderNewCubit extends Cubit<OrderNewState> {
       OrderStatus.VALIDATING,
     ]).forEach((orders) {
       var alreadyOrdered = <String>[];
-      orders.forEach((order) {
-        order.articles.forEach((article) {
-          alreadyOrdered.add(article.categoryId + ';' + article.productId);
-        });
-      });
+      for (var order in orders) {
+        for (var article in order.articles) {
+          alreadyOrdered.add('${article.categoryId};${article.productId}');
+        }
+      }
 
       emit(state.copyWith(alreadyOrdered: alreadyOrdered));
     });
@@ -86,10 +91,19 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
   void updateRoom(String? room) {
     emit(state.copyWith(room: room));
-    if ((room == null || room == '') && state.place != Place.ESIEE) {
+    if ((room == null || room == '')) {
       emit(state.copyWith(roomError: 'Salle non définie'));
     } else {
       emit(state.copyWith(roomError: ''));
+    }
+  }
+
+  void updatePhone(String? phone) {
+    emit(state.copyWith(room: phone));
+    if ((phone == null || phone == '')) {
+      emit(state.copyWith(phone: 'Téléphone non définie'));
+    } else {
+      emit(state.copyWith(phone: ''));
     }
   }
 
@@ -100,10 +114,6 @@ class OrderNewCubit extends Cubit<OrderNewState> {
     } else {
       emit(state.copyWith(placeError: ''));
     }
-  }
-
-  void updatePhone(String? phone) {
-    emit(state.copyWith(phone: phone ?? ''));
   }
 
   void updateMessage(String message) {
@@ -117,8 +127,13 @@ class OrderNewCubit extends Cubit<OrderNewState> {
   Future<bool> checkout(BuildContext context) async {
     updateRoom(state.room);
     updatePlace(state.place);
-    if (state.roomError != '' || state.placeError != '') {
-      await showError(context, 'Remplissez le lieu ET la salle');
+    updatePhone(state.phone);
+
+    if (state.roomError != '' ||
+        state.placeError != '' ||
+        state.phoneError != '') {
+      await showError(
+          context, 'Remplissez le lieu, la salle et votre numéro de téléphone');
 
       return false;
     }
@@ -144,10 +159,17 @@ class OrderNewCubit extends Cubit<OrderNewState> {
 
     try {
       emit(state.copyWith(loading: true));
-      if (state.place == null) throw Exception('Il manque le batiment');
-      if (state.room == null && state.place != Place.ESIEE) {
+      if (state.place == null) {
+        throw Exception('Il manque le batiment');
+      }
+      if (state.room == null) {
         throw Exception('Il manque la piece');
       }
+      if (state.phone == null) {
+        throw Exception('Il manque un numéro de téléphone');
+      }
+
+      authenticationRepository.updateUser(user.copyWith(phone: state.phone));
       await orderRepository.createOrder(Order(
         status: OrderStatus.VALIDATING,
         owner: user.id,
@@ -156,7 +178,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         place: state.place ?? Place.UNKNOWN,
         room: state.room ?? '',
         message: state.message,
-        phone: state.phone,
+        phone: state.phone ?? '',
       ));
 
       return true;
@@ -165,8 +187,12 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         context,
         'Erreur du système : ${e.toString()}\n\n${stacktrace.toString()}',
       );
-      print('Checkout error ' + e.toString());
-      print('Checkout stacktrace ' + stacktrace.toString());
+      if (foundation.kDebugMode) {
+        print('Checkout error $e');
+      }
+      if (foundation.kDebugMode) {
+        print('Checkout stacktrace $stacktrace');
+      }
       emit(state.copyWith(loading: false));
 
       return false;
@@ -178,7 +204,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) => AlertDialog(
-          title: Text('Erreur'),
+          title: const Text('Erreur'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -191,7 +217,7 @@ class OrderNewCubit extends Cubit<OrderNewState> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Confirmer'),
+              child: const Text('Confirmer'),
             ),
           ],
         ),

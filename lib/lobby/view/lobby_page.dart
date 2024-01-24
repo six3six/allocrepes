@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:setting_repository/setting_repository_firestore.dart';
 
+import '../../theme.dart';
+
 class LobbyPage extends StatefulWidget {
   static Route route() {
     return MaterialPageRoute<void>(
@@ -15,9 +17,9 @@ class LobbyPage extends StatefulWidget {
           settingRepository:
               RepositoryProvider.of<SettingRepositoryFirestore>(context),
         ),
-        child: LobbyPage(),
+        child: const LobbyPage(),
       ),
-      settings: RouteSettings(name: 'Main'),
+      settings: const RouteSettings(name: 'Main'),
     );
   }
 
@@ -36,44 +38,88 @@ class _LobbyPageState extends State<LobbyPage> {
 
     switch (_barIndex) {
       case 0:
-        selectedView = LobbyView();
+        selectedView = const LobbyView();
         break;
       case 1:
-        selectedView = OrderListPage();
+        selectedView = const OrderListPage();
         break;
       case 2:
-        selectedView = AdminMainPage();
+        selectedView = const AdminMainPage();
         break;
       default:
-        selectedView = LobbyView();
+        selectedView = const LobbyView();
         break;
     }
+
+    final bigWindow = isBigScreen(context);
+
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) => Scaffold(
-
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _barIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.other_houses_rounded),
-              label: 'Accueil',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: 'Commandes',
-            ),
-            if (state.user.admin)
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Admin',
-              ),
-          ],
-          onTap: (index) => setState(() {
-            _barIndex = index;
-          }),
-        ),
-        body: selectedView,
+        bottomNavigationBar:
+            bigWindow ? null : buildNavbar(state.user.admin, _barIndex),
+        body: bigWindow
+            ? Row(
+                children: [
+                  buildNavrail(state.user.admin, _barIndex),
+                  Expanded(child: selectedView),
+                ],
+              )
+            : selectedView,
       ),
+    );
+  }
+
+  Widget buildNavbar(bool isAdmin, int index) {
+    return BottomNavigationBar(
+      currentIndex: index,
+      items: [
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.other_houses_rounded),
+          label: 'Accueil',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.shopping_cart),
+          label: 'Commandes',
+        ),
+        if (isAdmin)
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Admin',
+          ),
+      ],
+      onTap: (index) => setState(() {
+        _barIndex = index;
+      }),
+    );
+  }
+
+  Widget buildNavrail(bool isAdmin, int index) {
+    return NavigationRail(
+      onDestinationSelected: (index) => setState(() {
+        _barIndex = index;
+      }),
+      selectedIndex: _barIndex,
+      groupAlignment: -0.9,
+      labelType: NavigationRailLabelType.all,
+      leading: Image.asset(
+        'assets/logo.png',
+        width: 60,
+      ),
+      destinations: [
+        const NavigationRailDestination(
+          icon: Icon(Icons.other_houses_rounded),
+          label: Text('Accueil'),
+        ),
+        const NavigationRailDestination(
+          icon: Icon(Icons.shopping_cart),
+          label: Text('Commandes'),
+        ),
+        if (isAdmin)
+          const NavigationRailDestination(
+            icon: Icon(Icons.settings),
+            label: Text('Admin'),
+          ),
+      ],
     );
   }
 }

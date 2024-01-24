@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_repository/models/category.dart';
 
 class ProductListView extends StatelessWidget {
-  const ProductListView() : super();
+  const ProductListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,19 +17,19 @@ class ProductListView extends StatelessWidget {
       body: ListView(
         children: [
           BlocBuilder<ProductListCubit, ProductListState>(
-            buildWhen: (prev, next) => !IterableEquality().equals(
+            buildWhen: (prev, next) => !const IterableEquality().equals(
               prev.categories.keys,
               next.categories.keys,
             ),
             builder: (context, state) {
               var categories = <_ProductCategory>[];
-              state.categories.keys.forEach(
-                (Category cat) => categories.add(
+              for (var cat in state.categories.keys) {
+                categories.add(
                   _ProductCategory(
                     category: cat,
                   ),
-                ),
-              );
+                );
+              }
 
               return Column(
                 children: categories,
@@ -41,7 +41,7 @@ class ProductListView extends StatelessWidget {
             child: TextButton(
               onPressed: () => BlocProvider.of<ProductListCubit>(context)
                   .addCategoryDialog(context),
-              child: Text('Ajouter une catégorie'),
+              child: const Text('Ajouter une catégorie'),
             ),
           ),
           _ProductOrderPagesViewCheckbox(),
@@ -66,8 +66,8 @@ class _ProductCategory extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20)
-              .add(EdgeInsets.only(top: 20)),
+          padding: const EdgeInsets.symmetric(horizontal: 20)
+              .add(const EdgeInsets.only(top: 20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -80,12 +80,12 @@ class _ProductCategory extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.edit),
+                    icon: const Icon(Icons.edit),
                     onPressed: () => BlocProvider.of<ProductListCubit>(context)
                         .editCategoryDialog(context, category),
                   ),
                   IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     onPressed: () => BlocProvider.of<ProductListCubit>(context)
                         .deleteCategoryDialog(context, category),
                   ),
@@ -112,13 +112,13 @@ class _ProductCategory extends StatelessWidget {
                 child: TextButton(
                   onPressed: () => BlocProvider.of<ProductListCubit>(context)
                       .addProductDialog(context, category),
-                  child: Text('Ajouter un produit'),
+                  child: const Text('Ajouter un produit'),
                 ),
               ),
             ],
           ),
         ),
-        Divider(),
+        const Divider(),
       ],
     );
   }
@@ -128,7 +128,7 @@ class _ProductEntry extends StatelessWidget {
   final int rank;
   final Category category;
 
-  _ProductEntry({
+  const _ProductEntry({
     Key? key,
     required this.rank,
     required this.category,
@@ -147,9 +147,9 @@ class _ProductEntry extends StatelessWidget {
           key: Key('${category.id};$productId'),
           direction: DismissDirection.endToStart,
           background: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             color: Colors.red,
-            child: Align(
+            child: const Align(
               alignment: Alignment.centerRight,
               child: Icon(
                 Icons.delete,
@@ -174,7 +174,7 @@ class _ProductEntry extends StatelessWidget {
             ),
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
                     _ProductName(
@@ -263,7 +263,7 @@ class _ProductMaxQuantity extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        Expanded(
+        const Expanded(
           flex: 7,
           child: Text(
             'Quantité max',
@@ -326,7 +326,7 @@ class _ProductAvailability extends StatelessWidget {
 
   Widget _availableESIEE() => Row(
         children: [
-          Expanded(
+          const Expanded(
             flex: 7,
             child: Text(
               "Disponible à l'ESIEE",
@@ -352,7 +352,7 @@ class _ProductAvailability extends StatelessWidget {
 
   Widget _available() => Row(
         children: [
-          Expanded(
+          const Expanded(
             flex: 7,
             child: Text(
               'Disponible en résidence',
@@ -378,7 +378,7 @@ class _ProductAvailability extends StatelessWidget {
 
   Widget _oneOrder() => Row(
         children: [
-          Expanded(
+          const Expanded(
             flex: 7,
             child: Text(
               "Commandable qu'une fois",
@@ -410,11 +410,11 @@ class _ProductOrderPagesViewCheckbox extends StatelessWidget {
     final textTheme = theme.textTheme;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Text(
@@ -424,7 +424,7 @@ class _ProductOrderPagesViewCheckbox extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded(
+              const Expanded(
                 flex: 7,
                 child: Text('Activer les pages de commandes'),
               ),

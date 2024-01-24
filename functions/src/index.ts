@@ -2,6 +2,8 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as https from "https";
 import * as sxml from "sxml";
+import * as sgMail from "@sendgrid/mail";
+
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -13,9 +15,9 @@ interface Token {
 
 const isAdmin = async (user: string | undefined): Promise<boolean> => {
   if (user == undefined) return false;
-  const adminRef = db.collection("roles").doc("admins");
-  const adminVal = await adminRef.get();
-  return adminVal.get(user) != undefined;
+  const userRef = db.collection("users").doc(user);
+  const userVal = await userRef.get();
+  return userVal.get("admin") ?? false;
 };
 
 const getSSOToken = async (fncUrl: string, ticket: string): Promise<Token> => {
@@ -88,8 +90,24 @@ exports.ssoLogin = functions.https.onRequest(async (req, res) => {
     console.log(req.query);
   }
 
-  res.redirect(`allocrepes-auth://?token=${token.token}&user=${token.user}`);
+  res.redirect(`selva-auth://?token=${token.token}&user=${token.user}`);
 });
+
+exports.ssoWebLogin = functions.https.onRequest(async (req, res) => {
+  const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
+  const ticket = typeof req.query.ticket === "string" ? req.query.ticket : "";
+
+  const token = await getSSOToken(fncUrl, ticket);
+
+
+  if (ticket == "") {
+    console.log("No ticket returned. Query :");
+    console.log(req.query);
+  }
+
+  res.redirect(`https://app.selva.lfpn.fr/auth.html?token=${token.token}&user=${token.user}`);
+});
+
 
 exports.ssoLoginToken = functions.https.onRequest(async (req, res) => {
   const fncUrl = `https://${req.header("host")}/${process.env.FUNCTION_TARGET}${req.path}`;
@@ -128,7 +146,7 @@ exports.onPointChange = functions.firestore
               notification: {
                 title: "Tu as gagné des points !",
                 body: `Tu as gagné ${diff} points !\n` +
-                            "Zeus est très impressionné !",
+                            "Tu es digne des meilleurs aventuriers",
                 sound: "default",
                 // badge: '1'
               },
@@ -202,7 +220,7 @@ exports.onCommandStatusChange = functions.firestore
 
       const user = nextData["owner"].toLowerCase();
 
-      await admin.messaging().sendToTopic(
+      admin.messaging().sendToTopic(
           "/topics/user" + user,
           {
             data: {"type": "order"},
@@ -235,8 +253,11 @@ enum OrderStatus {
 }
 
 exports.getPointsCls = functions.https.onCall(async (requestData, context) => {
-  const users = await db.collection("users").orderBy("point", "desc")
-      .limit(5).get();
+  const users = await db.collection("users")
+      .where("point", ">", 0)
+      .orderBy("point", "desc")
+      .limit(5)
+      .get();
   return users.docs.map((doc) =>
     doc.get("surname") + " " + doc.get("name") + " : " + doc.get("point"),
   );
@@ -311,6 +332,30 @@ exports.sendNotif = functions.https.onCall(async (requestData, context) => {
 
 
   return "ok";
+});
+
+exports.sendEmail = functions.https.onCall(async (requestData, context) => {
+  if (requestData == undefined) return;
+  const userRef = db.collection("users").doc(requestData);
+  const userVal = await userRef.get();
+  if (!userVal.exists) {
+    console.log(`User ${requestData} doesn't exist`);
+    return;
+  }
+
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY ?? "");
+
+  const token = await admin.auth().createCustomToken(requestData);
+
+  console.log("Token generated from the email");
+  const msg = {
+    to: requestData, // Change to your recipient
+    from: "esieelistebde2023@gmail.com", // Change to your verified sender
+    subject: "Votre token",
+    text: "Votre token a copier dans l'application est : \n\n" + token,
+  };
+
+  await sgMail.send(msg);
 });
 
 enum NotifRecipient {

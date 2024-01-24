@@ -4,6 +4,7 @@ import 'package:allocrepes/splash/splash.dart';
 import 'package:allocrepes/theme.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -36,7 +37,7 @@ class App extends StatelessWidget {
           create: (BuildContext context) => SettingRepositoryFirestore(),
           child: RepositoryProvider(
             create: (BuildContext context) => OrderRepositoryFirestore(),
-            child: AppView(),
+            child: const AppView(),
           ),
         ),
       ),
@@ -45,11 +46,13 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatefulWidget {
+  const AppView({super.key});
+
   @override
-  _AppViewState createState() => _AppViewState();
+  AppViewState createState() => AppViewState();
 }
 
-class _AppViewState extends State<AppView> {
+class AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   NavigatorState get _navigator => _navigatorKey.currentState!;
@@ -79,6 +82,7 @@ class _AppViewState extends State<AppView> {
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((initialMessage) => getNotif(initialMessage));
+
     FirebaseMessaging.onMessageOpenedApp.listen((initialMessage) {
       getNotif(initialMessage);
     });
@@ -89,8 +93,9 @@ class _AppViewState extends State<AppView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Xanthos',
+      title: 'Selva',
       theme: theme,
+      debugShowCheckedModeBanner: false,
       navigatorKey: _navigatorKey,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
@@ -101,7 +106,10 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                print('authenticated');
+                FirebaseAnalytics.instance.logLogin();
+                if (kDebugMode) {
+                  print('authenticated');
+                }
                 if (!kIsWeb) {
                   try {
                     if (state.user.student) {
@@ -115,9 +123,12 @@ class _AppViewState extends State<AppView> {
                       }
                     }
 
-                    print('subscribeToTopic(user${state.user.id})');
+                    if (kDebugMode) {
+                      print('subscribeToTopic(user${state.user.id})');
+                    }
                     FirebaseMessaging.instance
                         .subscribeToTopic('user${state.user.id}');
+
                   } catch (exception, stack) {
                     FirebaseCrashlytics.instance.recordError(exception, stack);
                   }

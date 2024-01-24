@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.bde2021.allocrepes">
+    package="fr.lfpn.selva">
 
     <queries>
         <package android:name="com.android.chrome" />
@@ -8,7 +8,7 @@
         android:name="${applicationName}"
         android:allowBackup="false"
         android:icon="@mipmap/launcher_icon"
-        android:label="Xanthos"
+        android:label="Selva"
         android:supportsRtl="true">
 
         <activity
@@ -25,7 +25,7 @@
                 android:resource="@mipmap/launcher_icon" />
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_color"
-                android:resource="@color/xanthos_blue" />
+                android:resource="@color/selva_brown" />
 
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
@@ -46,11 +46,11 @@
         </activity>
 
         <activity android:name="com.linusu.flutter_web_auth.CallbackActivity" android:exported="true">
-            <intent-filter android:label="flutter_web_auth">
+            <intent-filter android:label="Connexion ESIEE">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="allocrepes-auth" />
+                <data android:scheme="selva-auth" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

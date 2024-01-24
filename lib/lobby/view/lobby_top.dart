@@ -1,20 +1,24 @@
 import 'package:allocrepes/authentication/bloc/authentication_bloc.dart';
-import 'package:allocrepes/lobby/cubit/lobby_cubit.dart';
 import 'package:allocrepes/lobby/view/lobby_menu_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../theme.dart';
+
 class LobbyTop extends StatelessWidget {
-  static final pointRoundSize = 37.0;
+  static const pointRoundSize = 37.0;
+
+  const LobbyTop({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final user = BlocProvider.of<AuthenticationBloc>(context).state.user;
 
-    final bubbleColor = Theme.of(context).primaryColorDark;
+    final bubbleColor = Theme.of(context).primaryColor;
 
-    final borderRadius = BorderRadius.all(Radius.circular(50));
+    const borderRadius = BorderRadius.all(Radius.circular(50));
+
+    final bigWindow = isBigScreen(context);
 
     return SafeArea(
       child: Column(
@@ -23,35 +27,40 @@ class LobbyTop extends StatelessWidget {
         children: [
           Row(
             children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: 40),
-                child: Hero(
-                  tag: 'logo',
-                  child: Image.asset(
-                    'assets/logo.png',
+              if (!bigWindow)
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 40),
+                  child: Hero(
+                    tag: 'logo',
+                    child: Image.asset(
+                      'assets/logo.png',
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               Text(
-                'Xanthos',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                'Selva',
+                style: bigWindow
+                    ? TextStyle(fontSize: 30, fontWeight: FontWeight.w700)
+                    : TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               Expanded(
                 child: Container(
                   alignment: AlignmentDirectional.centerEnd,
                   child: InkWell(
                     onTap: () {
-                      showDialog(context: context, builder: (context) {
-                        return LobbyMenuPopup();
-                      });
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const LobbyMenuPopup();
+                          });
                     },
                     borderRadius: borderRadius,
                     child: Container(
-                      padding:
-                          EdgeInsets.only(left: 10, right: 41 - pointRoundSize),
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 41 - pointRoundSize),
                       height: 45,
                       decoration: BoxDecoration(
                         color: bubbleColor,
@@ -62,7 +71,7 @@ class LobbyTop extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ConstrainedBox(
-                            constraints: BoxConstraints(
+                            constraints: const BoxConstraints(
                               maxWidth: 90,
                             ),
                             child: Text(
@@ -70,15 +79,15 @@ class LobbyTop extends StatelessWidget {
                               overflow: TextOverflow.fade,
                               maxLines: 1,
                               softWrap: false,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Container(
-                            padding: EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(3),
                             width: pointRoundSize,
                             height: pointRoundSize,
                             decoration: BoxDecoration(
@@ -86,7 +95,7 @@ class LobbyTop extends StatelessWidget {
                               border: Border.all(
                                 color: bubbleColor,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(pointRoundSize),
                               ),
                             ),
