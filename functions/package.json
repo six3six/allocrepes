@@ -15,7 +15,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@sendgrid/mail": "^7.7.0",
+    "@sendgrid/mail": "^8.1.1",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^4.4.0",
     "sxml": "^1.0.4"
